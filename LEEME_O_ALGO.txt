@@ -29,20 +29,7 @@ FIREBASE:
 
 
 GOALS:
-	Pantalla de:
-		Menu Seleccion(compras, ventas,consultas, altas en inventario)
-		COMPRAS
-		Ventas
-		REGISTRO_CLIENTE
-		CONSULTAS(ventas, inventario)
-		ALTAS_EN_INVENTARIO
-		
-
-MENU_SELECCION(
-	COMPRAS,ETC
-	LOGOUT
-	
-)
+	Agregar interactividad entre las paginas y sus botones
 
 
 
