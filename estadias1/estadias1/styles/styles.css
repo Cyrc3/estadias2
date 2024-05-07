@@ -1,0 +1,109 @@
+/* Estilos generales */
+body {
+    background-color: #34495e;
+    font-family: Arial, sans-serif;
+    color: #282828;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Estilos para el título */
+h1 {
+    color: #2980b9;
+}
+
+/* Estilos para el formulario */
+form {
+    margin: 0 auto;
+    max-width: 300px;
+}
+
+/* Estilos para las etiquetas */
+label {
+    color: #2980b9;
+    font-weight: bold;
+}
+
+/* Estilos para los campos de entrada */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    box-sizing: border-box;
+    border: 2px solid #bdc3c7;
+    border-radius: 5px;
+    background-color: #2c3e50;
+    color: #d5cccc;
+}
+
+/* Estilos para los botones */
+button {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Estilos para el botón cuando el cursor está sobre él */
+button:hover {
+    background-color: #2980b9;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin-top: 10px; /* Ajusta el margen entre el botón de consultas y los botones de registro */
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #2c3e50;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: left;
+}
+
+.dropdown-content a {
+    color: #bdc3c7;
+    padding: 5px 0;
+    display: block;
+    text-decoration: none;
+}
+
+.dropdown-content a:hover {
+    background-color: #2980b9;
+    border-radius: 5px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.logout-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    background-color: #2980b9;
+}

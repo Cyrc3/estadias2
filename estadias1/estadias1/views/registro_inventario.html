@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Producto</title>
+    <link rel="stylesheet" href="../styles/styles.css">
+</head>
+<body>
+    <h1>Registro de Producto</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        <label for="id">ID:</label><br>
+        <input type="text" id="id" name="id" value="123" readonly><br>
+        
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" id="nombre" name="nombre"><br>
+        
+        <label for="categoria">Categoría:</label><br>
+        <select id="categoria" name="categoria">
+            <option value="1">Categoría 1</option>
+            <option value="2">Categoría 2</option>
+            <option value="3">Categoría 3</option>
+            <option value="{% url 'registrar_categoria' %}">Registrar Categoría</option>        </select><br>
+        
+        <label for="precio">Precio:</label><br>
+        <input type="number" id="precio" name="precio"><br>
+        
+        <label for="proveedor">Proveedor:</label><br>
+        <select id="proveedor" name="proveedor">
+            <option value="proveedor1">Proveedor 1</option>
+            <option value="proveedor2">Proveedor 2</option>
+            <option value="proveedor3">Proveedor 3</option>
+            <option value="{% url 'registrar_proveedor' %}">Registrar Proveedor</option>        </select><br>
+        
+        <button type="submit">Registrar Producto</button>
+    </form>
+</body>
+</html>

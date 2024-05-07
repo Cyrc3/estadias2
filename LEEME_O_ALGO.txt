@@ -23,8 +23,6 @@ PREGUTNAS:
 
 
 
-
-
 FIREBASE:
 	To be consumed by the movil app
 	Only to check historical information
@@ -39,8 +37,6 @@ GOALS:
 		CONSULTAS(ventas, inventario)
 		ALTAS_EN_INVENTARIO
 		
-
-
 
 MENU_SELECCION(
 	COMPRAS,ETC
