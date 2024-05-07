@@ -1,0 +1,53 @@
+<!--REGISTRAR VENTA-->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Venta</title>
+    <link rel="stylesheet" href="../styles/styles_ventas.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <h2>Registro de Venta</h2>
+            <form action="#" method="post">
+                <label for="producto">Componente:</label>
+                <select id="componente" name="componente" required>
+                    <option value="">Seleccionar</option>
+                    <option value="1">Arduino UNO</option>
+                    <option value="2">Raspberry pi 4GB</option>
+                    <option value="3">Orange pi 5 2GB</option>
+                    <!-- Agrega más opciones según sea necesario -->
+                </select>
+
+                <label for="cantidad">Cantidad:</label>
+                <input type="text" id="cantidad" name="cantidad" required>
+
+                <label for="total">Total:</label>
+                <input type="text" id="total" name="total" readonly>
+
+                <input type="submit" value="Guardar">
+            </form>
+        </div>
+        <div class="right">
+            <h2>Resumen</h2>
+            <div class="resumen">
+                <table>
+                    <tr>
+                        <th>Componente</th>
+                        <th>Precio por unidad</th>
+                        <th>Cantidad</th>
+                        <th>Precio Total</th>
+                    </tr>
+                    <!-- Aquí se pueden agregar filas de la tabla con JavaScript -->
+                </table>
+                <div class="total">
+                    Total: $<span id="total-compra">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

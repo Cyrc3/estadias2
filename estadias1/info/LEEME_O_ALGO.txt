@@ -1,0 +1,64 @@
+
+Firebase database for testing
+
+Local webpage with Django connected to my MariaDB server
+WEBPAGE:
+	Create-Delete-Changes
+
+
+MARIADB:
+	PROVIDER(ID_PROVIDER, RAZON_SOCIAL, RFC,)
+	USERS(ID_USER, NAME_USER, PRIVILEGES)
+	Buys(ID_BUY, BUY_NUMBER, TOTAL_COST, TIME, DATE)
+	Buys_DETAILED(ID_BUY, BUY_NUMBER, TOTAL_COST, TIME, DATE)
+	Sells(ID_SELL, SELL_NUMBER, TOTAL_COST, TIME, DATE)
+	Sells_DETAILED(ID_SELL, SELL_NUMBER, TOTAL_COST, TIME, DATE)
+	Products(ID_PRODUCTO, CATEGORIA, PRECIO, STOCK, OPTIMAL_STOCK, MINIMAL_STOCK)
+	
+	changes
+
+PREGUTNAS:
+	Trabajar con DB server en local? Unicamente accesible dentro de la Unicamente
+	O en firebase, menos informativo pero acceso en linea
+
+
+
+FIREBASE:
+	To be consumed by the movil app
+	Only to check historical information
+
+
+GOALS:
+	Pantalla de:
+		Menu Seleccion(compras, ventas,consultas, altas en inventario)
+		COMPRAS
+		Ventas
+		REGISTRO_CLIENTE
+		CONSULTAS(ventas, inventario)
+		ALTAS_EN_INVENTARIO
+		
+
+MENU_SELECCION(
+	COMPRAS,ETC
+	LOGOUT
+	
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

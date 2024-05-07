@@ -1,0 +1,39 @@
+<!--REGISTRAR CLIENTE-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Cliente</title>
+    <link rel="stylesheet" href="../styles/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Registro de Cliente</h2>
+        <form action="#" method="post">
+            <label for="rfc">RFC:</label>
+            <input type="text" id="rfc" name="rfc" required>
+
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="uso_factura">Uso de CFDI:</label>
+            <select id="uso_factura" name="uso_factura" required>
+                <option value="">Seleccionar</option>
+                <option value="G01">Adquisición de mercancias</option>
+                <option value="G02">Devoluciones, descuentos o bonificaciones</option>
+                <option value="G03">Gastos en general</option>
+                <!-- Agrega más opciones según sea necesario -->
+            </select>
+
+            <label for="regimen_fiscal">Régimen Fiscal:</label>
+            <input type="text" id="regimen_fiscal" name="regimen_fiscal" required>
+
+            <label for="codigo_postal">Código Postal:</label>
+            <input type="text" id="codigo_postal" name="codigo_postal" required>
+
+            <input type="submit" value="Registrar Cliente">
+        </form>
+    </div>
+</body>
+</html>
