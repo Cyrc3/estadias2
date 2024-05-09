@@ -37,8 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'django.contrib.accounts',
-
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -56,7 +55,7 @@ ROOT_URLCONF = 'estadias1.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR /'estadias1' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -78,16 +77,16 @@ WSGI_APPLICATION = 'estadias1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': BASE_DIR / 'CONTROL_INVENTARIO',
+        'NAME': 'EstadiaPruebas',
         'USER': 'root',
-        'PASSWORD': 'miau',
-        'HOST': '172.17.0.186',
+        'PASSWORD': '3Sa1s87873!',
+        'HOST': 'localhost',
         'PORT': '3306'
     }
 }
 #honestly i have no idea what this section do, is here tho, if it works, don't touch it.
 
-AUTH_USER_MODEL = 'estadias1'
+AUTH_USER_MODEL = 'accounts.Usuario'
 
 
 
