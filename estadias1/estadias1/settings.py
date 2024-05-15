@@ -81,7 +81,7 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': '3Sa1s87873!',
         'HOST': 'localhost',
-        'PORT': '3306'
+        'PORT': '3306',
     }
 }
 #honestly i have no idea what this section do, is here tho, if it works, don't touch it.
@@ -127,6 +127,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (BASE_DIR /'estadias1'/'static',)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

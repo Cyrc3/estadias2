@@ -6,11 +6,13 @@
     <title>Registro de Proveedor</title>
     <link rel="stylesheet" href="../styles/styles.css">
 </head>
-<body>
+<body> 
+   <form method="POST">
+    {% csrf_token %}
     <h1>Registro de Proveedor</h1>
     
     <label for="id_proveedor">ID de Proveedor:</label><br>
-    <input type="text" id="id_proveedor" name="id_proveedor" value="123" readonly><br>
+    <input type="text" id="id_proveedor" name="id_proveedor" value="--auto--" readonly><br>
     
     <label for="razon_social">Razón Social:</label><br>
     <input type="text" id="razon_social" name="razon_social"><br>
@@ -24,8 +26,11 @@
     <label for="rfc">RFC:</label><br>
     <input type="text" id="rfc" name="rfc"><br>
     
-    <button type="submit">Guardar</button>
+    <input type="submit" value="Guardar"></input>
+   </form>
     
-    <button class="logout-button" onclick="window.location.href='#logout'">Logout</button>
+    <!-- 
+    <button class="logout-button" onclick="window.location.href='/'">Logout</button>
+    -->
 </body>
 </html>
