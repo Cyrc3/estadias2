@@ -2,21 +2,24 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-#as far as i understand, this class 'Usuario' is meant to be the one who looks after the user and password in our database
-#I have to insist, AS FAR AS I UNDERSTAND
-#Not an expert tho
-#uwu
+#Commented bcs this isn't working
 class Usuario(AbstractUser):
-
     class Meta:
         db_table = 'USUARIO'   #Lit USUARIO es el nombre de la tabla, huele a fuga de informacion si me lo preguntas.
         managed = False
 
 
+#class Usuario(models.Model):
+#    id_usuario = models.AutoField(primary_key=True)
+#    nombre = models.CharField(max_length=255)
+#    privilegio = models.CharField(max_length=255)
+#    password = models.CharField(max_length=255)
+
+
 #MÉTODOS DEL CLIENTE "-------------UWU------------------"
 class Cliente(models.Model):
     rfc = models.CharField(max_length=20)
-    nombre = models.CharField(max_length=255)
+    razon_social = models.CharField(max_length=255)
     uso_factura = models.CharField(max_length=255)
     regimen_fiscal = models.CharField(max_length=10)
     codigo_postal = models.CharField(max_length=10)
@@ -56,6 +59,6 @@ class Producto(models.Model):
         db_table = 'producto'
         managed = False
 
-
+#faltan cosas aki
 
     
