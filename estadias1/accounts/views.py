@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
-from .models import Cliente, Proveedor, Categoria, Producto
+from .models import Cliente, Proveedor, Categoria, Producto, Compra
 from django.http import HttpResponse
 
 #from .forms import ProductoForm
@@ -22,9 +22,15 @@ def loginFun(request):
         form = AuthenticationForm()
     return render(request, '../estadias1/views/index.html', {'form': form})
 
+
 def menu_principal(request):
     
     return render(request, 'menu_principal.html')
+
+
+#def registro_compra(request):
+#    if request.method == 'POST':
+#        nueva_compra
 
 
 
@@ -84,12 +90,31 @@ def registrar_producto(request):
 def registrar_categoria(request):
     if request.method == 'POST':
         nueva_categoria = Categoria()
-        nueva_categoria.descripcion = request.POST.get('id_')
+        nueva_categoria.descripcion = request.POST.get('id_categoria')
         nueva_categoria.descripcion = request.POST.get('descripcion')
         nueva_categoria.save()
         return redirect('menu_principal')
     return render(request, 'registro_categoria.html')
 
+
+def registrar_compra(request):
+    if request.method == 'POST':
+        nueva_compra = Compra()
+        nueva_compra.id_compra = request.POST.get('id_compra')
+        nueva_compra.cantidad = request.POST.get('cantidad')
+        id_proveedor = int(request.POST.get('proveedor'))
+        if id_proveedor != '0':
+            proveedor = Proveedor.objects.get(id_proveedor = id_proveedor)
+            nueva_compra.id_proveedor = proveedor.id_proveedor
+        
+        id_producto = int(request.POST.get('producto'))
+        if id_producto != '0':
+            producto = Producto.objects.get(id_producto = id_producto)
+            nueva_compra.id_producto = producto.id_producto
+
+            nueva_compra.save()
+            return redirect('menu_principal')
+        
 
 
 def historico_compras(request):

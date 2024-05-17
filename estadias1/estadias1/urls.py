@@ -23,6 +23,7 @@ urlpatterns = [
     path('', LoginView.as_view(template_name='index.html'), name = 'login'),
     path('registro_venta/',views.registro_ventas,name="ventas"),
     path('registrar_clientes/',views.registrar_cliente,name='cliente'),
+    path('registro_compra/',views.registrar_cliente,name='compra'),
     path('registrar_proveedor/',views.registrar_proveedor,name='proveedor'),
     path('registrar_inventario/',views.registrar_producto,name='producto'),
     path('menu_principal/', views.menu_principal, name='menu_principal'),
