@@ -4,19 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles de Categoría</title>
-    <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="stylesheet" href="../static/styles/styles.css">
 </head>
 <body>
+    <form method="POST">
+    {% csrf_token %}
     <h1>Detalles de Categoría</h1>
-    
-    <label for="id_categoria">ID de Categoría:</label><br>
-    <input type="text" id="id_categoria" name="id_categoria" value="123" readonly><br>
-    
+
+
+
+    <label for="id_categoria">ID Categoria:</label><br>
+    <input type="number" id="id" name="id" required><br>
+
+
     <label for="descripcion">Descripción:</label><br>
-    <textarea id="descripcion" name="descripcion" rows="4" cols="50"></textarea><br>
-    
+    <input type="text" id="descripcion" name="descripcion" required><br>
+
+
+
     <button class="logout-button" onclick="window.location.href='#logout'">Logout</button>
 
     <button type="submit">Guardar</button>
+
+    </from>
 </body>
 </html>

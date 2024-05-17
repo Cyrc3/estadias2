@@ -79,3 +79,21 @@ def registrar_producto(request):
             return redirect('menu_principal')
     messages.error(request, 'Por favor, selecciona una categoría.')
     return render(request, 'registro_inventario.html', {'categorias': categorias})
+
+
+def registrar_categoria(request):
+    if request.method == 'POST':
+        nueva_categoria = Categoria()
+        nueva_categoria.descripcion = request.POST.get('id_')
+        nueva_categoria.descripcion = request.POST.get('descripcion')
+        nueva_categoria.save()
+        return redirect('menu_principal')
+    return render(request, 'registro_categoria.html')
+
+
+
+def historico_compras(request):
+    return render(request, 'menu_principal.html')
+
+def historico_ventas(request):
+    return render(request, 'menu_principal.html')

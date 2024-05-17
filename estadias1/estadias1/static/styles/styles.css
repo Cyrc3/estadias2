@@ -1,6 +1,6 @@
 /* Estilos generales */
 body {
-    background-color: #b7e1ff;
+    background-color: #005ea0;
     font-family: Arial, sans-serif;
     color: #282828;
     text-align: center;
@@ -21,7 +21,7 @@ form {
 
 /* Estilos para las etiquetas */
 label {
-    color: #2980b9;
+    color: #0366a8;
     font-weight: bold;
     margin-bottom: 10px; /* Añadido margen inferior para separación */
 }
@@ -42,7 +42,7 @@ input[type="password"] {
 
 /* Estilos para los botones */
 button {
-    background-color: #3498db;
+    background-color: #0066aa;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -89,7 +89,7 @@ button:hover {
 }
 
 .dropdown-content a:hover {
-    background-color: #2980b9;
+    background-color: #004572;
     border-radius: 5px;
 }
 
@@ -100,7 +100,7 @@ button:hover {
     position: absolute;
     top: 20px;
     right: 20px;
-    background-color: #3498db;
+    background-color: #00406b;
     color: #fff;
     padding: 10px 20px;
     border: none;

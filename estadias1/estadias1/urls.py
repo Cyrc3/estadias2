@@ -26,10 +26,9 @@ urlpatterns = [
     path('registrar_proveedor/',views.registrar_proveedor,name='proveedor'),
     path('registrar_inventario/',views.registrar_producto,name='producto'),
     path('menu_principal/', views.menu_principal, name='menu_principal'),
-    path('registro_compra/', views.menu_principal, name='compra'),
-    path('historico_compras/', views.menu_principal, name='historicoCompras'),
-    path('historico_ventas/', views.menu_principal, name='historicoVentas'),
-    path('registro_categoria/', views.menu_principal, name='altaCategoria'),
+    path('historico_compras/', views.historico_compras, name='historicoCompras'),
+    path('historico_ventas/', views.historico_ventas, name='historicoVentas'),
+    path('registro_categoria/', views.registrar_categoria, name='altaCategoria'),
 
     
 

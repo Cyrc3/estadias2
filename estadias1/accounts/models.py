@@ -61,6 +61,4 @@ class Producto(models.Model):
         db_table = 'producto'
         managed = False
 
-#faltan cosas aki
-
     
