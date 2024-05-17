@@ -5,15 +5,17 @@ from django.contrib.auth.models import AbstractUser
 #Commented bcs this isn't working
 class Usuario(AbstractUser):
     class Meta:
-        db_table = 'USUARIO'   #Lit USUARIO es el nombre de la tabla, huele a fuga de informacion si me lo preguntas.
+        db_table = 'USUARIO'  
         managed = False
 
 
 #class Usuario(models.Model):
+#    db_table = 'USUARIO' 
 #    id_usuario = models.AutoField(primary_key=True)
 #    nombre = models.CharField(max_length=255)
 #    privilegio = models.CharField(max_length=255)
 #    password = models.CharField(max_length=255)
+#    managed = False
 
 
 #MÉTODOS DEL CLIENTE "-------------UWU------------------"

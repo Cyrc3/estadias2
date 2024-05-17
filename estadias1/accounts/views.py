@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Cliente, Proveedor, Categoria, Producto
+from django.http import HttpResponse
+
 #from .forms import ProductoForm
 from django.contrib import messages
 
@@ -21,6 +23,7 @@ def loginFun(request):
     return render(request, '../estadias1/views/index.html', {'form': form})
 
 def menu_principal(request):
+    
     return render(request, 'menu_principal.html')
 
 
@@ -31,10 +34,13 @@ def index(request):
 def registro_ventas(request):
     return render(request,'registro_venta.html')
 
+#def render_cliente(View):
+#    return render(request, 'registro_cliente.html')
+
 def registrar_cliente(request):
     if request.method == 'POST' :
         nuevo_cliente = Cliente()
-        nuevo_cliente.nombre = request.POST.get('nombre')
+        nuevo_cliente.razon_social = request.POST.get('nombre')
         nuevo_cliente.rfc = request.POST.get('rfc')
         nuevo_cliente.regimen_fiscal = request.POST.get('regimen_fiscal')
         nuevo_cliente.uso_factura = request.POST.get('uso_factura')

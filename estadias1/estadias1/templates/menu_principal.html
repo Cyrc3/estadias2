@@ -1,3 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <link rel="stylesheet" href="../static/styles/stylesMenu.css">
+</head>
+<body>
+    <div class="container"> 
+        <h2>Menu principal</h2>
+        <!--<form method="POST">-->
+            {% csrf_token %}        
+            <a href="{% url 'compra' %}" class="button">Registrar Compra</a>
+            <a href="{% url 'ventas' %}" class="button">Registrar Venta</a>
+            <a href="{% url 'cliente' %}" class="button">Registrar Cliente</a>
+            <a href="{% url 'producto' %}" class="button">Registrar Alta en Inventario</a>
+            <a href="{% url 'proveedor' %}" class="button">Registrar Proveedor</a>
+            <a href="{% url 'historicoCompras' %}" class="button">Historico Compras</a>
+            <a href="{% url 'historicoVentas' %}" class="button">Historico Ventas</a>
+        
+            
+
+        </form>
+    </div>
+</body>
+</html>
+
+
+
+
+
+<!-- 
+            <input type="button" value ="Registrar Compra">
+            <input type="button" value="Registrar Venta">
+            <input type="button" value="Registrar Cliente">
+            <input type="button" value="Registrar Alta en inventario">
+            <input type="list" value="aa">
+            <input type="button" value="Logout">
+
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,10 +53,10 @@
 <h1>Gestion de inventario UTSJR</h1>
     
 <div class="button-container">
-    <button onclick="window.location.href='#registrar_compra'">Registrar Compra</button>
-    <button onclick="window.location.href='#registrar_venta'">Registrar Venta</button>
-    <button onclick="window.location.href='#registrar_cliente'">Registrar Cliente</button>
-    <button onclick="window.location.href='#registrar_inventario'">Registrar alta en inventario</button>
+    <button onclick="window.location.href='/registrar_compra'">Registrar Compra</button>
+    <button onclick="window.location.href='/registrar_venta'">Registrar Venta</button>
+    <button onclick="window.location.href='/registrar_cliente'">Registrar Cliente</button>
+    <button onclick="window.location.href='/registrar_inventario'">Registrar yalta en inventario</button>
     
     <div class="dropdown">
         <button class="dropbtn">CONSULTAS</button>
@@ -28,7 +71,7 @@
 <button class="logout-button" onclick="window.location.href='#logout'">Logout</button>
 
     
-    <!-- Placeholder para las siguientes secciones -->
+   
     <div id="registrar_compra"></div>
     <div id="registrar_venta"></div>
     <div id="registrar_cliente"></div>
@@ -38,3 +81,4 @@
     <div id="logout"></div>
 </body>
 </html>
+-->
