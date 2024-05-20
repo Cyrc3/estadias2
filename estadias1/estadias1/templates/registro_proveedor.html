@@ -1,36 +1,43 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Proveedor</title>
-    <link rel="stylesheet" href="../styles/styles.css">
+    {%load static%}
+    <link rel="stylesheet" href="{% static 'styles/styles_proveedor.css' %}">
 </head>
-<body> 
-   <form method="POST">
-    {% csrf_token %}
-    <h1>Registro de Proveedor</h1>
-    
-    <label for="id_proveedor">ID de Proveedor:</label><br>
-    <input type="text" id="id_proveedor" name="id_proveedor" value="--auto--" readonly><br>
-    
-    <label for="razon_social">Razón Social:</label><br>
-    <input type="text" id="razon_social" name="razon_social"><br>
-    
-    <label for="direccion">Dirección:</label><br>
-    <input type="text" id="direccion" name="direccion"><br>
-    
-    <label for="telefono">Número Telefónico:</label><br>
-    <input type="text" id="telefono" name="telefono"><br>
-    
-    <label for="rfc">RFC:</label><br>
-    <input type="text" id="rfc" name="rfc"><br>
-    
-    <input type="submit" value="Guardar"></input>
-   </form>
-    
-    <!-- 
+
+<body>
+    <div class="container">
+        <form method="POST">
+            {% csrf_token %}
+            <h1>Registro de Proveedor</h1>
+
+            <label for="id_proveedor">ID de Proveedor:</label><br>
+            <input type="text" id="id_proveedor" name="id_proveedor" value="--auto--" readonly><br>
+
+            <label for="razon_social">Razón Social:</label><br>
+            <input type="text" id="razon_social" name="razon_social"><br>
+
+            <label for="direccion">Dirección:</label><br>
+            <input type="text" id="direccion" name="direccion"><br>
+
+            <label for="telefono">Número Telefónico:</label><br>
+            <input type="text" id="telefono" name="telefono"><br>
+
+            <label for="rfc">RFC:</label><br>
+            <input type="text" id="rfc" name="rfc"><br>
+
+            <input type="submit" value="Guardar"></input>
+        </form>
+
+        <!-- 
     <button class="logout-button" onclick="window.location.href='/'">Logout</button>
     -->
+
+    </div>
 </body>
+
 </html>

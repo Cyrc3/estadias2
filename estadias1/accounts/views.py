@@ -94,6 +94,7 @@ def registrar_categoria(request):
         nueva_categoria.descripcion = request.POST.get('descripcion')
         nueva_categoria.save()
         return redirect('menu_principal')
+        
     return render(request, 'registro_categoria.html')
 
 
@@ -111,14 +112,16 @@ def registrar_compra(request):
         if id_producto != '0':
             producto = Producto.objects.get(id_producto = id_producto)
             nueva_compra.id_producto = producto.id_producto
-
             nueva_compra.save()
             return redirect('menu_principal')
+    else:
+         return render(request, 'registro_compra.html')        
         
 
 
 def historico_compras(request):
-    return render(request, 'menu_principal.html')
+    return render(request, 'historico_compras.html')
 
 def historico_ventas(request):
-    return render(request, 'menu_principal.html')
+    return render(request, 'historico_ventas.html')
+

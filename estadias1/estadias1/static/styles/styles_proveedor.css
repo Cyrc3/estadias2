@@ -27,8 +27,7 @@ label {
     display: block;
     margin: 10px 0 5px;
 }
-input[type="text"],
-select {
+input[type="text"] {
     width: calc(100% - 20px);
     padding: 8px 10px;
     margin-bottom: 10px;
@@ -36,7 +35,7 @@ select {
     border-radius: 5px;
 }
 input[type="submit"] {
-    background-color: #63c2e8; /* Color azul cielo */
+    background-color: #87CEEB; /* Color azul cielo */
     color: white; /* Letra blanca */
     border: none;
     padding: 10px 15px;
@@ -50,14 +49,4 @@ input[type="submit"] {
 }
 input[type="submit"]:hover {
     background-color: #7bc1e4; /* Un tono más oscuro para el hover */
-}
-.value {
-    display: block;
-    margin-top: -10px;
-    margin-bottom: 10px;
-    color: #2baee1;
-    text-decoration: none;
-}
-.value:hover {
-    text-decoration: underline;
 }

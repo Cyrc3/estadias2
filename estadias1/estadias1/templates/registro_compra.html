@@ -5,14 +5,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Venta</title>
+    <title>Registro de Compra</title>
+    {%load static%}
     <link rel="stylesheet" href="{% static 'styles/styles_ventas.css' %}">
 </head>
 <body>
     <div class="container">
         <div class="left">
             <h2>Registro de Compras</h2>
-            <form action="#" method="post">
+            <form action="#" method="POST">
+                {% csrf_token %}
                 <label for="proveedores">Proveedor</label>
                 <select id="proveedor" name="proveedor" required>
                     <option value="">Seleccionar</option>
@@ -37,7 +39,7 @@
                 <label for="total">Total:</label>
                 <input type="text" id="total" name="total">
 
-                <input type="button" value="Guardar">
+                <input type="submit" value="Guardar">
             </form>
         </div>
         <div class="right">

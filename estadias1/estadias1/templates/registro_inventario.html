@@ -8,37 +8,40 @@
 </head>
 <body>
     <h1>Registro de Producto</h1>
+    <div class="container">
+
     
-    <form method="POST">
-        {% csrf_token %}
-        <label for="id">ID:</label><br>
-        <input type="text" id="id" name="id" value="--auto--" readonly><br>
-        
-        <label for="nombre">Nombre:</label><br>
-        <input type="text" id="nombre" name="nombre" required><br>
-        
-        <label for="categoria">Categoría:</label><br>
-        <select id="id_categoria" name="id_categoria" required>
-            <option value="">Selecciona</option>
-            {% for categoria in categorias %}
-                <option value="{{categoria.id_categoria}}"> {{categoria.descripcion}} </option>
-            {% endfor %}
-        </select>
-        <a href="{% url 'altaCategoria' %}" class="value">Registrar Categoria</a>
+        <form method="POST">
+            {% csrf_token %}
+            <label for="id">ID:</label><br>
+            <input type="text" id="id" name="id" value="--auto--" readonly><br>
+            
+            <label for="nombre">Nombre:</label><br>
+            <input type="text" id="nombre" name="nombre" required><br>
+            
+            <label for="categoria">Categoría:</label><br>
+            <select id="id_categoria" name="id_categoria" required>
+                <option value="">Selecciona</option>
+                {% for categoria in categorias %}
+                    <option value="{{categoria.id_categoria}}"> {{categoria.descripcion}} </option>
+                {% endfor %}
+            </select>
+            <a href="{% url 'altaCategoria' %}" class="value">Registrar Categoria</a>
 
 
-        <br>
-        <label for="costo_venta">Costo de venta</label><br>
-        <input type="text" id="costo_venta" name="costo_venta" required>
-        <br>
+            <br>
+            <label for="costo_venta">Costo de venta</label><br>
+            <input type="text" id="costo_venta" name="costo_venta" required>
+            <br>
 
-        <label for="stock">Stock</label><br>
-        <input type="text" id="stock" name="stock" required>
+            <label for="stock">Stock</label><br>
+            <input type="text" id="stock" name="stock" required>
 
-        <br>
+            <br>
 
-        
-        <input type="submit" value="registrar">
-    </form>
+            
+            <input type="submit" value="registrar">
+        </form>
+    </div>
 </body>
 </html>
