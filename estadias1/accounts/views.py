@@ -60,6 +60,7 @@ def registrar_cliente(request):
 def registrar_proveedor(request):
     if request.method == 'POST' :
         nuevo_proveedor = Proveedor()
+        #nuevo_proveedor.id_proveedor =request.POST.get('id_proveedor')
         nuevo_proveedor.razon_social = request.POST.get('razon_social')
         nuevo_proveedor.direccion = request.POST.get('direccion')
         nuevo_proveedor.numero_telefono = request.POST.get('telefono')
@@ -90,34 +91,33 @@ def registrar_producto(request):
 def registrar_categoria(request):
     if request.method == 'POST':
         nueva_categoria = Categoria()
-        nueva_categoria.descripcion = request.POST.get('id_categoria')
+        nueva_categoria.id_categoria = request.POST.get('id_categoria')
         nueva_categoria.descripcion = request.POST.get('descripcion')
         nueva_categoria.save()
-        return redirect('menu_principal')
+        return redirect('producto')
         
     return render(request, 'registro_categoria.html')
 
 
 def registrar_compra(request):
+    proveedores = Proveedor.objects.all()    
     if request.method == 'POST':
         nueva_compra = Compra()
         nueva_compra.id_compra = request.POST.get('id_compra')
         nueva_compra.cantidad = request.POST.get('cantidad')
-        id_proveedor = int(request.POST.get('proveedor'))
-        if id_proveedor != '0':
-            proveedor = Proveedor.objects.get(id_proveedor = id_proveedor)
-            nueva_compra.id_proveedor = proveedor.id_proveedor
+        id_proveedor = int(request.POST.get('id_proveedor'))
+        if id_proveedor and id_proveedor != '0':
+            proveedores = Proveedor.objects.get(id_proveedor = id_proveedor)
+            nueva_compra.id_proveedor = proveedores.id_proveedor
         
-        id_producto = int(request.POST.get('producto'))
+        id_producto = int(request.POST.get('id_producto'))
         if id_producto != '0':
             producto = Producto.objects.get(id_producto = id_producto)
             nueva_compra.id_producto = producto.id_producto
             nueva_compra.save()
             return redirect('menu_principal')
     else:
-         return render(request, 'registro_compra.html')        
-        
-
+         return render(request, 'registro_compra.html')   
 
 def historico_compras(request):
     return render(request, 'historico_compras.html')

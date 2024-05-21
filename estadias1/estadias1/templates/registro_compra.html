@@ -11,26 +11,26 @@
 </head>
 <body>
     <div class="container">
+        
+
         <div class="left">
             <h2>Registro de Compras</h2>
-            <form action="#" method="POST">
+            <form method="POST">
                 {% csrf_token %}
-                <label for="proveedores">Proveedor</label>
-                <select id="proveedor" name="proveedor" required>
+                <label for="proveedor">Proveedor</label><br>
+                <select id="id_proveedor" name="id_proveedor" required>
                     <option value="">Seleccionar</option>
-                    <option value="1">Vilros</option>
-                    <option value="2">Alibaba</option>
-                    <option value="1">Mosquitto</option>
-
+                    {% for proveedor in proveedores %}
+                        <option value="{{proveedor.id_proveedor}}"> {{proveedor.razon_social}} </option>
+                    {% endfor %}
                 </select>
 
                 <label for="componente">Producto:</label>
-                <select id="componente" name="componente" required>
+                <select id="id_producto" name="id_producto" required>
                     <option value="">Seleccionar</option>
-                    <option value="1">Arduino UNO</option>
-                    <option value="2">Raspberry pi 4GB</option>
-                    <option value="3">Orange pi 5 2GB</option>
-                    <!-- Agrega más opciones según sea necesario -->
+                    {% for producto in productos %}
+                        <option value="{{proveedor.id_proveedor}}"> {{proveedor.razon_social}} </option>
+                    {% endfor %}
                 </select>
 
                 <label for="cantidad">Cantidad:</label>
@@ -60,6 +60,8 @@
                 <input type="button" value="Registrar">
             </div>
         </div>
+    </form>
+
     </div>
 </body>
 </html>
