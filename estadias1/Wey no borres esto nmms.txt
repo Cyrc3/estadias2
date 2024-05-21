@@ -1,0 +1,79 @@
+-- tabla categoria_producto
+create table categoria_producto (
+    id_categoria int primary key auto_increment,
+    descripcion varchar(255)
+);
+
+-- tabla producto
+create table producto (
+    id_producto int primary key auto_increment,
+    stock int,
+    nombre varchar(255),
+    id_categoria int,
+    costo_venta decimal(10, 2),
+    foreign key (id_categoria) references categoria_producto(id_categoria)
+);
+
+-- tabla detalle_venta
+create table detalle_venta (
+    id_detalleventa int primary key auto_increment,
+    id_producto int,
+    cantidad int,
+    precio_total decimal(10, 2),
+    foreign key (id_producto) references producto(id_producto)
+);
+
+-- tabla venta
+create table venta (
+    id_venta int primary key auto_increment,
+    fecha date,
+    total decimal(10, 2),
+    id_detalleventa int,
+    foreign key (id_detalleventa) references detalle_venta(id_detalleventa)
+);
+
+-- tabla proveedor
+create table proveedor (
+    id_proveedor int primary key auto_increment,
+    razon_social varchar(255),
+    direccion varchar(255),
+    numero_telefono varchar(20),
+    rfc varchar(20)
+);
+
+-- tabla detalle_compra
+create table detalle_compra (
+    id_detallecompra int primary key auto_increment,
+    id_proveedor int,
+    cantidad int,
+    costo decimal(10, 2),
+    id_producto int,
+    foreign key (id_proveedor) references proveedor(id_proveedor),
+    foreign key (id_producto) references producto(id_producto)
+);
+
+-- tabla compra
+create table compra (
+    id_compra int primary key auto_increment,
+    total decimal(10, 2),
+    id_detallecompra int,
+    fecha date,
+    foreign key (id_detallecompra) references detalle_compra(id_detallecompra)
+);
+
+-- tabla cliente
+create table cliente (
+    rfc varchar(20) primary key,
+    razon_social varchar(255),
+    uso_factura varchar(255),
+    regimen_fiscal varchar(255),
+    codigo_postal varchar(10)
+);
+
+-- tabla usuario
+create table usuario (
+    id_usuario int primary key auto_increment,
+    nombre varchar(255),
+    privilegio varchar(50),
+    password varchar(255)
+);
