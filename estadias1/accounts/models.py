@@ -62,7 +62,7 @@ class Producto(models.Model):
         managed = False
 
 #    
-class Compra(models.Model):
+class Detalle_Compra(models.Model):
     id_compra = models.AutoField(primary_key=True)
     id_proveedor = models.IntegerField()
     id_producto = models.IntegerField()
@@ -70,7 +70,7 @@ class Compra(models.Model):
     total = models.FloatField()
 
     class Meta:
-        db_table = 'compra'
+        db_table = 'detalle_compra'
         managed = False
 
 

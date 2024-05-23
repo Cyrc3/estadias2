@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
-from .models import Cliente, Proveedor, Categoria, Producto, Compra
+from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra
 from django.http import HttpResponse
 
 #from .forms import ProductoForm
@@ -101,27 +101,30 @@ def registrar_categoria(request):
 
 def registrar_compra(request):
     proveedores = Proveedor.objects.all()    
-    if request.method == 'POST':
-        nueva_compra = Compra()
-        nueva_compra.id_compra = request.POST.get('id_compra')
+    productos = Producto.objects.all()
+    if request.method == 'POST': 
+        nueva_compra = Detalle_Compra()
+        #nueva_compra.id_compra = request.POST.get('id_compra')
         nueva_compra.cantidad = request.POST.get('cantidad')
         id_proveedor = int(request.POST.get('id_proveedor'))
-        if id_proveedor and id_proveedor != '0':
-            proveedores = Proveedor.objects.get(id_proveedor = id_proveedor)
-            nueva_compra.id_proveedor = proveedores.id_proveedor
+        id_producto = int(request.POST.get('id_producto'))
+        if id_proveedor and id_proveedor != '0' and id_producto and id_producto != '0':
+            proveedor = Proveedor.objects.get(id_proveedor = id_proveedor)
+            producto = Producto.objects.get(id_producto = id_producto)
+            nueva_compra.id_proveedor = proveedor.id_proveedor
+            nueva_compra.id_producto = producto.id_producto
             nueva_compra.save()
-        
-        #id_producto = int(request.POST.get('id_producto'))
-        #if id_producto != '0':
-        #    producto = Producto.objects.get(id_producto = id_producto)
-        #    nueva_compra.id_producto = producto.id_producto
-        #    nueva_compra.save()
-        #    return redirect('menu_principal')
+
     else:
-         return render(request, 'registro_compra.html')   
+         return render(request, 'registro_compra.html', {'proveedores': proveedores, 'productos' : productos})   
+
+
 
 def historico_compras(request):
     return render(request, 'historico_compras.html')
+
+
+
 
 def historico_ventas(request):
     return render(request, 'historico_ventas.html')

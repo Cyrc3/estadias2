@@ -14,7 +14,7 @@
         
 
         <div class="left">
-            <h2>Registro de Compras</h2>
+            <h2>Registro de Compras</h2> 
             <form method="POST">
                 {% csrf_token %}
                 <label for="proveedor">Proveedor</label><br>
@@ -29,7 +29,7 @@
                 <select id="id_producto" name="id_producto" required>
                     <option value="">Seleccionar</option>
                     {% for producto in productos %}
-                        <option value="{{proveedor.id_proveedor}}"> {{proveedor.razon_social}} </option>
+                        <option value="{{producto.id_proveedor}}"> {{producto.nombre}} </option>
                     {% endfor %}
                 </select>
 
