@@ -109,13 +109,14 @@ def registrar_compra(request):
         if id_proveedor and id_proveedor != '0':
             proveedores = Proveedor.objects.get(id_proveedor = id_proveedor)
             nueva_compra.id_proveedor = proveedores.id_proveedor
-        
-        id_producto = int(request.POST.get('id_producto'))
-        if id_producto != '0':
-            producto = Producto.objects.get(id_producto = id_producto)
-            nueva_compra.id_producto = producto.id_producto
             nueva_compra.save()
-            return redirect('menu_principal')
+        
+        #id_producto = int(request.POST.get('id_producto'))
+        #if id_producto != '0':
+        #    producto = Producto.objects.get(id_producto = id_producto)
+        #    nueva_compra.id_producto = producto.id_producto
+        #    nueva_compra.save()
+        #    return redirect('menu_principal')
     else:
          return render(request, 'registro_compra.html')   
 
