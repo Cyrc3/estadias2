@@ -49,12 +49,15 @@ class Categoria(models.Model):
     class Meta : 
         db_table = 'categoria_producto'
         managed = False
+    def __str__(self):
+        return self.descripcion
+    
 
 class Producto(models.Model):
     id_producto = models.AutoField(primary_key=True)
     stock = models.IntegerField()
     nombre = models.CharField(max_length=255)
-    id_categoria = models.IntegerField()
+    id_categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE,db_column='id_categoria')
     costo_venta = models.DecimalField(decimal_places=2, max_digits=10)
 
     class Meta :
@@ -67,7 +70,7 @@ class Detalle_Compra(models.Model):
     id_proveedor = models.IntegerField()
     id_producto = models.IntegerField()
     cantidad = models.IntegerField()
-    total = models.FloatField()
+    costo = models.FloatField()
 
     class Meta:
         db_table = 'detalle_compra'

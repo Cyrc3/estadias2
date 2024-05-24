@@ -1,47 +1,30 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Producto</title>
-    <link rel="stylesheet" href="../static/styles/styles.css">
-</head>
-<body>
-    <h1>Registro de Producto</h1>
-    <div class="container">
+{% extends 'base.html' %}
 
+{% block title %}Registro de Producto{% endblock %}
+
+{% block extra_css %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Registro de Producto</h1>
+<div class="container">
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
     
-        <form method="POST">
-            {% csrf_token %}
-            <label for="id">ID:</label><br>
-            <input type="text" id="id" name="id" value="--auto--" readonly><br>
-            
-            <label for="nombre">Nombre:</label><br>
-            <input type="text" id="nombre" name="nombre" required><br>
-            
-            <label for="categoria">Categoría:</label><br>
-            <select id="id_categoria" name="id_categoria" required>
-                <option value="">Selecciona</option>
-                {% for categoria in categorias %}
-                    <option value="{{categoria.id_categoria}}"> {{categoria.descripcion}} </option>
-                {% endfor %}
-            </select>
-            <a href="{% url 'altaCategoria' %}" class="value">Registrar Categoria</a>
-
-
-            <br>
-            <label for="costo_venta">Costo de venta</label><br>
-            <input type="text" id="costo_venta" name="costo_venta" required>
-            <br>
-
-            <label for="stock">Stock</label><br>
-            <input type="text" id="stock" name="stock" required>
-
-            <br>
-
-            
-            <input type="submit" value="registrar">
-        </form>
+        <input type="submit" value="Registrar">
+    </form>
+    
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        {% for field, errors in form.errors.items %}
+        <strong>{{ field|title }}</strong>: {{ errors|striptags }}
+        {% endfor %}
     </div>
-</body>
-</html>
+    {% endif %}
+    
+    <a href="{% url 'altaCategoria' %}" class="value">Añadir Categoría</a>
+</div>
+{% endblock %}

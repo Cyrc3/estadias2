@@ -20,15 +20,25 @@ from accounts import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
     path('', LoginView.as_view(template_name='index.html'), name = 'login'),
+
     path('registro_venta/',views.registro_ventas,name="ventas"),
+    
     path('registrar_clientes/',views.registrar_cliente,name='cliente'),
+    
     path('registro_compra/',views.registrar_compra,name='compra'),
+    
     path('registrar_proveedor/',views.registrar_proveedor,name='proveedor'),
+    
     path('registrar_inventario/',views.registrar_producto,name='producto'),
+    
     path('menu_principal/', views.menu_principal, name='menu_principal'),
+    
     path('historico_compras/', views.historico_compras, name='historicoCompras'),
+    
     path('historico_ventas/', views.historico_ventas, name='historicoVentas'),
+    
     path('registro_categoria/', views.registrar_categoria, name='altaCategoria'),
 
     

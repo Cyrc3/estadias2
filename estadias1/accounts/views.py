@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra
+from .forms import ProductoForm, ClienteForm, ProveedorForm
 from django.http import HttpResponse
 
 #from .forms import ProductoForm
@@ -42,50 +43,44 @@ def registro_ventas(request):
 
 #def render_cliente(View):
 #    return render(request, 'registro_cliente.html')
-
+ 
 def registrar_cliente(request):
     if request.method == 'POST' :
-        nuevo_cliente = Cliente()
-        nuevo_cliente.razon_social = request.POST.get('nombre')
-        nuevo_cliente.rfc = request.POST.get('rfc')
-        nuevo_cliente.regimen_fiscal = request.POST.get('regimen_fiscal')
-        nuevo_cliente.uso_factura = request.POST.get('uso_factura')
-        nuevo_cliente.codigo_postal = request.POST.get('codigo_postal')
-        nuevo_cliente.save()
-        return render(request, 'menu_principal.html')
+        form = ClienteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('menu_principal')
+        else:
+            messages.error(request, "Hubo un error al registrar el cliente.")
     else:
-        return render(request, 'registro_cliente.html')
+        form = ClienteForm()
+    return render(request, 'registro_cliente.html', {'form':form})
     
 
 def registrar_proveedor(request):
     if request.method == 'POST' :
-        nuevo_proveedor = Proveedor()
-        #nuevo_proveedor.id_proveedor =request.POST.get('id_proveedor')
-        nuevo_proveedor.razon_social = request.POST.get('razon_social')
-        nuevo_proveedor.direccion = request.POST.get('direccion')
-        nuevo_proveedor.numero_telefono = request.POST.get('telefono')
-        nuevo_proveedor.rfc = request.POST.get('rfc')
-        nuevo_proveedor.save()
-        return render(request, 'menu_principal.html')
+        form = ProveedorForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'menu_principal.html')
+        else:
+            messages.error(request, "Hubo un error al registrar el proveedor.")
     else:
-        return render(request,'registro_proveedor.html') 
+        form = ProveedorForm()
+    return render(request, 'registro_proveedor.html', {'form':form})
     
 
 def registrar_producto(request):
-    categorias = Categoria.objects.all()
     if request.method == 'POST':
-        nuevo_producto = Producto()
-        nuevo_producto.nombre = request.POST.get('nombre')
-        nuevo_producto.stock = request.POST.get('stock')
-        nuevo_producto.costo_venta = request.POST.get('costo_venta')
-        id_categoria = int(request.POST.get('id_categoria'))
-        if id_categoria and id_categoria != '0': 
-            categoria = Categoria.objects.get(id_categoria=id_categoria)
-            nuevo_producto.id_categoria = categoria.id_categoria
-            nuevo_producto.save()
+        form = ProductoForm(request.POST)
+        if form.is_valid():
+            form.save()
             return redirect('menu_principal')
-    messages.error(request, 'Por favor, selecciona una categoría.')
-    return render(request, 'registro_inventario.html', {'categorias': categorias})
+        else:
+            messages.error(request, "Hubo un error al registrar el producto.")
+    else:
+        form = ProductoForm()
+    return render(request, 'registro_inventario.html', {'form':form})
 
 
 def registrar_categoria(request):
@@ -113,7 +108,7 @@ def registrar_compra(request):
             producto = Producto.objects.get(id_producto = id_producto)
             nueva_compra.id_proveedor = proveedor.id_proveedor
             nueva_compra.id_producto = producto.id_producto
-            nueva_compra.save()
+            #nueva_compra.save()
 
     else:
          return render(request, 'registro_compra.html', {'proveedores': proveedores, 'productos' : productos})   

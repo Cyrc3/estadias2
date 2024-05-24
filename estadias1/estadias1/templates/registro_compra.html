@@ -24,20 +24,20 @@
                         <option value="{{proveedor.id_proveedor}}"> {{proveedor.razon_social}} </option>
                     {% endfor %}
                 </select>
-
+                <a href="{% url 'proveedor' %}" class="value">Registrar Proveedor</a>
                 <label for="componente">Producto:</label>
                 <select id="id_producto" name="id_producto" required>
                     <option value="">Seleccionar</option>
                     {% for producto in productos %}
-                        <option value="{{producto.id_proveedor}}"> {{producto.nombre}} </option>
+                        <option value="{{producto.id_producto}}"> {{producto.nombre}} </option>
                     {% endfor %}
                 </select>
-
+                <a href="{% url 'producto' %}" class="value">Registrar Producto</a>
                 <label for="cantidad">Cantidad:</label>
                 <input type="text" id="cantidad" name="cantidad" required>
 
-                <label for="total">Total:</label>
-                <input type="text" id="total" name="total">
+                <label for="total">Precio por unidad</label>
+                <input type="text" id="total" name="total" placeholder="10.00">
 
                 <input type="submit" value="Guardar">
             </form>
@@ -52,7 +52,7 @@
                         <th>Cantidad</th>
                         <th>Precio Total</th>
                     </tr>
-                    <!-- Aquí se pueden agregar filas de la tabla con JavaScript -->
+                    
                 </table>
                 <div class="total">
                     Total: $<span id="total-compra">0</span>

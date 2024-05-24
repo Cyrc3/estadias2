@@ -11,32 +11,20 @@
 
 <body>
     <div class="container">
+        <h1>Registrar Proveedor</h1>
         <form method="POST">
             {% csrf_token %}
-            <h1>Registro de Proveedor</h1>
-
-            <label for="id_proveedor">ID de Proveedor:</label><br>
-            <input type="text" id="id_proveedor" name="id_proveedor" value="--auto--" readonly><br>
-
-            <label for="razon_social">Razón Social:</label><br>
-            <input type="text" id="razon_social" name="razon_social"><br>
-
-            <label for="direccion">Dirección:</label><br>
-            <input type="text" id="direccion" name="direccion"><br>
-
-            <label for="telefono">Número Telefónico:</label><br>
-            <input type="text" id="telefono" name="telefono"><br>
-
-            <label for="rfc">RFC:</label><br>
-            <input type="text" id="rfc" name="rfc"><br>
+            {{ form.as_p }}
 
             <input type="submit" value="Guardar"></input>
         </form>
-
-        <!-- 
-    <button class="logout-button" onclick="window.location.href='/'">Logout</button>
-    -->
-
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            {% for field, errors in form.errors.items %}
+            <strong>{{ field|title }}</strong>: {{ errors|striptags }}
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
 </body>
 

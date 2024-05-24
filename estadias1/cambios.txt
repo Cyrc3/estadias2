@@ -1,0 +1,37 @@
+CAMBIOS HECHOS POR IZAI EL DIA 23 05 2024 A LAS 11:43 PMMMMMMMMMMMMM
+
+
+-- forms.py en carpeta accounts ahi es donde django hace los forms, tengo entendido que se deben esppecificar todos los campos que hay en la bd
+    django automaticamente pone las claves primarias nulas y no las pone en el form
+    EN EL CASO DE PRODUCTO, COMO SE DESPLIEGAN LAS CATEGORIAS QUE HAY EN LA BD ES NECESARIA LA CONFIGURACION
+    id_categoria = forms.ModelChoiceField(queryset=Categoria.objects.all(), label='Categoría', to_field_name='descripcion')
+    ...demás código..
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['id_categoria'].queryset = Categoria.objects.all()
+
+     ESO SIRVE PARA PERSONALIZAR EL FORMULARIO 
+
+
+-- modificacion de views.py para que django se encargue de las inserciones y a la bd sin que nosotros 
+    lo hagamos, puedes ver eso en registrar_producto, registrar cliente y proveedor
+
+
+-- creacion de html base >  base.html el cual va a servir para usar como encabezado y se pueda navegar en todas las plantillas 
+    este se usa por medio de blocks, puedes analizarlo entrando al bse.html, luego al html de los registros que modifique
+    es como javascript lo que haciamos con renezito para el encabezado y pie de pagina lo mismito
+
+
+-- modoficacion de html de los respectivos registros, cliente, producto y proveedor para los formularioooooos
+
+
+-- modificacion en models, teniendo en cuenta que django esta gestionando las inserciones
+    debemos especificar las claves foraneas, nomás eso
+
+
+
+    
+
+
+
+    

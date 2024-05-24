@@ -1,0 +1,32 @@
+{% load static %}   
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Aplicación</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles/style_base.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'menu_principal' %}">Inicio</a></li>
+                <li><a href="{% url 'producto' %}">Registro de Inventario</a></li>
+                <li><a href="{% url 'ventas' %}">Registro de Ventas</a></li>
+                <li><a href="{% url 'historicoCompras' %}">Histórico de Compras</a></li>
+                <li><a href="{% url 'historicoVentas' %}">Histórico de Ventas</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+
+        {% endblock %}
+    </main>
+    <footer>
+        <p>SOMOS LOBOS - UTSJR 2024 | esto es para pruebassss no se va a quedar asi</p>
+    </footer>
+</body>
+</html>

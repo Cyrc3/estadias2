@@ -107,3 +107,14 @@ input[type="button"] {
 input[type="button"]:hover {
     background-color: #7bc1e4;
 }
+
+.value {
+    display: block;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    color: #2baee1;
+    text-decoration: none;
+}
+.value:hover {
+    text-decoration: underline;
+}

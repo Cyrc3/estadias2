@@ -1,37 +1,26 @@
-<!--REGISTRAR CLIENTE-->
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Cliente</title>
-    {%load static%}
-    <link rel="stylesheet" href="{% static 'styles/styles_cliente.css' %}">
-</head>
-<body>
-    <div class="container"> 
-        <h2>Registro de Cliente</h2>
-        <form method="POST">
-            {% csrf_token %}
-            <label for="rfc">RFC:</label>
-            <input type="text" id="rfc" name="rfc" required>
+{% extends 'base.html' %}
 
-            <label for="razon_social">Razon Social:</label>
-            <input type="text" id="razon_social" name="razon_social" required>
+{% block title %}Registro de Producto{% endblock %}
 
-            <label for="uso_factura">Uso de CFDI:</label>
-            <select id="uso_factura" name="uso_factura" required>
-                <option value="">Seleccionar</option>
-                <option value="Adquisición de mercancias">Adquisición de mercancias</option>
-                <option value="Devoluciones, descuentos o bonificaciones">Devoluciones, descuentos o bonificaciones</option>
-                <option value="Gastos en general">Gastos en general</option>
-            </select>
-            <label for="regimen_fiscal">Régimen Fiscal:</label>
-            <input type="text" id="regimen_fiscal" name="regimen_fiscal" required>
-            <label for="codigo_postal">Código Postal:</label>
-            <input type="text" id="codigo_postal" name="codigo_postal" required>
-            <input type="submit" value="Registrar Cliente">
-        </form>
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'styles/styles_cliente.css' %}">
+{% endblock %}
+
+{% block content %}
+<h2>Registro de Cliente</h2>
+<div class="container">
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Registrar Cliente">
+    </form>
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        {% for field, errors in form.errors.items %}
+        <strong>{{ field|title }}</strong>: {{ errors|striptags }}
+        {% endfor %}
     </div>
-</body>
-</html>
+    {% endif %}
+</div>
+{% endblock %}

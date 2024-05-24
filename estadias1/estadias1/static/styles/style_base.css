@@ -1,0 +1,28 @@
+/* Estilos para el menú de navegación */
+header nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-around; /* Para distribuir los elementos de forma equitativa */
+}
+
+header nav ul li {
+    font-size: 20px; /* Tamaño de letra más grande */
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: #2d5985; /* Color azul pastel */
+    padding: 10px;
+}
+
+header nav ul li a:hover {
+    color: #5a7a9c; /* Color azul pastel más oscuro al pasar el mouse */
+}
+
+
+footer{
+    background-color: #000000;
+    color:chocolate;
+}
