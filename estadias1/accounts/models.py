@@ -66,7 +66,7 @@ class Producto(models.Model):
 
 #    
 class Detalle_Compra(models.Model):
-    id_compra = models.AutoField(primary_key=True)
+    id_detallecompra = models.AutoField(primary_key=True)
     id_proveedor = models.IntegerField()
     id_producto = models.IntegerField()
     cantidad = models.IntegerField()
@@ -76,4 +76,13 @@ class Detalle_Compra(models.Model):
         db_table = 'detalle_compra'
         managed = False
 
+
+class Detalle_Venta(models.Model):
+    id_detalleventa = models.AutoField(primary_key=True)
+    id_producto = models.IntegerField()
+    cantidad = models.IntegerField()
+    precio_total = models.FloatField()
+    class Meta:
+        db_table = 'detalle_venta'
+        managed = False
 

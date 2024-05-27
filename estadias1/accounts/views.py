@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
-from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra
+from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Detalle_Venta
 from .forms import ProductoForm, ClienteForm, ProveedorForm
 from django.http import HttpResponse
 
@@ -108,10 +108,27 @@ def registrar_compra(request):
             producto = Producto.objects.get(id_producto = id_producto)
             nueva_compra.id_proveedor = proveedor.id_proveedor
             nueva_compra.id_producto = producto.id_producto
-            #nueva_compra.save()
+            nueva_compra.save()
+            
 
     else:
          return render(request, 'registro_compra.html', {'proveedores': proveedores, 'productos' : productos})   
+
+def registrar_venta(request):
+    producto = Producto.objects.all()
+    if request.method == 'POST':
+        nueva_venta = Detalle_Venta()
+
+        id_producto = int(request.POST.get('id_producto'))
+        if id_producto and id_producto != '0':
+            productos = Producto.objects.get(id_producto = id_producto)
+            nueva_venta.id_detalleventa = int(request.POST.get('id_detalleventa'))            
+            nueva_venta.id_producto = productos.id_producto
+            nueva_venta.cantidad = int(request.POST.get('cantidad'))
+            nueva_venta.precio_total = float(request.POST.get('precio_total'))
+            nueva_venta.save()
+    else:
+        return render(request, 'registro_venta.html', {'productos' : productos})
 
 
 
