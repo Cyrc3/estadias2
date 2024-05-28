@@ -20,11 +20,11 @@ class Usuario(AbstractUser):
 
 #MÉTODOS DEL CLIENTE "-------------UWU------------------"
 class Cliente(models.Model):
-    rfc = models.CharField(max_length=20)
+    rfc = models.CharField(max_length=13)
     razon_social = models.CharField(max_length=255)
     uso_factura = models.CharField(max_length=255)
-    regimen_fiscal = models.CharField(max_length=10)
-    codigo_postal = models.CharField(max_length=10)
+    regimen_fiscal = models.CharField(max_length=255)
+    codigo_postal = models.IntegerField()
 
     class Meta:
         db_table = "cliente"
@@ -36,11 +36,14 @@ class Proveedor(models.Model):
     razon_social = models.CharField(max_length=255)
     direccion = models.CharField(max_length=255)
     numero_telefono = models.CharField(max_length=255)
-    rfc = models.CharField(max_length=20)
+    rfc = models.CharField(max_length=12)
 
     class Meta:
         db_table = 'proveedor'
         managed = False 
+    def __str__(self):
+        return self.razon_social
+
 
 class Categoria(models.Model):
     id_categoria = models.AutoField(primary_key=True)
@@ -63,12 +66,24 @@ class Producto(models.Model):
     class Meta :
         db_table = 'producto'
         managed = False
+    def __str__(self):
+        return self.nombre
 
-#    
+
+class Compra(models.Model):
+    id_compra = models.AutoField(primary_key=True)
+    total = models.DecimalField(decimal_places=2, max_digits=10)
+    fecha = models.DateField()
+
+    class Meta : 
+        db_table = 'compra'
+        managed = False
+
+
 class Detalle_Compra(models.Model):
-    id_detallecompra = models.AutoField(primary_key=True)
-    id_proveedor = models.IntegerField()
-    id_producto = models.IntegerField()
+    id_compra = models.ForeignKey(Compra, on_delete=models.SET_NULL, db_column='id_compra',null=True)
+    id_proveedor = models.ForeignKey(Proveedor,on_delete=models.SET_NULL, db_column='id_proveedor',null=True)
+    id_producto = models.ForeignKey(Producto,on_delete=models.SET_NULL, db_column='id_producto',null=True)
     cantidad = models.IntegerField()
     costo = models.FloatField()
 

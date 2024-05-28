@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,50 +10,39 @@
     {%load static%}
     <link rel="stylesheet" href="{% static 'styles/styles_ventas.css' %}">
 </head>
+
 <body>
     <div class="container">
-        
+
 
         <div class="left">
-            <h2>Registro de Compras</h2> 
-            <form method="POST">
+            <h2>Registro de Compras</h2>
+            <form id="compraForm" method="POST">
                 {% csrf_token %}
-                <label for="proveedor">Proveedor</label><br>
-                <select id="id_proveedor" name="id_proveedor" required>
-                    <option value="">Seleccionar</option>
-                    {% for proveedor in proveedores %}
-                        <option value="{{proveedor.id_proveedor}}"> {{proveedor.razon_social}} </option>
-                    {% endfor %}
-                </select>
-                <a href="{% url 'proveedor' %}" class="value">Registrar Proveedor</a>
-                <label for="componente">Producto:</label>
-                <select id="id_producto" name="id_producto" required>
-                    <option value="">Seleccionar</option>
-                    {% for producto in productos %}
-                        <option value="{{producto.id_producto}}"> {{producto.nombre}} </option>
-                    {% endfor %}
-                </select>
-                <a href="{% url 'producto' %}" class="value">Registrar Producto</a>
-                <label for="cantidad">Cantidad:</label>
-                <input type="text" id="cantidad" name="cantidad" required>
-
-                <label for="total">Precio por unidad</label>
-                <input type="text" id="total" name="total" placeholder="10.00">
-
+                {{ form.as_p }}
                 <input type="submit" value="Guardar">
             </form>
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                {% for field, errors in form.errors.items %}
+                <strong>{{ field|title }}</strong>: {{ errors|striptags }}
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
         <div class="right">
             <h2>Resumen</h2>
             <div class="resumen">
-                <table>
+                <table id="resumenTabla">
                     <tr>
                         <th>Producto</th>
+                        <th>Proveedor</th>
                         <th>Precio por unidad</th>
                         <th>Cantidad</th>
                         <th>Precio Total</th>
+                        
                     </tr>
-                    
+
                 </table>
                 <div class="total">
                     Total: $<span id="total-compra">0</span>
@@ -60,8 +50,8 @@
                 <input type="button" value="Registrar">
             </div>
         </div>
-    </form>
-
     </div>
+    <script src="{% static 'JavaScript/Registro_compra_form.js' %}"></script>
 </body>
+
 </html>
