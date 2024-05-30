@@ -62,15 +62,17 @@ def registrar_proveedor(request):
 
 def registrar_producto(request):
     if request.method == 'POST':
-        form = ProductoForm(request.POST)
+        form = VentaForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('menu_principal')
         else:
             messages.error(request, "Hubo un error al registrar el producto.")
     else:
-        form = ProductoForm()
-    return render(request, 'registro_inventario.html', {'form':form})
+        form = VentaForm()
+    #return render(request, 'registro_inventario.html', {'form':form})
+    return render(request, 'registro_venta.html', {'form':form})
+
 
 
 def registrar_categoria(request):
@@ -90,15 +92,16 @@ def registrar_compra(request):
     else:
         form=CompraForm()
     return render(request, 'registro_compra.html', {'form':form})  
+ 
+
 
 
 def registrar_venta(request):
-    #productos = Producto.objects.all()  # Usar plural para la colección
     if request.method == 'POST':
-        form = CompraForm(request.POST)
+        form = VentaForm(request.POST)
     else:
-        form=CompraForm()
-    return render(request, 'registro_venta.html', {'form':form})  # Pasar productos al contexto
+        form = VentaForm()
+    return render(request, 'registro_venta.html', {'form':form})
 
 
 

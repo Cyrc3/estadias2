@@ -1,6 +1,7 @@
 <!--REGISTRAR VENTA-->
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,10 +9,11 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'styles/styles_ventas.css' %}">
 </head>
+
 <body>
     <div class="container">
         <div class="left">
-            <h2>Registro de Venta</h2> 
+            <h2>Registro de Venta</h2>
             <form method="POST">
                 {% csrf_token %}
                 {{ form.as_p }}
@@ -25,6 +27,7 @@
             </div>
             {% endif %}
         </div>
+
         <div class="right">
             <h2>Resumen</h2>
             <div class="resumen">
@@ -44,4 +47,5 @@
         </div>
     </div>
 </body>
+
 </html>
