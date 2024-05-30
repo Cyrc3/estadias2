@@ -80,6 +80,7 @@ class Compra(models.Model):
         managed = False
 
 
+
 class Detalle_Compra(models.Model):
     id_detallecompra = models.AutoField(primary_key=True)
     id_compra = models.ForeignKey(Compra, on_delete=models.SET_NULL, db_column='id_compra',null=True)
@@ -91,6 +92,7 @@ class Detalle_Compra(models.Model):
     class Meta:
         db_table = 'detalle_compra'
         managed = False
+
 
 
 class Venta(models.Model):

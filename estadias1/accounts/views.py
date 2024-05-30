@@ -31,8 +31,7 @@ def menu_principal(request):
 def index(request):
     return render(request,'index.html')
 
-def registro_ventas(request):
-    return render(request,'registro_venta.html')
+
 
 def registrar_cliente(request):
     if request.method == 'POST' :
@@ -62,16 +61,16 @@ def registrar_proveedor(request):
 
 def registrar_producto(request):
     if request.method == 'POST':
-        form = VentaForm(request.POST)
+        form = ProductoForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('menu_principal')
         else:
             messages.error(request, "Hubo un error al registrar el producto.")
     else:
-        form = VentaForm()
-    #return render(request, 'registro_inventario.html', {'form':form})
-    return render(request, 'registro_venta.html', {'form':form})
+        form = ProductoForm()
+    return render(request, 'registro_inventario.html', {'form':form})
+    #return render(request, 'registro_venta.html', {'form':form})
 
 
 
@@ -94,14 +93,13 @@ def registrar_compra(request):
     return render(request, 'registro_compra.html', {'form':form})  
  
 
-
-
-def registrar_venta(request):
+def registro_ventas(request):
     if request.method == 'POST':
         form = VentaForm(request.POST)
     else:
         form = VentaForm()
     return render(request, 'registro_venta.html', {'form':form})
+
 
 
 

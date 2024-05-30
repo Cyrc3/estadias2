@@ -5,7 +5,6 @@ from .models import Categoria, Producto, Cliente, Proveedor, Detalle_Compra, Det
 
 
 class ProductoForm(forms.ModelForm):
-
     id_categoria = forms.ModelChoiceField(queryset=Categoria.objects.all(), label='Categoría', to_field_name='descripcion')
 
     class Meta:
@@ -15,14 +14,12 @@ class ProductoForm(forms.ModelForm):
 
 
 class ClienteForm(forms.ModelForm):
-
     class Meta:
         model = Cliente
         fields = ['rfc','razon_social','uso_factura','regimen_fiscal','codigo_postal']
 
 
 class ProveedorForm(forms.ModelForm):
-
     class Meta:
         model = Proveedor 
         fields = ['id_proveedor','razon_social','direccion','numero_telefono','rfc']
@@ -42,7 +39,6 @@ class CompraForm(forms.ModelForm):
 
 
 class VentaForm(forms.ModelForm):
-
     id_producto = forms.ModelChoiceField(queryset=Producto.objects.all(), label='Producto',to_field_name='nombre')
 
     class Meta:
