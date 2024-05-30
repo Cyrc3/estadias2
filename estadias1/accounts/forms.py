@@ -43,4 +43,4 @@ class VentaForm(forms.ModelForm):
 
     class Meta:
         model = Detalle_Venta
-        fields = ['id_producto','cantidad','precio_total']
+        fields = ['id_producto','cantidad','precio_total', 'iva']

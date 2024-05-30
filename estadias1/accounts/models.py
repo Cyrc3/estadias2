@@ -111,6 +111,7 @@ class Detalle_Venta(models.Model):
     id_producto = models.ForeignKey(Producto,on_delete=models.SET_NULL, db_column='id_producto',null=True)
     cantidad = models.IntegerField()
     precio_total = models.FloatField()
+    iva = models.FloatField()
     class Meta:
         db_table = 'detalle_venta'
         managed = False

@@ -14,7 +14,7 @@
     <div class="container">
         <div class="left">
             <h2>Registro de Venta</h2>
-            <form method="POST">
+            <form id="ventaForm" method="POST">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <input type="submit" value="Guardar">
@@ -31,7 +31,7 @@
         <div class="right">
             <h2>Resumen</h2>
             <div class="resumen">
-                <table>
+                <table id="resumenTabla">
                     <tr>
                         <th>Componente</th>
                         <th>Precio por unidad</th>
@@ -41,11 +41,12 @@
                     <!-- Aquí se pueden agregar filas de la tabla con JavaScript -->
                 </table>
                 <div class="total">
-                    Total: $<span id="total-compra">0</span>
+                    Total: $<span id="total-venta">0</span>
                 </div>
             </div>
         </div>
     </div>
+    <script src="{% static 'JavaScript/Registro_venta_form.js' %}"></script>
 </body>
 
 </html>
