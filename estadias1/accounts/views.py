@@ -98,20 +98,19 @@ def registrar_compra(request):
 
 
 def registrar_venta(request):
-    producto = Producto.objects.all()
+    productos = Producto.objects.all()  # Usar plural para la colección
     if request.method == 'POST':
         nueva_venta = Detalle_Venta()
 
-        id_producto = int(request.POST.get('id_producto'))
+        id_producto = request.POST.get('id_producto')
         if id_producto and id_producto != '0':
-            productos = Producto.objects.get(id_producto = id_producto)
-            nueva_venta.id_detalleventa = int(request.POST.get('id_detalleventa'))            
-            nueva_venta.id_producto = productos.id_producto
+            producto = Producto.objects.get(id_producto=id_producto)  # Obtener el producto correcto
+            nueva_venta.id_producto = producto
             nueva_venta.cantidad = int(request.POST.get('cantidad'))
             nueva_venta.precio_total = float(request.POST.get('precio_total'))
             nueva_venta.save()
-    else:
-        return render(request, 'registro_venta.html', {'productos' : productos})
+            return redirect('menu_principal')  # Redirigir después de guardar
+    return render(request, 'registro_venta.html', {'productos': productos})  # Pasar productos al contexto
 
 
 

@@ -21,6 +21,8 @@ create table detalle_venta (
     cantidad int,
     precio_total decimal(10, 2),
     foreign key (id_producto) references producto(id_producto)
+    id_venta1 int foreign key,
+    foreign key(id_venta1) references venta(id_venta)
 );
 
 -- tabla venta
@@ -28,8 +30,6 @@ create table venta (
     id_venta int primary key auto_increment,
     fecha date,
     total decimal(10, 2),
-    id_detalleventa int,
-    foreign key (id_detalleventa) references detalle_venta(id_detalleventa)
 );
 
 -- tabla proveedor
