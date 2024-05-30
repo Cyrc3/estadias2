@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Detalle_Venta
-from .forms import ProductoForm, ClienteForm, ProveedorForm, CompraForm
+from .forms import ProductoForm, ClienteForm, ProveedorForm, CompraForm, VentaForm
 from django.http import HttpResponse
 
 #from .forms import ProductoForm
@@ -87,30 +87,18 @@ def registrar_categoria(request):
 def registrar_compra(request):
     if request.method == 'POST': 
         form = CompraForm(request.POST)
-        #if form.is_valid():
-            #form.save()
-         #   return redirect('menu_principal')
-        #else:
-         #   messages.error(request, "Hubo un error al registrar la compra.")
     else:
         form=CompraForm()
     return render(request, 'registro_compra.html', {'form':form})  
 
 
 def registrar_venta(request):
-    productos = Producto.objects.all()  # Usar plural para la colección
+    #productos = Producto.objects.all()  # Usar plural para la colección
     if request.method == 'POST':
-        nueva_venta = Detalle_Venta()
-
-        id_producto = request.POST.get('id_producto')
-        if id_producto and id_producto != '0':
-            producto = Producto.objects.get(id_producto=id_producto)  # Obtener el producto correcto
-            nueva_venta.id_producto = producto
-            nueva_venta.cantidad = int(request.POST.get('cantidad'))
-            nueva_venta.precio_total = float(request.POST.get('precio_total'))
-            nueva_venta.save()
-            return redirect('menu_principal')  # Redirigir después de guardar
-    return render(request, 'registro_venta.html', {'productos': productos})  # Pasar productos al contexto
+        form = CompraForm(request.POST)
+    else:
+        form=CompraForm()
+    return render(request, 'registro_venta.html', {'form':form})  # Pasar productos al contexto
 
 
 

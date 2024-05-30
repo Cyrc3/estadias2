@@ -81,6 +81,7 @@ class Compra(models.Model):
 
 
 class Detalle_Compra(models.Model):
+    id_detallecompra = models.AutoField(primary_key=True)
     id_compra = models.ForeignKey(Compra, on_delete=models.SET_NULL, db_column='id_compra',null=True)
     id_proveedor = models.ForeignKey(Proveedor,on_delete=models.SET_NULL, db_column='id_proveedor',null=True)
     id_producto = models.ForeignKey(Producto,on_delete=models.SET_NULL, db_column='id_producto',null=True)

@@ -77,9 +77,9 @@ WSGI_APPLICATION = 'estadias1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'CONTROL_INVENTARIO',
+        'NAME': 'EstadiaPruebas',
         'USER': 'root',
-        'PASSWORD': 'miau',
+        'PASSWORD': '3Sa1s87873!',
         'HOST': 'localhost',
         'PORT': '3306',
     }

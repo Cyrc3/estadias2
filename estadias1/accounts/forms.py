@@ -1,5 +1,5 @@
 from django import forms
-from .models import Categoria, Producto, Cliente, Proveedor, Detalle_Compra, Venta
+from .models import Categoria, Producto, Cliente, Proveedor, Detalle_Compra, Detalle_Venta
 
 #ESTE ARCHIVO SE UTILIZA PARA LOS FORMULARIOS Y HACER QUE DJANGO HAGA TODO EL TRABAJO AJIJIJI
 
@@ -42,8 +42,9 @@ class CompraForm(forms.ModelForm):
 
 
 class VentaForm(forms.ModelForm):
+
     id_producto = forms.ModelChoiceField(queryset=Producto.objects.all(), label='Producto',to_field_name='nombre')
-    id_venta = forms.ModelChoiceField(queryset=Venta.objects.all(), label='Venta')
+
     class Meta:
-        model = Venta
-        fields = ['id_producto', 'id_venta']
+        model = Detalle_Venta
+        fields = ['id_producto','cantidad','precio_total']
