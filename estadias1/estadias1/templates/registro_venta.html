@@ -1,52 +1,47 @@
-<!--REGISTRAR VENTA-->
-<!DOCTYPE html>
-<html lang="es">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Venta</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'styles/styles_ventas.css' %}">
-</head>
+{% block title %}Registro de Venta{% endblock %}
 
-<body>
-    <div class="container">
-        <div class="left">
-            <h2>Registro de Venta</h2>
-            <form id="ventaForm" method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" value="Guardar">
-            </form>
-            {% if form.errors %}
-            <div class="alert alert-danger">
-                {% for field, errors in form.errors.items %}
-                <strong>{{ field|title }}</strong>: {{ errors|striptags }}
-                {% endfor %}
-            </div>
-            {% endif %}
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'styles/styles_ventas.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="left">
+        <h2>Registro de Venta</h2>
+        <form id="ventaForm" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Guardar">
+        </form>
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            {% for field, errors in form.errors.items %}
+            <strong>{{ field|title }}</strong>: {{ errors|striptags }}
+            {% endfor %}
         </div>
+        {% endif %}
+    </div>
 
-        <div class="right">
-            <h2>Resumen</h2>
-            <div class="resumen">
-                <table id="resumenTabla">
-                    <tr>
-                        <th>Componente</th>
-                        <th>Precio por unidad</th>
-                        <th>Cantidad</th>
-                        <th>Precio Total</th>
-                    </tr>
-                    <!-- Aquí se pueden agregar filas de la tabla con JavaScript -->
-                </table>
-                <div class="total">
-                    Total: $<span id="total-venta">0</span>
-                </div>
+    <div class="right">
+        <h2>Resumen</h2>
+        <div class="resumen">
+            <table id="resumenTabla">
+                <tr>
+                    <th>Componente</th>
+                    <th>Precio por unidad</th>
+                    <th>Cantidad</th>
+                    <th>Precio Total</th>
+                </tr>
+                <!-- Aquí se pueden agregar filas de la tabla con JavaScript -->
+            </table>
+            <div class="total">
+                Total: $<span id="total-venta">0</span>
             </div>
         </div>
     </div>
-    <script src="{% static 'JavaScript/Registro_venta_form.js' %}"></script>
-</body>
-
-</html>
+</div>
+<script src="{% static 'JavaScript/Registro_venta_form.js' %}"></script>
+{% endblock %}

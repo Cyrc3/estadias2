@@ -1,40 +1,39 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historial de Compras</title>
-    {%load static%}
-    <link rel="stylesheet" href="{% static 'styles/styles_historico_compras.css' %}">
-</head>
-<body>
-    <h1>Historial de Compras</h1>
-    
-    <table>
-        <thead>
-            <tr>
-                <th>ID Compra</th>
-                <th>Fecha</th>
-                <th>ID Producto</th>
-                <th>Cantidad</th>
-                <th>Costo</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for compra in historial_compras %}
-            <tr>
-                <td>{{ compra.id }}</td>
-                <td>{{ compra.fecha }}</td>
-                <td>{{ compra.id_producto }}</td>
-                <td>{{ compra.cantidad }}</td>
-                <td>{{ compra.costo }}</td>
-            </tr>
-            {% endfor %}
-            <tr>
-                <td colspan="4" style="text-align: right;">Total:</td>
-                <td>{{ total }}</td>
-            </tr>
-        </tbody>
-    </table>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Historial de Compras{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'styles/styles_historico_compras.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Historial de Compras</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID Compra</th>
+            <th>Fecha</th>
+            <th>ID Producto</th>
+            <th>Cantidad</th>
+            <th>Costo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for compra in historial_compras %}
+        <tr>
+            <td>{{ compra.id }}</td>
+            <td>{{ compra.fecha }}</td>
+            <td>{{ compra.id_producto }}</td>
+            <td>{{ compra.cantidad }}</td>
+            <td>{{ compra.costo }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="4" style="text-align: right;">Total:</td>
+            <td>{{ total }}</td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

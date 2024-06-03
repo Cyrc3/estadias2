@@ -1,31 +1,26 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Proveedor</title>
-    {%load static%}
-    <link rel="stylesheet" href="{% static 'styles/styles_proveedor.css' %}">
-</head>
+{% block title %}Registro de Proveedor{% endblock %}
 
-<body>
-    <div class="container">
-        <h1>Registrar Proveedor</h1>
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'styles/styles_proveedor.css' %}">
+{% endblock %}
 
-            <input type="submit" value="Guardar"></input>
-        </form>
-        {% if form.errors %}
-        <div class="alert alert-danger">
-            {% for field, errors in form.errors.items %}
-            <strong>{{ field|title }}</strong>: {{ errors|striptags }}
-            {% endfor %}
-        </div>
-        {% endif %}
+{% block content %}
+<div class="container">
+    <h1>Registrar Proveedor</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Guardar"></input>
+    </form>
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        {% for field, errors in form.errors.items %}
+        <strong>{{ field|title }}</strong>: {{ errors|striptags }}
+        {% endfor %}
     </div>
-</body>
-
-</html>
+    {% endif %}
+</div>
+{% endblock %}
