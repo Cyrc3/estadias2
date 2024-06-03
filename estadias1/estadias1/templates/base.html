@@ -12,11 +12,14 @@
     <header>
         <nav>
             <ul>
-                <li><a href="{% url 'menu_principal' %}">Inicio</a></li>
-                <li><a href="{% url 'producto' %}">Registro de Inventario</a></li>
-                <li><a href="{% url 'ventas' %}">Registro de Ventas</a></li>
-                <li><a href="{% url 'historicoCompras' %}">Histórico de Compras</a></li>
-                <li><a href="{% url 'historicoVentas' %}">Histórico de Ventas</a></li>
+                <li><a href="{% url 'menu_principal' %}">Inicio  |</a></li>
+                <li><a href="{% url 'producto' %}">Registro de Inventario |</a></li>
+                <li><a href="{% url 'ventas' %}">Registro de Ventas | </a></li>
+                <li><a href="{% url 'historicoCompras' %}">Histórico de Compras |</a></li>
+                <li><a href="{% url 'historicoVentas' %}">Histórico de Ventas |</a></li>
+                <li><a href="{% url 'cliente' %}">Registrar Cliente |</a></li>
+                <li><a href="{% url 'proveedor' %}">Registrar Proveedor |</a></li>
+                <li><a href="{% url 'compra' %}">Registrar Compra</a></li>
             </ul>
         </nav>
     </header>
@@ -26,7 +29,7 @@
         {% endblock %}
     </main>
     <footer>
-        <p>SOMOS LOBOS - UTSJR 2024 | esto es para pruebassss no se va a quedar asi</p>
+        <p>SOMOS LOBOS - UTSJR 2024</p>
     </footer>
 </body>
 </html>

@@ -21,8 +21,23 @@ header nav ul li a:hover {
     color: #5a7a9c; /* Color azul pastel más oscuro al pasar el mouse */
 }
 
-
-footer{
-    background-color: #000000;
-    color:chocolate;
+/* Estilos para el menú de navegación */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff; /* Cambia el color de fondo según tus preferencias */
+    z-index: 100; /* Asegura que el encabezado esté por encima del contenido */
 }
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #000000;
+    color: chocolate;
+    z-index: 100;
+}
+

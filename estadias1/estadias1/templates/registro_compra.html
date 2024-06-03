@@ -1,55 +1,66 @@
-<!--REGISTRAR COMPRA-->
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang="es">
+{% block title %}Registro de Producto{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Compra</title>
-    {%load static%}
-    <link rel="stylesheet" href="{% static 'styles/styles_ventas.css' %}">
-</head>
+{% block extra_css %}
+{%load static%}
+<link rel="stylesheet" href="{% static 'styles/styles_ventas.css' %}">
+{% endblock %}
 
-<body>
-    <div class="container">
-        <div class="left">
-            <h2>Registro de Compras</h2>
-            <form id="compraForm" method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" value="Guardar">
-            </form>
-            {% if form.errors %}
-            <div class="alert alert-danger">
-                {% for field, errors in form.errors.items %}
-                <strong>{{ field|title }}</strong>: {{ errors|striptags }}
-                {% endfor %}
-            </div>
-            {% endif %}
+{% block content %}
+<div class="container">
+    <div class="left">
+        <h2>Registro de Compras</h2>
+        <button id="cambiarProveedorBtn" style="display: none;">Cambiar Proveedor</button>
+        <form id="compraForm" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            
+            <input type="submit" value="Guardar">
+        </form>
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            {% for field, errors in form.errors.items %}
+            <strong>{{ field|title }}</strong>: {{ errors|striptags }}
+            {% endfor %}
         </div>
-        <div class="right">
-            <h2>Resumen</h2>
-            <div class="resumen">
-                <table id="resumenTabla">
-                    <tr>
-                        <th>Producto</th>
-                        <th>Proveedor</th>
-                        <th>Precio por unidad</th>
-                        <th>Cantidad</th>
-                        <th>Precio Total</th>
-                        
-                    </tr>
+        {% endif %}
 
-                </table>
-                <div class="total">
-                    Total: $<span id="total-compra">0</span>
-                </div>
-                <input type="button" value="Registrar">
+
+
+    </div>
+    <div class="right">
+        <h2>Resumen</h2>
+        <div class="resumen">
+            <table id="resumenTabla">
+                <tr>
+                    <th>Producto</th>
+                    <th>Proveedor</th>
+                    <th>Precio por unidad</th>
+                    <th>Cantidad</th>
+                    <th>Precio Total</th>
+
+                </tr>
+
+            </table>
+            <div class="total">
+                Total: $<span id="total-compra">0</span>
             </div>
+            <input type="button" value="Registrar">
         </div>
     </div>
-    <script src="{% static 'JavaScript/Registro_compra_form.js' %}"></script>
-</body>
+</div>
+
+<div id="cambiarProveedorModal" class="modal">
+    <div class="modal-content">
+        <p>¿Seguro que quieres cambiar el proveedor?</p>
+        <button id="aceptarCambioProveedor">Aceptar</button>
+        <button id="cancelarCambioProveedor">Cancelar</button>
+    </div>
+</div>
+
+
+<script src="{% static 'JavaScript/Registro_compra_form.js' %}"></script>
+{% endblock %}
 
 </html>

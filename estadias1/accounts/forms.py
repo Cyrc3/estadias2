@@ -28,7 +28,7 @@ class ProveedorForm(forms.ModelForm):
 
 class CompraForm(forms.ModelForm):
 
-    id_proveedor = forms.ModelChoiceField(queryset=Proveedor.objects.all(),label='Proveedor', to_field_name='razon_social')
+    id_proveedor = forms.ModelChoiceField(queryset=Proveedor.objects.all(),label='Proveedor', to_field_name='razon_social',widget=forms.Select(attrs={'id': 'id_proveedor', 'onchange': 'disableProveedorField();'}))
     id_producto = forms.ModelChoiceField(queryset=Producto.objects.all(), label='Producto',to_field_name='nombre')
 
     costo = forms.FloatField(label='Costo Individual')
