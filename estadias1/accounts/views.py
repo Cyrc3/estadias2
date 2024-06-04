@@ -64,7 +64,7 @@ def registrar_producto(request):
         form = ProductoForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('menu_principal')
+            return redirect('producto')
         else:
             messages.error(request, "Hubo un error al registrar el producto.")
     else:

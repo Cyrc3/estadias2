@@ -6,10 +6,10 @@ from .models import Categoria, Producto, Cliente, Proveedor, Detalle_Compra, Det
 
 class ProductoForm(forms.ModelForm):
     id_categoria = forms.ModelChoiceField(queryset=Categoria.objects.all(), label='Categoría', to_field_name='descripcion')
-
+    id_proveedor = forms.ModelChoiceField(queryset=Proveedor.objects.all(), label='Proveedor', to_field_name='razon_social')
     class Meta:
         model = Producto
-        fields = ['nombre','id_categoria','costo_venta','stock']
+        fields = ['nombre','id_proveedor','id_categoria','costo_venta','stock']
         
 
 
