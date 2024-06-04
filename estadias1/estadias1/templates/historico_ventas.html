@@ -1,30 +1,28 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historial de Ventas</title>
-    {%load static%}
-    <link rel="stylesheet" href="{% static 'styles/styles_historico_compras.css' %}">
+{% extends 'base.html' %}
 
-</head>
-<body>
-    <h1>Historial de Ventas</h1>
-    
-    <table>
-        <thead>
-            <tr>
-                <th>ID Venta</th>
-                <th>Fecha</th>
-                <th>Productos</th>
-                <th>Cantidad</th>
-                <th>Costo Individual</th>
-                <th>Costo Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Aquí se mostrarán las filas de datos dinámicos -->
-        </tbody>
-    </table>
-</body>
-</html>
+{% block title %}Historial de Ventas{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'styles/styles_historico_compras.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Historial de Ventas</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID Venta</th>
+            <th>Fecha</th>
+            <th>Productos</th>
+            <th>Cantidad</th>
+            <th>Costo Individual</th>
+            <th>Costo Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Aquí se mostrarán las filas de datos dinámicos -->
+    </tbody>
+</table>
+{% endblock %}
