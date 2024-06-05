@@ -20,7 +20,7 @@ class Usuario(AbstractUser):
 
 #MÉTODOS DEL CLIENTE "-------------UWU------------------"
 class Cliente(models.Model):
-    rfc = models.CharField(max_length=13)
+    rfc = models.CharField(max_length=13,primary_key=True)
     razon_social = models.CharField(max_length=255)
     uso_factura = models.CharField(max_length=255)
     regimen_fiscal = models.CharField(max_length=255)
@@ -29,6 +29,9 @@ class Cliente(models.Model):
     class Meta:
         db_table = "cliente"
         managed = False
+
+    def __str__(self):
+        return self.rfc
 
 
 class Proveedor(models.Model):
