@@ -40,7 +40,9 @@ class CompraForm(forms.ModelForm):
 
 class VentaForm(forms.ModelForm):
     id_producto = forms.ModelChoiceField(queryset=Producto.objects.all(), label='Producto',to_field_name='nombre')
+    rfc = forms.ModelChoiceField(queryset=Cliente.objects.all(), label='rfc', to_field_name='rfc')
 
     class Meta:
         model = Detalle_Venta
-        fields = ['id_producto','cantidad','precio_total', 'iva']
+        fields = ['id_producto','cantidad','precio_total','rfc']
+  

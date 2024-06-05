@@ -106,14 +106,16 @@ class Venta(models.Model):
         managed = False
 
         
+
 class Detalle_Venta(models.Model):
     id_detalleventa = models.AutoField(primary_key=True)
     id_venta1 = models.ForeignKey(Venta, on_delete=models.SET_NULL, db_column='id_venta', null=True)
     id_producto = models.ForeignKey(Producto,on_delete=models.SET_NULL, db_column='id_producto',null=True)
+    rfc = models.ForeignKey(Cliente,on_delete=models.SET_NULL, db_column='rfc', null=True)
     cantidad = models.IntegerField()
     precio_total = models.FloatField()
+
     iva = models.FloatField()
     class Meta:
         db_table = 'detalle_venta'
         managed = False
-
