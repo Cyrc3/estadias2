@@ -97,10 +97,18 @@ def registrar_compra(request):
 
 def registro_ventas(request):
     if request.method == 'POST':
-        form = VentaForm(request.POST)
-    else:
-        form = VentaForm()
-    return render(request, 'registro_venta.html', {'form':form})
+        nueva_venta = Detalle_Venta()
+        nueva_venta.id_detalleventa = request.POST.get('id_detalleventa')
+        nueva_venta.id_producto = request.POST.get('id_producto')
+        nueva_venta.cantidad = request.POST.get('cantidad')
+        nueva_venta.precio_total = request.POST.get('precio_total')
+        nueva_venta.id_venta1 = request.POST.get('id_venta1')
+        nueva_venta.iva = request.POST.get('iva')
+        nueva_venta.rfc = request.POST.get('rfc')
+        nueva_venta.save()
+        return redirect('venta')
+        
+    return render(request, 'registro_venta.html')
 
 
 
