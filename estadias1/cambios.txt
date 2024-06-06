@@ -93,3 +93,23 @@ CAMBIOS HECHOS POR IZAI EL {
     
 }
 
+
+
+
+Fokin 6 de junio alaberga{
+    Se hicieron correcciones a la pendejada de Detalle_venta
+    Registro_venta_form.js{
+        Se hicieron correcciones a los calculos y etiquetas tanto de total como del iva, como etiquetas en gral
+    }
+    forms{
+        se hicieron ajustes en ventaForm pa que jale macizo alchile, ya solo falta que reporte a la bd
+    }
+    views{
+        No recuerdo pero tambien le movi a esa madre
+    }
+
+    GOALS{
+        QUe reporte el total y el iva  a la BD pero ps ya manana, amonos
+    }
+
+}

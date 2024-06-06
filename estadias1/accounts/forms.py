@@ -41,6 +41,10 @@ class CompraForm(forms.ModelForm):
 
 class VentaForm(forms.ModelForm):
     id_producto = forms.ModelChoiceField(queryset=Producto.objects.all(), label='Producto',to_field_name='nombre')
+    cantidad = forms.IntegerField(label='Cantidad')
+    precio_total = forms.FloatField(label='Precio Total')
+    #id_venta1 not defined cs don't get how to link this (detalle_venta) with Venta xd
+    #iva = forms.FloatField(label='IVA')
     rfc = forms.ModelChoiceField(queryset=Cliente.objects.all(), label='rfc', to_field_name='rfc')
 
     class Meta:
