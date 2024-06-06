@@ -4,6 +4,8 @@ from django.contrib.auth.forms import AuthenticationForm
 from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Detalle_Venta
 from .forms import ProductoForm, ClienteForm, ProveedorForm, CompraForm, VentaForm
 from django.http import HttpResponse
+from django_select2.views import AutoResponseView
+
 
 #from .forms import ProductoForm
 from django.contrib import messages
@@ -112,3 +114,16 @@ def historico_compras(request):
 def historico_ventas(request):
     return render(request, 'historico_ventas.html')
 
+
+class ProveedorSelect2View(AutoResponseView):
+    def get_queryset(self):
+        qs = Proveedor.objects.all()
+        # Puedes aplicar filtros o cualquier lógica adicional aquí
+        return qs
+    def get_result_value(self, result):
+        # Define cómo se devuelve el valor de cada resultado
+        return result.id_proveedor
+
+    def get_result_label(self, result):
+        # Define cómo se muestra la etiqueta de cada resultado
+        return str(result.razon_social)

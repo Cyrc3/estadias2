@@ -12,10 +12,10 @@ document.getElementById('compraForm').addEventListener('submit', function(event)
     const table = document.getElementById('resumenTabla');
     const newRow = table.insertRow();
     newRow.innerHTML = `
+        <td>${cantidad}</td>
         <td>${producto}</td>
         <td>${proveedor}</td>
         <td>${costo}</td>
-        <td>${cantidad}</td>
         <td>${precioTotal}</td>
     `;
 

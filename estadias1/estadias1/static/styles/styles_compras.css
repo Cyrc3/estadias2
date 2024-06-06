@@ -1,0 +1,173 @@
+/* Estilos para el contenedor principal */
+.container {
+    display: flex;
+    flex-direction: column;
+    max-width: 1300px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 5%;
+    overflow-y: auto; /* Agrega desplazamiento vertical */
+    max-height: 80vh; /* Limita la altura del contenedor */
+}
+
+/* Estilos para la sección "top" */
+.top {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+/* Estilos para el formulario */
+#compraForm {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#id_id_proveedor {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    color: #333;
+    width: 15%; /* Ocupa todo el ancho disponible */
+    font-size: 14px;
+    margin-right: 10px; /* Tamaño de fuente */
+    margin-left: 5px;
+}
+
+/* Estilos para las opciones del select */
+#id_id_proveedor option {
+    font-size: 14px;
+}
+
+#id_id_producto {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    color: #333;
+    width: 18%; /* Ocupa todo el ancho disponible */
+    font-size: 14px;
+    margin-right: 10px; /* Tamaño de fuente */
+    margin-left: 5px;
+}
+
+/* Estilos para las opciones del select */
+#id_id_producto option {
+    font-size: 14px;
+}
+
+
+
+/* Estilos para los campos del formulario */
+#compraForm input[type="text"],
+#compraForm input[type="number"] {
+    padding: 10px;
+    margin-right: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex: 1;
+}
+
+/* Estilos para el botón de guardar */
+#compraForm input[type="submit"] {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+/* Estilos para la sección "bottom" */
+.bottom {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+    position: relative;
+}
+
+/* Estilos para el encabezado de la tabla */
+#resumenTabla th {
+    background-color: #80a0d1;
+}
+
+/* Estilos para la tabla de resumen */
+#resumenTabla {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 4%;
+}
+
+/* Estilos para las filas de la tabla */
+#resumenTabla tr {
+    border-bottom: 1px solid #ccc;
+}
+
+/* Estilos para las celdas de la tabla */
+#resumenTabla th,
+#resumenTabla td {
+    padding: 10px;
+    text-align: left;
+}
+
+/* Estilos para el total */
+.total {
+    font-weight: bold;
+    font-size: x-large;
+    color: rgb(0, 0, 0);
+    position: absolute;
+    margin-bottom: 20px;
+    margin-left: 88%;
+}
+
+/* Estilos para el botón de registrar */
+#registrarBtn {
+    margin-top: 20px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+input[type="button"] {
+    background-color: #5100b5;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 50px;
+    margin-left: 70%;
+}
+
+input[type="button"]:hover {
+    background-color: #7bc1e4;
+}

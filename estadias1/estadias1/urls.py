@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.views import LoginView, LogoutView
 from accounts import views
+from django_select2 import views as select2_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -42,7 +43,7 @@ urlpatterns = [
     path('registro_categoria/', views.registrar_categoria, name='altaCategoria'),
 
     
-
+     #path('select2/', views.ProveedorSelect2View.as_view(), namespace='select2_proveedor'),
 
 ]
 
