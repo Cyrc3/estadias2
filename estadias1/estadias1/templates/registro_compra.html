@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}Registro de Producto{% endblock %}
+{% block title %}<title>Registrar Compras</title>{% endblock %}
 
 {% block extra_css %}
 {%load static%}
 <link rel="stylesheet" href="{% static 'styles/styles_compras.css' %}">
 {% endblock %}
- 
+
 {% block content %}
 <div class="container">
     <div class="top">
@@ -15,8 +15,8 @@
         <form id="compraForm" method="POST">
             {% csrf_token %}
             {{ form.as_table }}
-            
-            <input type="submit" value="Guardar">
+
+            <input type="button" value="Guardar" id="btnGuardar">
         </form>
         {% if form.errors %}
         <div class="alert alert-danger">
@@ -31,6 +31,17 @@
     </div>
     <div class="bottom">
         <h2>Resumen</h2>
+        <label for="fecha">Fecha de la compra:</label>
+        <input type="date" id="fecha" name="fecha" required>
+        <script>
+            // Obtener la fecha actual en formato ISO (YYYY-MM-DD)
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Asignar la fecha actual como el valor máximo del input de fecha
+            document.getElementById('fecha').setAttribute('max', today);
+            
+        </script>
+        <button id="editarCompraBtn" style="display: none;">Editar Compra</button>
         <div class="resumen">
             <table id="resumenTabla">
                 <tr>
@@ -39,20 +50,21 @@
                     <th>Proveedor</th>
                     <th>Precio por unidad</th>
                     <th>Precio Total</th>
+                    <th>Acciones</th>
                 </tr>
 
             </table>
             <div class="total">
                 Total: $<span id="total-compra">0</span>
             </div>
-            <input type="button" value="Registrar compra">
+            <input type="submit" value="Registrar compra">
         </div>
     </div>
 </div>
 
 <div id="cambiarProveedorModal" class="modal">
     <div class="modal-content">
-        <p>¿Seguro que quieres cambiar el proveedor?</p>
+        <p>¿Seguro que deseas eliminar esta compra?</p>
         <button id="aceptarCambioProveedor">Aceptar</button>
         <button id="cancelarCambioProveedor">Cancelar</button>
     </div>

@@ -3,7 +3,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mi Aplicación</title>
+    {% block title %} {% endblock %}
     {% load static %}
     <link rel="stylesheet" href="{% static 'styles/style_base.css' %}">
     {% block extra_css %}{% endblock %}

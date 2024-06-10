@@ -93,6 +93,7 @@ def registrar_compra(request):
     else:
         form=CompraForm()
     return render(request, 'registro_compra.html', {'form':form})  
+
  
 
 def registro_ventas(request):
