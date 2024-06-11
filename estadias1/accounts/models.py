@@ -45,7 +45,7 @@ class Proveedor(models.Model):
         db_table = 'proveedor'
         managed = False 
     def __str__(self):
-        return self.razon_social
+        return f"{self.id_proveedor} - {self.razon_social}"
 
 
 class Categoria(models.Model):
@@ -71,7 +71,7 @@ class Producto(models.Model):
         db_table = 'producto'
         managed = False
     def __str__(self):
-        return self.nombre
+        return f"{self.id_producto} - {self.nombre}"
 
 
 class Compra(models.Model):

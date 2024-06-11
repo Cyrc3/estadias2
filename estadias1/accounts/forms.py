@@ -28,15 +28,21 @@ class ProveedorForm(forms.ModelForm):
 
 class CompraForm(forms.ModelForm):
 
-    id_proveedor = forms.ModelChoiceField(queryset=Proveedor.objects.all(),label='Proveedor', to_field_name='razon_social')
+    id_proveedor = forms.ModelChoiceField(queryset=Proveedor.objects.all(),label='Proveedor', required=False)
 
-    id_producto = forms.ModelChoiceField(queryset=Producto.objects.all(), label='Producto',to_field_name='nombre')
+    id_producto = forms.ModelChoiceField(queryset=Producto.objects.all(), label='Producto', required=False)
 
-    costo = forms.FloatField(label='Costo Individual')
+    cantidad = forms.IntegerField(required=False)
+
+    costo = forms.FloatField(label='Costo Individual', required=False)
     class Meta:
         model = Detalle_Compra
         fields = ['id_proveedor','id_producto','cantidad','costo']
 
+    def __init__(self, *args, **kwargs):
+        super(CompraForm, self).__init__(*args, **kwargs)
+        self.fields['id_proveedor'].queryset = Proveedor.objects.all()
+        self.fields['id_producto'].queryset = Producto.objects.all()
 
 
 class VentaForm(forms.ModelForm):

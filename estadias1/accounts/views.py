@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
-from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Detalle_Venta
+from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Detalle_Venta, Compra
 from .forms import ProductoForm, ClienteForm, ProveedorForm, CompraForm, VentaForm
 from django.http import HttpResponse
 from django_select2.views import AutoResponseView
+
+import json
+
 
 
 #from .forms import ProductoForm
@@ -90,6 +93,37 @@ def registrar_categoria(request):
 def registrar_compra(request):
     if request.method == 'POST': 
         form = CompraForm(request.POST)
+        if form.is_valid() or not form.has_changed():
+            try:
+                fecha_compra = request.POST.get('fecha_compra')
+                total_compra = request.POST.get('total_compra')
+                resumen_data = json.loads(request.POST.get('resumen_data', '[]'))
+
+                # Crear nueva compra
+                nueva_compra = Compra(fecha=fecha_compra, total=total_compra)
+                nueva_compra.save()
+
+                #insertar detalles de la compra
+                for item in resumen_data:
+                    proveedor =  Proveedor.objects.get(id_proveedor=item['proveedor_id'])
+                    producto = Producto.objects.get(id_producto=item['producto_id'])
+                    cantidad = item['cantidad']
+                    costo = item['costo']
+                    detalle_compra = Detalle_Compra(
+                        id_compra=nueva_compra,
+                        id_proveedor=proveedor,
+                        id_producto=producto,
+                        cantidad=cantidad,
+                        costo=costo
+                    )
+                    detalle_compra.save()
+
+                return redirect('compra')
+            except Exception as e:
+                print(f"Error al guardar la compra: {e}")
+
+        else:
+              print("El formulario no es válido")
     else:
         form=CompraForm()
     return render(request, 'registro_compra.html', {'form':form})  
