@@ -131,10 +131,12 @@ def registrar_compra(request):
 
 def registro_ventas(request):
     if request.method == 'POST':
-        form = VentaForm(request.POST) 
-        if form.is_valid():  
-            form.save()  
-            return redirect('venta')
+        if form.is_valid() or not form.has_changed():
+            #try:
+                
+
+
+
     else:
         form = VentaForm()  
     return render(request, 'registro_venta.html', {'form': form})
