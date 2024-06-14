@@ -263,3 +263,42 @@ input[type="date"] {
     cursor: pointer; /* Cursor en forma de mano al pasar el mouse */
     font-size: 13px; /* Tamaño de la fuente */
 }
+
+
+/* Estilo para el botón Aceptar */
+#aceptarEliminar {
+    background-color: rgb(255, 0, 0);
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    font-weight: bold;
+}
+
+/* Estilo para el botón Cancelar */
+#cancelarEliminar {
+    background-color: rgb(255, 174, 0);
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    font-weight: bold;
+}
+
+#eliminarModal{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+}

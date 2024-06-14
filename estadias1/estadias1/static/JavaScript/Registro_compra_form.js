@@ -108,13 +108,32 @@ function editarFila(row) {
   eliminarFila(row);
 }
 
+
+
 function eliminarFila(row) {
-  const precioTotalCell = row.cells[4];
-  const precioTotal = parseFloat(precioTotalCell.textContent);
-  const totalCompra = document.getElementById("total-compra");
-  totalCompra.textContent = parseFloat(totalCompra.textContent) - precioTotal;
-  row.remove(); // Elimina toda la fila
+  filaParaEliminar = row;
+  document.getElementById("eliminarCompra").style.display = 'block';
 }
+
+document.getElementById('aceptarEliminar').addEventListener('click',function(event){
+  event.preventDefault();
+  if(filaParaEliminar){
+    const precioTotalCell = filaParaEliminar.cells[4];
+        const precioTotal = parseFloat(precioTotalCell.textContent);
+        const totalCompra = document.getElementById("total-compra");
+        totalCompra.textContent = (parseFloat(totalCompra.textContent) - precioTotal).toFixed(2);
+        filaParaEliminar.remove(); // Elimina toda la fila
+        filaParaEliminar = null;
+        document.getElementById("eliminarCompra").style.display = "none";
+  }
+});
+
+document.getElementById('cancelarEliminar').addEventListener('click',function(event){
+  event.preventDefault();
+  filaParaEliminar = null;
+  document.getElementById("eliminarCompra").style.display = "none";
+})
+
 
 function disableProveedorField() {
   const proveedorInput = document.getElementById("id_proveedor");
