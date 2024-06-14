@@ -8,14 +8,14 @@
     <link rel="stylesheet" href="{% static 'styles/style_base.css' %}">
     {% block extra_css %}{% endblock %}
 </head>
-<body>
+<body> 
     <header>
         <nav>
             <ul>
                 <li><a href="{% url 'menu_principal' %}">Inicio  |</a></li>
-                <li><a href="{% url 'producto' %}">Registro de Inventario |</a></li>
+                <li><a href="{% url 'producto' %}">Registro de productos |</a></li>
                 <li><a href="{% url 'ventas' %}">Registro de Ventas | </a></li>
-                <li><a href="{% url 'compra' %}">Registrar Compra</a></li>
+                <li><a href="{% url 'compra' %}">Registrar Compra   |</a></li>
                 <li><a href="{% url 'cliente' %}">Registrar Cliente |</a></li>
                 <li><a href="{% url 'proveedor' %}">Registrar Proveedor |</a></li>
                 <li><a href="{% url 'historicoCompras' %}">Histórico de Compras |</a></li>

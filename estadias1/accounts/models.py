@@ -45,7 +45,7 @@ class Proveedor(models.Model):
         db_table = 'proveedor'
         managed = False 
     def __str__(self):
-        return f"{self.id_proveedor} - {self.razon_social}"
+        return self.razon_social
 
 
 class Categoria(models.Model):
@@ -61,7 +61,6 @@ class Categoria(models.Model):
 
 class Producto(models.Model):
     id_producto = models.AutoField(primary_key=True)
-    id_proveedor = models.ForeignKey(Proveedor, on_delete=models.SET_NULL,db_column='id_proveedor',null=True)
     stock = models.IntegerField()
     nombre = models.CharField(max_length=255)
     id_categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL,db_column='id_categoria',null=True)
@@ -71,7 +70,7 @@ class Producto(models.Model):
         db_table = 'producto'
         managed = False
     def __str__(self):
-        return f"{self.id_producto} - {self.nombre}"
+        return self.nombre
 
 
 class Compra(models.Model):

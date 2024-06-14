@@ -62,10 +62,12 @@ document
     document.getElementById("id_costo").value = "";
   });
 
+
+
 //editar compra
 document
-  .getElementById("editarCompraBtn")
-  .addEventListener("click", function () {
+  .getElementById("editarCompraBtn").addEventListener("click", function (event) {
+    event.preventDefault();
     const rows = document.querySelectorAll("#resumenTabla tr");
 
     rows.forEach((row, index) => {
@@ -77,6 +79,8 @@ document
     });
     document.getElementById("editarCompraBtn").style.display = "none"; // Hide the Edit Compra button after it is clicked
   });
+
+
 
 function editarFila(row) {
   const cantidadCell = row.cells[0];

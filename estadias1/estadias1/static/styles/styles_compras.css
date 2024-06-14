@@ -1,5 +1,6 @@
 /* Estilos para el contenedor principal */
 .container {
+    font-family: Arial, Helvetica, sans-serif;
     display: flex;
     flex-direction: column;
     max-width: 1300px;
@@ -65,6 +66,29 @@
     font-size: 14px;
 }
 
+#id_cantidad{
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    color: #333;
+    width: 50%; /* Ocupa todo el ancho disponible */
+    font-size: 14px;
+    margin-right: 10px; /* Tamaño de fuente */
+    margin-left: 5px;
+}
+
+#id_costo{
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    color: #333;
+    width: 50%; /* Ocupa todo el ancho disponible */
+    font-size: 14px;
+    margin-right: 10px; /* Tamaño de fuente */
+    margin-left: 5px;
+}
 
 
 /* Estilos para los campos del formulario */
@@ -79,13 +103,19 @@
 
 /* Estilos para el botón de guardar */
 #btnGuardar {
-    background-color: #007bff;
-    color: #ffffff;
-    border: none;
+    background-color: #ffffff;
+    color: #0048ff;
+    border-color: #007bff;
     border-radius: 4px;
     padding: 10px 15px;
     cursor: pointer;
+    font-weight: bold;
+}
 
+#btnGuardar:hover{
+    background-color: #006efe;
+    color: #ffffff;
+    border-color: #007bff;
 }
 
 /* Estilos para la sección "bottom" */
@@ -99,14 +129,14 @@
 
 /* Estilos para el encabezado de la tabla */
 #resumenTabla th {
-    background-color: #80a0d1;
+    background-color: #00c3d8;
 }
 
 /* Estilos para la tabla de resumen */
 #resumenTabla {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 2%;
+    margin-top: 1%;
     margin-bottom: 4%;
 }
 
@@ -159,8 +189,9 @@
 }
 
 input[type="submit"] {
-    background-color: #5100b5;
-    color: white;
+    background-color: #04db00;
+    color: rgb(255, 249, 249);
+    font-weight: bold;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
@@ -171,5 +202,64 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-    background-color: #7bc1e4;
+    background-color: #cf0080;
+}
+
+#editarCompraBtn {
+    background-color: #ffa200; /* Color de fondo amarillo */
+    margin-left: 10px; /* Espacio a la izquierda para separarlo del otro botón */
+    color: rgb(255, 249, 249);
+    font-weight: bold;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 50px;
+    margin-left: 2%;
+}
+
+#editarCompraBtn:hover {
+    background-color: #ff9900; /* Color de fondo más oscuro al pasar el mouse */
+}
+
+td{
+    font-weight: bold;
+}
+
+label{
+    font-weight: 500;
+}
+
+#lfecha {
+    font-size: 18px; /* Ajusta el tamaño de la fuente del label */
+    color: #333; /* Cambia el color del texto */
+}
+input[type="date"] {
+    width: 200px; /* Ajusta el ancho del input */
+    height: 30px; /* Ajusta la altura del input */
+    border: 1px solid #ccc; /* Añade un borde al input */
+    border-radius: 5px; /* Redondea las esquinas del input */
+    padding: 5px; /* Añade un poco de espacio alrededor del texto en el input */
+}
+
+
+.editarBtn {
+    background-color: #0095ff; /* Color de fondo azul */
+    color: white; /* Texto en color blanco */
+    border: none; /* Sin bordes */
+    padding: 10px 15px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cursor en forma de mano al pasar el mouse */
+    font-size: 13px; /* Tamaño de la fuente */
+}
+
+.eliminarBtn {
+    background-color: #ff0019; /* Color de fondo rojo */
+    color: white; /* Texto en color blanco */
+    border: none; /* Sin bordes */
+    padding: 10px 15px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cursor en forma de mano al pasar el mouse */
+    font-size: 13px; /* Tamaño de la fuente */
 }

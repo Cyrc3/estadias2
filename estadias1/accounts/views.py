@@ -123,12 +123,11 @@ def registrar_compra(request):
                 print(f"Error al guardar la compra: {e}")
 
         else:
-              print("El formulario no es válido")
+            print("El formulario no es válido")
     else:
         form=CompraForm()
     return render(request, 'registro_compra.html', {'form':form})  
 
- 
 
 def registro_ventas(request):
     if request.method == 'POST':
