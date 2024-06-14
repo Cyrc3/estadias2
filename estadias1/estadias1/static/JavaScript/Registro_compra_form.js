@@ -105,9 +105,17 @@ function editarFila(row) {
     .setAttribute("data-editing-row-index", row.rowIndex);
 
   // Eliminar la fila original
-  eliminarFila(row);
+  eliminarFilaParaEditar(row);
 }
 
+
+function eliminarFilaParaEditar(row){
+  const precioTotalCell = row.cells[4];
+  const precioTotal = parseFloat(precioTotalCell.textContent);
+  const totalCompra = document.getElementById("total-compra");
+  totalCompra.textContent = parseFloat(totalCompra.textContent) - precioTotal;
+  row.remove(); // Elimina toda la fila
+}
 
 
 function eliminarFila(row) {
@@ -134,35 +142,6 @@ document.getElementById('cancelarEliminar').addEventListener('click',function(ev
   document.getElementById("eliminarCompra").style.display = "none";
 })
 
-
-function disableProveedorField() {
-  const proveedorInput = document.getElementById("id_proveedor");
-  const cambiarProveedorBtn = document.getElementById("cambiarProveedorBtn");
-  proveedorInput.disabled = true;
-  cambiarProveedorBtn.style.display = "inline";
-
-  cambiarProveedorBtn.addEventListener("click", function (event) {
-    event.preventDefault();
-    const cambiarProveedorModal = document.getElementById(
-      "cambiarProveedorModal"
-    );
-    cambiarProveedorModal.style.display = "block";
-  });
-
-  document
-    .getElementById("aceptarCambioProveedor")
-    .addEventListener("click", function () {
-      const proveedorInput = document.getElementById("id_proveedor");
-      proveedorInput.disabled = false;
-      document.getElementById("cambiarProveedorModal").style.display = "none";
-    });
-
-  document
-    .getElementById("cancelarCambioProveedor")
-    .addEventListener("click", function () {
-      document.getElementById("cambiarProveedorModal").style.display = "none";
-    });
-}
 
 //botón registrar
 
