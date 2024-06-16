@@ -5,6 +5,7 @@ from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Det
 from .forms import ProductoForm, ClienteForm, ProveedorForm, CompraForm, VentaForm
 from django.http import HttpResponse
 from django_select2.views import AutoResponseView
+import json
 
 import json
 
@@ -127,20 +128,78 @@ def registrar_compra(request):
     else:
         form=CompraForm()
     return render(request, 'registro_compra.html', {'form':form})  
+def registrar_compra(request):
+    if request.method == 'POST': 
+        form = CompraForm(request.POST)
+        if form.is_valid() or not form.has_changed():
+            try:
+                fecha_compra = request.POST.get('fecha_compra')
+                total_compra = request.POST.get('total_compra')
+                resumen_data = json.loads(request.POST.get('resumen_data', '[]'))
+
+                # Crear nueva compra
+                nueva_compra = Compra(fecha=fecha_compra, total=total_compra)
+                nueva_compra.save()
+
+                #insertar detalles de la compra
+                for item in resumen_data:
+                    proveedor =  Proveedor.objects.get(id_proveedor=item['proveedor_id'])
+                    producto = Producto.objects.get(id_producto=item['producto_id'])
+                    cantidad = item['cantidad']
+                    costo = item['costo']
+                    detalle_compra = Detalle_Compra(
+                        id_compra=nueva_compra,
+                        id_proveedor=proveedor,
+                        id_producto=producto,
+                        cantidad=cantidad,
+                        costo=costo
+                    )
+                    detalle_compra.save()
+
+                return redirect('compra')
+            except Exception as e:
+                print(f"Error al guardar la compra: {e}")
+
+        else:
+            print("El formulario no es válido")
+    else:
+        form=CompraForm()
+    return render(request, 'registro_compra.html', {'form':form})  
 
 
 def registro_ventas(request):
     if request.method == 'POST':
-        if form.is_valid() or not form.has_changed():
-            #try:
+        form = VentaForm(request.POST)
+        try:
+            if form.is_valid():
+                fecha_venta = form.cleaned_data['fecha_venta']
+                total_venta = form.cleaned_data['total_venta']
+                resumen_data = json.loads(request.POST.get('resumen_data', '[]'))
                 
+                nueva_venta = Venta(fecha=fecha_venta, total=total_venta)
+                nueva_venta.save()
+                
+                for item in resumen_data:
+                    cliente = item.get('cliente')
+                    cantidad = item.get('cantidad')
+                    precio_total = item.get('precio_total')
 
-
-
+                    detalle_venta = Detalle_Venta(
+                        id_venta=nueva_venta,
+                        rfc=cliente,
+                        cantidad=cantidad,
+                        precio_total=precio_total
+                    )
+                    detalle_venta.save()
+                
+                return redirect('venta')
+        except Exception as e:
+            print(f"Error sabrá Dios dónde: {e}")
+            
     else:
-        form = VentaForm()  
+        form = VentaForm()
+    
     return render(request, 'registro_venta.html', {'form': form})
-
 
 
 def historico_compras(request):

@@ -56,6 +56,6 @@ class VentaForm(forms.ModelForm):
         model = Detalle_Venta
         fields = ['id_producto','cantidad','precio_total','rfc']
     def _init_(self, *args, **kwargs):
-            super(CompraForm, self)._init_(*args, **kwargs)
+            super(VentaForm, self)._init_(*args, **kwargs)
             self.fields['id_producto'].queryset = Producto.objects.all()
             self.fields['rfc'].queryset = Cliente.objects.all()
