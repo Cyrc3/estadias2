@@ -4,12 +4,11 @@ document
     event.preventDefault();
 
     // Obtener datos del formulario
-    const formData = new FormData(document.getElementById("ventaForm")); // Asegúrate de que el ID del formulario sea correcto
+    const formData = new FormData(document.getElementById("VentaForm")); // Asegúrate de que el ID del formulario sea correcto
     const productoId = formData.get("id_producto");
     const cantidad = parseInt(formData.get("cantidad"));
     const precioTotal = parseFloat(formData.get("precio_total"));
     const rfcId = formData.get("rfc");
-
     // Verificar si cantidad y precio total son números válidos
     if (isNaN(cantidad) || isNaN(precioTotal)) {
       alert("Por favor, introduce valores válidos para cantidad y precio total.");

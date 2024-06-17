@@ -1,4 +1,4 @@
-document
+iddocument
   .getElementById("btnGuardar")
   .addEventListener("click", function (event) {
     event.preventDefault();

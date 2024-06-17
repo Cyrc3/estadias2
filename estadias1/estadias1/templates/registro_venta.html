@@ -14,7 +14,7 @@
         <form id="ventaForm" method="POST">
             {% csrf_token %}
             {{ form.as_p }}
-            <input type="submit" value="Guardar">
+            <input type="button" value="Guardar" id="btnGuardar">
         
         {% if form.errors %}
         <div class="alert alert-danger">
@@ -43,8 +43,7 @@
             </form>
             </div>
             
-            <input type="button" value="Registrar"><br>
-            <input type="button" value="Imprimir Ticket">
+            <input type="submit" value="Registrar venta" id="registrarCompraBtn">            <input type="button" value="Imprimir Ticket">
         </div>
     </div>
 </div>
