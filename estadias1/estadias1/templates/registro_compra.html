@@ -8,36 +8,53 @@
 {% endblock %}
 
 {% block content %}
+<h2 id="title">Registro de Compras</h2>
 <div class="container">
     <div class="top">
-        <h2>Registro de Compras</h2>
-        <button id="cambiarProveedorBtn" style="display: none;">Cambiar Proveedor</button>
         <form id="compraForm" method="POST">
             {% csrf_token %}
-            {{ form.as_table }}
+            <div class="form-group">
+                {{ form.id_proveedor.label_tag }} {{ form.id_proveedor }}
+                <input type="hidden" id="hidden_proveedor" name="hidden_proveedor">
+                <label for="fecha" id="lfecha">Fecha de la compra:</label>
+                <input type="date" id="fecha" name="fecha" required>
+                <script>
+                    // Obtener la fecha actual en formato ISO (YYYY-MM-DD)
+                    const today = new Date().toISOString().split('T')[0];
 
-            <input type="button" value="Guardar" id="btnGuardar">
+                    // Asignar la fecha actual como el valor máximo del input de fecha
+                    document.getElementById('fecha').setAttribute('max', today);
 
+                </script>
+                <button id="cambiarProveedorBtn" style="display: none;">Cambiar Proveedor</button>
+            </div>
     </div>
     <div class="bottom">
-        <h2>Resumen</h2>
-        <label for="fecha" id="lfecha">Fecha de la compra:</label>
-        <input type="date" id="fecha" name="fecha" required>
-        <script>
-            // Obtener la fecha actual en formato ISO (YYYY-MM-DD)
-            const today = new Date().toISOString().split('T')[0];
-
-            // Asignar la fecha actual como el valor máximo del input de fecha
-            document.getElementById('fecha').setAttribute('max', today);
-
-        </script>
+        <div class="form-row">
+            <div class="form-group">
+                {{ form.id_producto.label_tag }} {{ form.id_producto }}
+            </div>
+            <div class="form-group">
+                {{ form.cantidad.label_tag }} {{ form.cantidad }}
+            </div>
+            <div class="form-group">
+                {{ form.costo.label_tag }} {{ form.costo }}
+            </div>
+            <div class="form-group">
+                <input type="checkbox" id="iva" checked>
+                <label for="iva">¿Registrar con IVA?</label>
+            </div>
+            <div class="form-group">
+                <input type="button" value="Añadir Compra" id="btnGuardar">
+            </div>
+        </div>
         <div class="resumen">
             <table id="resumenTabla">
-                <tr>
+                <tr> 
                     <th>Cantidad</th>
                     <th>Producto</th>
                     <th>Proveedor</th>
-                    <th>Precio por unidad</th>
+                    <th>Precio C/U</th>
                     <th>Precio Total</th>
                     <th>Acciones</th>
                 </tr>
@@ -65,9 +82,17 @@
 
 <div id="eliminarCompra" class="modal">
     <div class="modal-content">
-        <p id="eliminarModal" >¿Seguro que deseas eliminar está fila?</p>
+        <p id="eliminarModal">¿Seguro que deseas eliminar está fila?</p>
         <button id="aceptarEliminar" type="button">Aceptar</button>
         <button id="cancelarEliminar" type="button">Cancelar</button>
+    </div>
+</div>
+
+<div id="cambiarProveedor" class="modal">
+    <div class="modal-content">
+        <p id="eliminarModal">¿Seguro que deseas cambiar el proveedor?, al aceptar modificarás todas las filas añadidas</p>
+        <button id="aceptarCambiar" type="button">Aceptar</button>
+        <button id="cancelarCambiar" type="button">Cancelar</button>
     </div>
 </div>
 

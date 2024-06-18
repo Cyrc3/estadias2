@@ -1,12 +1,21 @@
-iddocument
+document
   .getElementById("btnGuardar")
   .addEventListener("click", function (event) {
     event.preventDefault();
     const formData = new FormData(document.getElementById("compraForm"));
     const productoId = formData.get("id_producto");
-    const proveedorId = formData.get("id_proveedor");
+
+    //const proveedorId = formData.get("id_proveedor");
+    let proveedorId = formData.get("id_proveedor");
+    if (document.getElementById("id_id_proveedor").disabled) {
+      proveedorId = document.getElementById("hidden_proveedor").value;
+    } else {
+        document.getElementById("hidden_proveedor").value = proveedorId;
+    }
+    //console.log(proveedorId);
     const cantidad = parseFloat(formData.get("cantidad"));
     const costo = parseFloat(formData.get("costo"));
+
     //modificacion para id
     const productoText = document.querySelector(
       `#id_id_producto option[value="${productoId}"]`
@@ -34,6 +43,9 @@ iddocument
         <td>${precioTotal}</td>
     `;
 
+    document.getElementById("id_id_proveedor").disabled = true;
+
+    
     // Actualizar el total
     const totalCompra = document.getElementById("total-compra");
     const nuevoTotal = parseFloat(totalCompra.textContent) + precioTotal;
@@ -50,23 +62,27 @@ iddocument
     `;
     newRow.querySelector(".editarBtn").addEventListener("click", function () {
       editarFila(newRow);
+      document.getElementById('cambiarProveedorBtn').style.display='inline';
     });
     newRow.querySelector(".eliminarBtn").addEventListener("click", function () {
       eliminarFila(newRow);
     });
 
+
     // limpiar el formulario
     document.getElementById("id_id_producto").value = "";
-    document.getElementById("id_id_proveedor").value = "";
     document.getElementById("id_cantidad").value = "";
     document.getElementById("id_costo").value = "";
+    document.getElementById('cambiarProveedorBtn').style.display='none';
+
+
   });
 
 
-
-//editar compra
+//editar compra ###################################################################################
 document
-  .getElementById("editarCompraBtn").addEventListener("click", function (event) {
+  .getElementById("editarCompraBtn")
+  .addEventListener("click", function (event) {
     event.preventDefault();
     const rows = document.querySelectorAll("#resumenTabla tr");
 
@@ -77,10 +93,8 @@ document
         row.querySelector(".eliminarBtn").style.display = "inline";
       }
     });
-    document.getElementById("editarCompraBtn").style.display = "none"; // Hide the Edit Compra button after it is clicked
+    document.getElementById("editarCompraBtn").style.display = "none"; 
   });
-
-
 
 function editarFila(row) {
   const cantidadCell = row.cells[0];
@@ -93,23 +107,28 @@ function editarFila(row) {
   const proveedorid = proveedorCell.getAttribute("data-id");
   const costo = costoCell.textContent;
 
-  // Llenar el formulario con los datos de la fila
+  // Llenar el formulario con los datos de la fila ###################################################################################
   document.getElementById("id_id_producto").value = productoid;
   document.getElementById("id_id_proveedor").value = proveedorid;
   document.getElementById("id_cantidad").value = cantidad;
   document.getElementById("id_costo").value = costo;
 
-  // Guardar el índice de la fila para referencia
+  // Guardar el índice de la fila para referencia ###################################################################################
   document
     .getElementById("compraForm")
     .setAttribute("data-editing-row-index", row.rowIndex);
 
-  // Eliminar la fila original
+  // Eliminar la fila original ###################################################################################
   eliminarFilaParaEditar(row);
+
+  // Ocultar todos los botones de editar y eliminar
+  const editarButtons = document.querySelectorAll(".editarBtn");
+  const eliminarButtons = document.querySelectorAll(".eliminarBtn");
+  editarButtons.forEach(button => button.style.display = 'none');
+  eliminarButtons.forEach(button => button.style.display = 'none');
 }
 
-
-function eliminarFilaParaEditar(row){
+function eliminarFilaParaEditar(row) {
   const precioTotalCell = row.cells[4];
   const precioTotal = parseFloat(precioTotalCell.textContent);
   const totalCompra = document.getElementById("total-compra");
@@ -117,33 +136,63 @@ function eliminarFilaParaEditar(row){
   row.remove(); // Elimina toda la fila
 }
 
-
 function eliminarFila(row) {
   filaParaEliminar = row;
-  document.getElementById("eliminarCompra").style.display = 'block';
+  document.getElementById("eliminarCompra").style.display = "block"; // ###################################################################################
 }
 
-document.getElementById('aceptarEliminar').addEventListener('click',function(event){
-  event.preventDefault();
-  if(filaParaEliminar){
-    const precioTotalCell = filaParaEliminar.cells[4];
-        const precioTotal = parseFloat(precioTotalCell.textContent);
-        const totalCompra = document.getElementById("total-compra");
-        totalCompra.textContent = (parseFloat(totalCompra.textContent) - precioTotal).toFixed(2);
-        filaParaEliminar.remove(); // Elimina toda la fila
-        filaParaEliminar = null;
-        document.getElementById("eliminarCompra").style.display = "none";
-  }
-});
+document
+  .getElementById("aceptarEliminar")
+  .addEventListener("click", function (event) {
+    event.preventDefault();
+    if (filaParaEliminar) {
+      const precioTotalCell = filaParaEliminar.cells[4];
+      const precioTotal = parseFloat(precioTotalCell.textContent);
+      const totalCompra = document.getElementById("total-compra");
+      totalCompra.textContent = (
+        parseFloat(totalCompra.textContent) - precioTotal
+      ).toFixed(2);
+      filaParaEliminar.remove(); // Elimina toda la fila
+      filaParaEliminar = null;
+      document.getElementById("eliminarCompra").style.display = "none";
+    }
+  });
 
-document.getElementById('cancelarEliminar').addEventListener('click',function(event){
+document
+  .getElementById("cancelarEliminar")
+  .addEventListener("click", function (event) {
+    event.preventDefault();
+    filaParaEliminar = null;
+    document.getElementById("eliminarCompra").style.display = "none";
+  });
+
+
+//Editar proveedor ###################################################################################
+
+
+document.getElementById('cambiarProveedorBtn').addEventListener('click',function(event){
   event.preventDefault();
-  filaParaEliminar = null;
-  document.getElementById("eliminarCompra").style.display = "none";
+  cambiarProveedor();
 })
 
+function cambiarProveedor(){
+  document.getElementById('cambiarProveedor').style.display='block';
+  document.getElementById("cambiarProveedorBtn").style.display = "none";
+}
 
-//botón registrar
+document.getElementById('aceptarCambiar').addEventListener('click',function(event){
+  event.preventDefault();
+  document.getElementById('id_id_proveedor').disabled=false;
+  document.getElementById('cambiarProveedor').style.display='none';
+
+})
+
+document.getElementById('cancelarCambiar').addEventListener('click',function(event){
+  event.preventDefault();
+  document.getElementById('cambiarProveedor').style.display='none';
+})
+
+//botón registrar  ###################################################################################
 
 document
   .getElementById("registrarCompraBtn")
@@ -172,21 +221,20 @@ document
     hiddenField.value = JSON.stringify(resumenData);
     document.getElementById("compraForm").appendChild(hiddenField);
 
-    const fechaCompra = document.getElementById('fecha').value;
-    const totalCompra = document.getElementById('total-compra').textContent;
+    const fechaCompra = document.getElementById("fecha").value;
+    const totalCompra = document.getElementById("total-compra").textContent;
 
-    const fechaField = document.createElement('input');
-    fechaField.type = 'hidden';
-    fechaField.name = 'fecha_compra';
+    const fechaField = document.createElement("input");
+    fechaField.type = "hidden";
+    fechaField.name = "fecha_compra";
     fechaField.value = fechaCompra;
-    document.getElementById('compraForm').appendChild(fechaField);
+    document.getElementById("compraForm").appendChild(fechaField);
 
-    const totalField = document.createElement('input');
-    totalField.type = 'hidden';
-    totalField.name = 'total_compra';
+    const totalField = document.createElement("input");
+    totalField.type = "hidden";
+    totalField.name = "total_compra";
     totalField.value = totalCompra;
-    document.getElementById('compraForm').appendChild(totalField);
+    document.getElementById("compraForm").appendChild(totalField);
 
-    document.getElementById('compraForm').submit();
-
+    document.getElementById("compraForm").submit();
   });
