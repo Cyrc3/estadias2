@@ -11,7 +11,7 @@
     font-family: Arial, Helvetica, sans-serif;
     display: flex;
     flex-direction: column;
-    max-width: 1300px;
+    max-width: 1400px;
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -179,9 +179,33 @@
     font-size: x-large;
     color: rgb(0, 0, 0);
     position: absolute;
+    margin-top: 10px;
     margin-bottom: 20px;
     margin-left: 0%;
 }
+
+.currencyT{
+    margin-left: 15px;
+}
+
+
+/*Estilos para iva*/
+
+.ivaT{
+    margin-top: 10px;
+}
+
+#ivaT, .currencyI{
+    margin-left: 54px;
+}
+
+/*Estilos para subtotal*/
+
+#subtotal, .currencyS{
+    margin-left: 14.5px;
+}
+
+
 
 /* Estilos para el botón de registrar */
 #registrarBtn {
@@ -377,3 +401,4 @@ input[type="date"] {
     border-radius: 12px;
     font-weight: bold;
 }
+

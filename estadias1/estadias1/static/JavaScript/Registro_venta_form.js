@@ -1,10 +1,10 @@
 document
   .getElementById("btnGuardar")
   .addEventListener("click", function (event) {
-    event.preventDefault();
+    event.preventDefault(); 
 
     // Obtener datos del formulario
-    const formData = new FormData(document.getElementById("VentaForm")); // Asegúrate de que el ID del formulario sea correcto
+    const formData = new FormData(document.getElementById("ventaForm")); // Asegúrate de que el ID del formulario sea correcto
     const productoId = formData.get("id_producto");
     const cantidad = parseInt(formData.get("cantidad"));
     const precioTotal = parseFloat(formData.get("precio_total"));

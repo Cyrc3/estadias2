@@ -55,13 +55,19 @@
                     <th>Producto</th>
                     <th>Proveedor</th>
                     <th>Precio C/U</th>
-                    <th>Precio Total</th>
+                    <th>Sub-total</th>
                     <th>Acciones</th>
                 </tr>
 
             </table>
+            <div class="subtotal">
+                Sub-total: <span class="currencyS">$</span><span id="subtotal-compra">0.00</span>
+            </div>
+            <div class="ivaT">
+                IVA: <span class="currencyI">$</span><span id="iva-compra">0.00</span>
+            </div>
             <div class="total">
-                Total: $<span id="total-compra">0</span>
+                Total: <span class="currencyT">$</span><span id="total-compra">0.00</span>
             </div>
             <input type="submit" value="Registrar compra" id="registrarCompraBtn">
             <button id="editarCompraBtn" type="button" style="display: none;">Editar Compra</button>
