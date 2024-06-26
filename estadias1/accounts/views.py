@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
-from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Detalle_Venta, Compra
+from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Detalle_Venta, Compra, Venta
 from .forms import ProductoForm, ClienteForm, ProveedorForm, CompraForm, VentaForm
 from django.http import HttpResponse
 from django_select2.views import AutoResponseView
@@ -90,7 +90,7 @@ def registrar_categoria(request):
         
     return render(request, 'registro_categoria.html')
 
-
+'''
 def registrar_compra(request):
     if request.method == 'POST': 
         form = CompraForm(request.POST)
@@ -127,7 +127,9 @@ def registrar_compra(request):
             print("El formulario no es válido")
     else:
         form=CompraForm()
-    return render(request, 'registro_compra.html', {'form':form})  
+    return render(request, 'registro_compra.html', {'form':form})  '''
+
+
 def registrar_compra(request):
     if request.method == 'POST': 
         form = CompraForm(request.POST)
@@ -155,7 +157,10 @@ def registrar_compra(request):
                         costo=costo
                     )
                     detalle_compra.save()
-
+                    #actualización del stock
+                    producto.stock += int(cantidad)
+                    producto.save()
+                    
                 return redirect('compra')
             except Exception as e:
                 print(f"Error al guardar la compra: {e}")
@@ -165,6 +170,7 @@ def registrar_compra(request):
     else:
         form=CompraForm()
     return render(request, 'registro_compra.html', {'form':form})  
+
 
 
 def registro_ventas(request):
