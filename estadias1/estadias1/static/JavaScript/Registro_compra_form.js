@@ -78,7 +78,8 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
 
 
     //SE LIMPIA EL FORMULARIO
-    document.getElementById("id_id_producto").value = "";
+    //document.getElementById("id_id_producto").value = ""; como ahora es un select2 se usa esto:
+    $('#id_id_producto').val(null).trigger('change');
     document.getElementById("id_cantidad").value = "";
     document.getElementById("id_costo").value = "";
     document.getElementById('cambiarProveedorBtn').style.display = 'none';
@@ -125,7 +126,8 @@ function editarFila(row) {
 
     actualizarTotales(-subtotal, -iva);
 
-    document.getElementById("id_id_producto").value = productoid;
+    //document.getElementById("id_id_producto").value = productoid;
+    $('#id_id_producto').val(productoid).trigger('change');
     document.getElementById("id_id_proveedor").value = proveedorid;
     document.getElementById("id_cantidad").value = cantidad;
     document.getElementById("id_costo").value = costo;

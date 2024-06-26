@@ -58,9 +58,9 @@
     border-radius: 4px;
     background-color: #f9f9f9;
     color: #333;
-    width: 15%; /* Ocupa todo el ancho disponible */
+    width: 16%; /* Ocupa todo el ancho disponible */
     font-size: 14px;
-    margin-right: 10px; /* Tamaño de fuente */
+    margin-right: 10px; 
     margin-left: 5px;
     margin-bottom: 0%;
 }
@@ -76,7 +76,7 @@
     border-radius: 4px;
     background-color: #f9f9f9;
     color: #333;
-    width: 61%; /* Ocupa todo el ancho disponible */
+    width: 250px; /* Ocupa todo el ancho disponible */
     font-size: 14px;
     margin-right: 1px; /* Tamaño de fuente */
     margin-left: 1px;
@@ -299,6 +299,7 @@ label{
 #lfecha {
     font-size: 16px; /* Ajusta el tamaño de la fuente del label */
     color: #333; /* Cambia el color del texto */
+    padding-left: 5%;
 }
 input[type="date"] {
     width: 200px; /* Ajusta el ancho del input */
@@ -306,6 +307,7 @@ input[type="date"] {
     border: 1px solid #ccc; /* Añade un borde al input */
     border-radius: 5px; /* Redondea las esquinas del input */
     padding: 5px; /* Añade un poco de espacio alrededor del texto en el input */
+
 }
 
 
