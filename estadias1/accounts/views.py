@@ -48,6 +48,7 @@ def registrar_cliente(request):
             messages.error(request, "Hubo un error al registrar el cliente.")
     else:
         form = ClienteForm()
+    
     return render(request, 'registro_cliente.html', {'form':form})
     
 
@@ -56,12 +57,13 @@ def registrar_proveedor(request):
         form = ProveedorForm(request.POST)
         if form.is_valid():
             form.save()
-            return render(request, 'menu_principal.html')
+            return redirect('proveedor')
         else:
             messages.error(request, "Hubo un error al registrar el proveedor.")
     else:
         form = ProveedorForm()
-    return render(request, 'registro_proveedor.html', {'form':form})
+    proveedores = Proveedor.objects.all()
+    return render(request, 'registro_proveedor.html', {'form':form, 'proveedores':proveedores})
     
 
 def registrar_producto(request):
@@ -74,15 +76,13 @@ def registrar_producto(request):
             messages.error(request, "Hubo un error al registrar el producto.")
     else:
         form = ProductoForm()
-    return render(request, 'registro_inventario.html', {'form':form})
-    #return render(request, 'registro_venta.html', {'form':form})
-
+    productos = Producto.objects.all()
+    return render(request, 'registro_inventario.html', {'form':form, 'productos':productos})
 
 
 def registrar_categoria(request):
     if request.method == 'POST':
         nueva_categoria = Categoria()
-        nueva_categoria.id_categoria = request.POST.get('id_categoria')
         nueva_categoria.descripcion = request.POST.get('descripcion')
         nueva_categoria.save()
         return redirect('producto')
@@ -172,9 +172,9 @@ def historico_compras(request):
     db = Database()
     try:
         query="""
-        SELECT dc.id_compra, c.fecha, dc.id_producto, dc.cantidad, dc.costo
+        SELECT dc.id_compra, c.fecha, p.nombre, dc.cantidad, dc.costo
         FROM Detalle_Compra dc
-        JOIN Compra c ON dc.id_compra = c.id_compra
+        JOIN Compra c ON dc.id_compra = c.id_compra JOIN Producto p ON p.id_producto=dc.id_producto
         """
         historial_compras = db.fetch_all(query)
         

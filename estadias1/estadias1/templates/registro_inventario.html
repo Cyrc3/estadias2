@@ -3,8 +3,8 @@
 {% block title %}<title>Registro de Producto </title>{% endblock %}
 
 {% block extra_css %}
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+{% load static %}
+<link rel="stylesheet" href="{% static 'styles/styles.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -15,16 +15,17 @@
 <!-- Select2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
-<h1>Registro de Producto</h1>
-<div class="container">
+
+<div class="form-container">
+    <h1>Registro de Producto</h1>
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-    
+
         <input type="submit" value="Registrar">
     </form>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#id_id_categoria').select2({
                 placeholder: "Selecciona una categoria",
                 allowClear: true
@@ -39,5 +40,30 @@
     </div>
     {% endif %}
     <a href="{% url 'altaCategoria' %}" class="value">Añadir Categoría</a>
+</div>
+<div class="table-container">
+    <h1>Productos Existentes</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Stock</th>
+                <th>Categoría</th>
+                <th>Precio de Venta</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+            <tr>
+                <td> {{producto.id_producto}} </td>
+                <td> {{producto.nombre}} </td>
+                <td> {{producto.stock}} </td>
+                <td> {{producto.id_categoria.descripcion}} </td>
+                <td> {{producto.costo_venta}} </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}

@@ -1,21 +1,35 @@
 body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
 }
-.container {
+
+
+.form-container {
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: left;
-    width: 300px;
+    width: 45%;
+    margin-right: 20px;
+    float: left;
+    width: 30%;
 }
+
+/* Estilos para la tabla */
+.table-container {
+    width: 60%; /* Ajusta el ancho según tus necesidades */
+    max-height: 460px; /* Establece la altura máxima deseada */
+    overflow-y: auto; /* Habilita el scroll vertical */
+    border: 1px solid #ccc;
+}
+
+
 h1 {
     text-align: center;
     color: #000;
@@ -23,10 +37,12 @@ h1 {
     font-size: 24px;
     margin-bottom: 20px;
 }
+
 label {
     display: block;
     margin: 10px 0 5px;
 }
+
 input[type="text"],
 select {
     width: calc(100% - 20px);
@@ -35,6 +51,7 @@ select {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+
 input[type="submit"] {
     background-color: #63c2e8; /* Color azul cielo */
     color: white; /* Letra blanca */
@@ -48,9 +65,11 @@ input[type="submit"] {
     border-radius: 5px;
     cursor: pointer;
 }
+
 input[type="submit"]:hover {
     background-color: #7bc1e4; /* Un tono más oscuro para el hover */
 }
+
 .value {
     display: block;
     margin-top: 10px;
@@ -58,8 +77,36 @@ input[type="submit"]:hover {
     color: #1795e3;
     text-decoration: solid;
 }
+
 .value:hover {
     text-decoration: underline;
 }
 
-/* registro_inventario.css */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #87CEEB;
+}
+
+thead th {
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-weight: bold;
+}
+
+tbody tr {
+    border-bottom: 1px solid #ddd;
+}
+
+tbody td {
+    padding: 12px;
+    text-align: left;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}

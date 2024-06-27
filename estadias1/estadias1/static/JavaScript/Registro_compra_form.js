@@ -87,7 +87,7 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
 
      // Llamar a la función de actualización de proveedores después de guardar
     actualizarProveedores(proveedorId, proveedorText);
-
+    
 });
 
 
@@ -266,6 +266,10 @@ document.getElementById("registrarCompraBtn").addEventListener("click", function
     document.getElementById("compraForm").appendChild(hiddenField);
 
     const fechaCompra = document.getElementById("fecha").value;
+    if(fechaCompra === ""){
+        alert("INGRESA LA FECHA DE LA COMPRA")
+        return;
+    }
     const totalCompra = document.getElementById("total-compra").textContent;
 
     const fechaField = document.createElement("input");

@@ -10,18 +10,45 @@
 
 {% block content %}
 <div class="container">
-    <h1>Registrar Proveedor</h1>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Guardar"></input>
-    </form>
-    {% if form.errors %}
-    <div class="alert alert-danger">
-        {% for field, errors in form.errors.items %}
-        <strong>{{ field|title }}</strong>: {{ errors|striptags }}
-        {% endfor %}
+    <div class="form-container">
+        <h1>Registrar Proveedor</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Guardar"></input>
+        </form>
+        {% if form.errors %}
+        <div class="alert alert-danger">
+            {% for field, errors in form.errors.items %}
+            <strong>{{ field|title }}</strong>: {{ errors|striptags }}
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
+    <div class="table-container">
+        <h2>Proveedores existentes</h2>
+        <table>
+            <thead>
+                <tr>
+                    <td>Id</td>
+                    <td>Razón Social</td>
+                    <td>Dirección</td>
+                    <td>Teléfono</td>
+                    <td>RFC</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for proveedor in proveedores %}
+                <tr>
+                    <td> {{ proveedor.id_proveedor }} </td>
+                    <td> {{ proveedor.razon_social }} </td>
+                    <td> {{ proveedor.direccion }} </td>
+                    <td> {{ proveedor.numero_telefono }} </td>
+                    <td> {{ proveedor.rfc }} </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}
