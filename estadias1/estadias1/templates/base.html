@@ -1,37 +1,52 @@
-{% load static %}   
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    {% block title %} {% endblock %}
-    {% load static %}
+    {% block title %}{% endblock %}
     <link rel="stylesheet" href="{% static 'styles/style_base.css' %}">
     <link rel="icon" type="image/x-icon" href="{% static '/favicon.ico' %}">
 
     {% block extra_css %}{% endblock %}
 </head>
-<body> 
+
+<body>
     <header>
-        <nav>
-            <ul>
-                <li><a href="{% url 'menu_principal' %}">Inicio  |</a></li>
-                <li><a href="{% url 'proveedor' %}">Registrar Proveedor |</a></li>
-                <li><a href="{% url 'producto' %}">Registrar productos |</a></li>
-                <li><a href="{% url 'ventas' %}">Registrar Venta | </a></li>
-                <li><a href="{% url 'compra' %}">Registrar Compra   |</a></li>
-                <li><a href="{% url 'cliente' %}">Registrar Cliente |</a></li>
-                <li><a href="{% url 'historicoCompras' %}">Histórial de Compras |</a></li>
-                <li><a href="{% url 'historicoVentas' %}">Histórial de Ventas |</a></li>
+        <nav class="menu-hamburguesa">
+            <button id="toggle-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <ul class="menu-list">
+                <li><a href="{% url 'menu_principal' %}">Inicio</a></li>
+                <li><a href="{% url 'proveedor' %}">Registrar Proveedor</a></li>
+                <li><a href="{% url 'producto' %}">Registrar productos</a></li>
+                <li><a href="{% url 'ventas' %}">Registrar Venta</a></li>
+                <li><a href="{% url 'compra' %}">Registrar Compra</a></li>
+                <li><a href="{% url 'cliente' %}">Registrar Cliente</a></li>
+                <li><a href="{% url 'historicoCompras' %}">Historial de Compras</a></li>
+                <li><a href="{% url 'historicoVentas' %}">Historial de Ventas</a></li>
             </ul>
         </nav>
+        <script>
+            const toggleButton = document.getElementById('toggle-menu');
+            const menuList = document.querySelector('.menu-list');
+
+            toggleButton.addEventListener('click', () => {
+                menuList.classList.toggle('show-menu');
+            });
+
+        </script>
     </header>
     <main>
         {% block content %}
-
         {% endblock %}
     </main>
     <footer>
         <p>SOMOS LOBOS - UTSJR 2024</p>
     </footer>
 </body>
+
 </html>

@@ -172,14 +172,14 @@ def historico_compras(request):
     db = Database()
     try:
         query="""
-        SELECT dc.id_compra, c.fecha, p.nombre, dc.cantidad, dc.costo
+        SELECT dc.id_detallecompra, dc.id_compra, c.fecha, p.nombre, dc.cantidad, dc.costo
         FROM Detalle_Compra dc
         JOIN Compra c ON dc.id_compra = c.id_compra JOIN Producto p ON p.id_producto=dc.id_producto
         """
         historial_compras = db.fetch_all(query)
         
         #calculando el total
-        total = sum(compra[3]*compra[4] for compra in historial_compras)
+        total = sum(compra[4]*compra[5] for compra in historial_compras)
         context = {
             'historial_compras': historial_compras,
             'total': total,
