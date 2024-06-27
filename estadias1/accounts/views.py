@@ -5,8 +5,7 @@ from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Det
 from .forms import ProductoForm, ClienteForm, ProveedorForm, CompraForm, VentaForm
 from django.http import HttpResponse
 from django_select2.views import AutoResponseView
-import json
-
+from .db_conection import Database #conexión directa
 import json
 
 
@@ -90,45 +89,6 @@ def registrar_categoria(request):
         
     return render(request, 'registro_categoria.html')
 
-'''
-def registrar_compra(request):
-    if request.method == 'POST': 
-        form = CompraForm(request.POST)
-        if form.is_valid() or not form.has_changed():
-            try:
-                fecha_compra = request.POST.get('fecha_compra')
-                total_compra = request.POST.get('total_compra')
-                resumen_data = json.loads(request.POST.get('resumen_data', '[]'))
-
-                # Crear nueva compra
-                nueva_compra = Compra(fecha=fecha_compra, total=total_compra)
-                nueva_compra.save()
-
-                #insertar detalles de la compra
-                for item in resumen_data:
-                    proveedor =  Proveedor.objects.get(id_proveedor=item['proveedor_id'])
-                    producto = Producto.objects.get(id_producto=item['producto_id'])
-                    cantidad = item['cantidad']
-                    costo = item['costo']
-                    detalle_compra = Detalle_Compra(
-                        id_compra=nueva_compra,
-                        id_proveedor=proveedor,
-                        id_producto=producto,
-                        cantidad=cantidad,
-                        costo=costo
-                    )
-                    detalle_compra.save()
-
-                return redirect('compra')
-            except Exception as e:
-                print(f"Error al guardar la compra: {e}")
-
-        else:
-            print("El formulario no es válido")
-    else:
-        form=CompraForm()
-    return render(request, 'registro_compra.html', {'form':form})  '''
-
 
 def registrar_compra(request):
     if request.method == 'POST': 
@@ -209,8 +169,24 @@ def registro_ventas(request):
 
 
 def historico_compras(request):
-    return render(request, 'historico_compras.html')
-
+    db = Database()
+    try:
+        query="""
+        SELECT dc.id_compra, c.fecha, dc.id_producto, dc.cantidad, dc.costo
+        FROM Detalle_Compra dc
+        JOIN Compra c ON dc.id_compra = c.id_compra
+        """
+        historial_compras = db.fetch_all(query)
+        
+        #calculando el total
+        total = sum(compra[4] for compra in historial_compras)
+        context = {
+            'historial_compras': historial_compras,
+            'total': total,
+        }
+    finally:
+        db.close()
+    return render(request, 'historico_compras.html',context)
 
 
 
@@ -218,15 +194,23 @@ def historico_ventas(request):
     return render(request, 'historico_ventas.html')
 
 
-class ProveedorSelect2View(AutoResponseView):
-    def get_queryset(self):
-        qs = Proveedor.objects.all()
-        # Puedes aplicar filtros o cualquier lógica adicional aquí
-        return qs
-    def get_result_value(self, result):
-        # Define cómo se devuelve el valor de cada resultado
-        return result.id_proveedor
+#TEST PARA LA CONEXION DIRECTA A LA BD !!--11--1--121-01|0|020|920|93UR84U2RY2U3
+'''
+def test_db_view(request):
+    db = Database()
+    try:
+        #probando para insertar --se insertara un cliente 
+        insert_query = "INSERT INTO cliente (RFC, razon_social, USO_FACTURA, REGIMEN_FISCAL, CODIGO_POSTAL) VALUES (%s, %s, %s, %s, %s)"
+        db.execute_query(insert_query,('GGGGGGGGGGGGG','CALAMARDO','SEPA','noce',76800))
 
-    def get_result_label(self, result):
-        # Define cómo se muestra la etiqueta de cada resultado
-        return str(result.razon_social)
+        #verificando la inserciónn
+        select_query = "SELECT * FROM cliente WHERE RFC= %s"
+        resultados = db.fetch_all(select_query,('GGGGGGGGGGGGG'))
+
+        resultado_str = "<br>".join([str(fila) for fila in resultados])
+        return HttpResponse(f"Inserción exitosa.<br>Resultados obtenidos:<br>{resultado_str}")
+    except Exception as e:
+        return HttpResponse(f"Error: {e}")
+    
+    finally:
+        db.close()'''

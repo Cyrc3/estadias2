@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Historial de Compras{% endblock %}
+{% block title %}<title>Historial de Compras</title>{% endblock %}
 
 {% block extra_css %}
 {% load static %}
@@ -9,31 +9,32 @@
 
 {% block content %}
 <h1>Historial de Compras</h1>
-
-<table>
-    <thead>
-        <tr>
-            <th>ID Compra</th>
-            <th>Fecha</th>
-            <th>ID Producto</th>
-            <th>Cantidad</th>
-            <th>Costo</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for compra in historial_compras %}
-        <tr>
-            <td>{{ compra.id }}</td>
-            <td>{{ compra.fecha }}</td>
-            <td>{{ compra.id_producto }}</td>
-            <td>{{ compra.cantidad }}</td>
-            <td>{{ compra.costo }}</td>
-        </tr>
-        {% endfor %}
-        <tr>
-            <td colspan="4" style="text-align: right;">Total:</td>
-            <td>{{ total }}</td>
-        </tr>
-    </tbody>
-</table>
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>ID Compra</th>
+                <th>Fecha</th>
+                <th>ID Producto</th>
+                <th>Cantidad</th>
+                <th>Costo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for compra in historial_compras %}
+            <tr>
+                <td>{{ compra.0 }}</td>
+                <td>{{ compra.1 }}</td>
+                <td>{{ compra.2}}</td>
+                <td>{{ compra.3 }}</td>
+                <td>{{ compra.4 }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="4" style="text-align: right;">Total:</td>
+                <td>{{ total }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 {% endblock %}

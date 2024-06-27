@@ -42,8 +42,10 @@ urlpatterns = [
     
     path('registro_categoria/', views.registrar_categoria, name='altaCategoria'),
 
-    
-     #path('select2/', views.ProveedorSelect2View.as_view(), namespace='select2_proveedor'),
+    #prueba coneksion a la bd directo
+    #path('test_db/',views.test_db_view, name='test_db'),
+
+    #path('select2/', views.ProveedorSelect2View.as_view(), namespace='select2_proveedor'),
 
 ]
 

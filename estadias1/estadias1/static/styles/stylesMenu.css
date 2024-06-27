@@ -1,6 +1,6 @@
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #1a1a1a, #262626);
+    background: #f0efea;
     margin: 0;
     padding: 0;
     display: flex;
@@ -14,22 +14,45 @@ body {
 }
 
 h2 {
-    color: #eee;
+    color: #000000;
+}
+
+.menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .button {
-    display: inline-block;
-    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 150px;
     margin: 10px;
-    font-size: 18px;
-    font-weight: bold;
+    padding: 10px;
+    text-align: center;
     text-decoration: none;
-    color: #fff;
-    background: linear-gradient(135deg, #4CAF50, #388E3C);
-    border-radius: 5px;
+    color: #000000;
+    background: #ffffff;
+    border-radius: 10px;
     transition: background-color 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .button:hover {
-    background: linear-gradient(135deg, #45a049, #357e36);
+    background: linear-gradient(135deg, #55b4da, #64bfe9);
+}
+
+.icon img {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+}
+
+.text {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
 }

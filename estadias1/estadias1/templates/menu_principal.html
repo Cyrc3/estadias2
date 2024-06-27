@@ -1,29 +1,48 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu</title>
+    {% load static %}
     <link rel="stylesheet" href="../static/styles/stylesMenu.css">
+    <link rel="icon" type="image/x-icon" href="{% static '/favicon.ico' %}">
+
 </head>
 <body>
-    <div class="container"> 
-        <h2>Menu principal</h2>
-        <!--<form method="POST">-->
-            {% csrf_token %}        
-            <a href="{% url 'compra' %}" class="button">Registrar Compra</a>
-            <a href="{% url 'ventas' %}" class="button">Registrar Venta</a>
-            <a href="{% url 'cliente' %}" class="button">Registrar Cliente</a>
-            <a href="{% url 'producto' %}" class="button">Registrar Alta en Inventario</a>
-            <a href="{% url 'proveedor' %}" class="button">Registrar Proveedor</a>
-            <a href="{% url 'historicoCompras' %}" class="button">Historico Compras</a>
-            <a href="{% url 'historicoVentas' %}" class="button">Historico Ventas</a>
-        
-            
-
-        </form>
+    <div class="container">
+        <h2>Bienvenido</h2>
+        <div class="menu">
+            {% csrf_token %}
+            <a href="{% url 'compra' %}" class="button">
+                <div class="icon"><img src="../static/images/compra_icon.png" alt="Icon"></div>
+                <div class="text">Registrar Compra</div>
+            </a>
+            <a href="{% url 'ventas' %}" class="button">
+                <div class="icon"><img src="../static/images/venta_icon.png" alt="Icon"></div>
+                <div class="text">Registrar Venta</div>
+            </a>
+            <a href="{% url 'cliente' %}" class="button">
+                <div class="icon"><img src="../static/images/cliente_icon.png" alt="Icon"></div>
+                <div class="text">Registrar Cliente</div>
+            </a>
+            <a href="{% url 'producto' %}" class="button">
+                <div class="icon"><img src="../static/images/producto_icono.png" alt="Icon"></div>
+                <div class="text">Registrar Productos</div>
+            </a>
+            <a href="{% url 'proveedor' %}" class="button">
+                <div class="icon"><img src="../static/images/proveedor_icono.png" alt="Icon"></div>
+                <div class="text">Registrar Proveedor</div>
+            </a>
+            <a href="{% url 'historicoCompras' %}" class="button">
+                <div class="icon"><img src="../static/images/hist_com_icono.png" alt="Icon"></div>
+                <div class="text">Historico Compras</div>
+            </a>
+            <a href="{% url 'historicoVentas' %}" class="button">
+                <div class="icon"><img src="../static/images/hist_ven_icono.png" alt="Icon"></div>
+                <div class="text">Historico Ventas</div>
+            </a>
+        </div>
     </div>
 </body>
 </html>
-
