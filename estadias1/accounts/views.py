@@ -179,7 +179,7 @@ def historico_compras(request):
         historial_compras = db.fetch_all(query)
         
         #calculando el total
-        total = sum(compra[4] for compra in historial_compras)
+        total = sum(compra[3]*compra[4] for compra in historial_compras)
         context = {
             'historial_compras': historial_compras,
             'total': total,
