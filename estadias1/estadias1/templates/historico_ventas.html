@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Historial de Ventas{% endblock %}
+{% block title %}<title>Historial de Ventas</title>{% endblock %}
 
 {% block extra_css %}
 {% load static %}
@@ -9,20 +9,21 @@
 
 {% block content %}
 <h1>Historial de Ventas</h1>
-
-<table>
-    <thead>
-        <tr>
-            <th>ID Venta</th>
-            <th>Fecha</th>
-            <th>Productos</th>
-            <th>Cantidad</th>
-            <th>Costo Individual</th>
-            <th>Costo Total</th>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- Aquí se mostrarán las filas de datos dinámicos -->
-    </tbody>
-</table>
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>ID Venta</th>
+                <th>Fecha</th>
+                <th>Productos</th>
+                <th>Cantidad</th>
+                <th>Costo Individual</th>
+                <th>Costo Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se mostrarán las filas de datos dinámicos -->
+        </tbody>
+    </table>
+</div>
 {% endblock %}

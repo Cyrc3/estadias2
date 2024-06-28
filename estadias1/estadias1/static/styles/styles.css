@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #f6f3ee;
     margin: 0;
     padding: 0;
     display: flex;
@@ -24,9 +24,12 @@ body {
 /* Estilos para la tabla */
 .table-container {
     width: 60%; /* Ajusta el ancho según tus necesidades */
-    max-height: 460px; /* Establece la altura máxima deseada */
+    max-height: 470px; /* Establece la altura máxima deseada */
     overflow-y: auto; /* Habilita el scroll vertical */
-    border: 1px solid #ccc;
+    border: 1px solid #ffffff;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
 }
 
 
@@ -36,11 +39,16 @@ h1 {
     font-weight: bold;
     font-size: 24px;
     margin-bottom: 20px;
+
 }
 
 label {
     display: block;
     margin: 10px 0 5px;
+}
+
+#id_nombre{
+    width: 82%;
 }
 
 input[type="text"],
@@ -53,8 +61,9 @@ select {
 }
 
 input[type="submit"] {
-    background-color: #63c2e8; /* Color azul cielo */
-    color: white; /* Letra blanca */
+    background-color: #1aff00; /* Color azul cielo */
+    color: white;
+    font-weight: bold;
     border: none;
     padding: 10px 15px;
     text-align: center;
@@ -67,15 +76,17 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-    background-color: #7bc1e4; /* Un tono más oscuro para el hover */
+    background-color: #f0a800; /* Un tono más oscuro para el hover */
 }
 
 .value {
     display: block;
     margin-top: 10px;
     margin-bottom: 10px;
-    color: #1795e3;
+    color: #22ff00;
+    font-weight: bold;
     text-decoration: solid;
+    
 }
 
 .value:hover {
@@ -88,25 +99,39 @@ table {
 }
 
 thead {
-    background-color: #87CEEB;
+    background-color: #00e5ff;
 }
 
 thead th {
-    color: white;
+    color: rgb(0, 0, 0);
     padding: 12px;
     text-align: left;
     font-weight: bold;
 }
 
 tbody tr {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #c9c9c9;
 }
 
 tbody td {
     padding: 12px;
     text-align: left;
 }
-
+/*
 tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #bbffd2;
+}
+*/
+
+/* Estilos para las filas según el nivel de stock */
+.high-stock {
+    background-color: #c1ffcf; /* Verde claro */
+}
+
+.medium-stock {
+    background-color: #f9ebbe; /* Amarillo claro */
+}
+
+.low-stock {
+    background-color: #fad5d8; /* Rojo claro */
 }

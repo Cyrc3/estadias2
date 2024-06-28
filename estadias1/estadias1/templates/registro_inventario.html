@@ -55,7 +55,7 @@
         </thead>
         <tbody>
             {% for producto in productos %}
-            <tr>
+            <tr class="{% if producto.stock > 100 %}high-stock{% elif producto.stock >= 50 %}medium-stock{% else %}low-stock{% endif %}">
                 <td> {{producto.id_producto}} </td>
                 <td> {{producto.nombre}} </td>
                 <td> {{producto.stock}} </td>

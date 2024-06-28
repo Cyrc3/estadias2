@@ -1,7 +1,7 @@
 // Interceptar el evento "Enter" en los campos de entrada
-document.querySelectorAll("#id_cantidad, #id_costo", '#iva').forEach(function(input) {
+document.querySelectorAll("#id_cantidad, #id_costo", ".iva").forEach(function(input) {
     input.addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
+        if (event.key === "Enter" && input.type !== 'checkbox') {
             event.preventDefault(); // Prevenir el envío del formulario
         }
     });

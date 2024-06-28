@@ -13,7 +13,7 @@
 
 <body>
     <header>
-        <nav class="menu-hamburguesa">
+        <nav class="menu-hamburguesa" id="menu-hamburguesa">
             <button id="toggle-menu">
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -36,7 +36,11 @@
 
             toggleButton.addEventListener('click', () => {
                 menuList.classList.toggle('show-menu');
+                document.getElementById('menu-hamburguesa').style.backgroundColor = 'white';
+                
             });
+            
+
 
         </script>
     </header>

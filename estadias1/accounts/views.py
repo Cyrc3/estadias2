@@ -1,41 +1,41 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Detalle_Venta, Compra, Venta
-from .forms import ProductoForm, ClienteForm, ProveedorForm, CompraForm, VentaForm
+from .forms import ProductoForm, ClienteForm, ProveedorForm, CompraForm, VentaForm, UsuarioForm
 from django.http import HttpResponse
 from django_select2.views import AutoResponseView
 from .db_conection import Database #conexión directa
 import json
-
-
-
 #from .forms import ProductoForm
 from django.contrib import messages
 
-def loginFun(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(request, request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                # Redirigir a la página deseada después del inicio de sesión
-                return redirect('../estadias1/views/menu_principal.html')
-    else:
-        form = AuthenticationForm()
-    return render(request, '../estadias1/views/index.html', {'form': form})
+
+
 
 
 def menu_principal(request):
     
     return render(request, 'menu_principal.html')
 
+
 def index(request):
     return render(request,'index.html')
 
+
+def registro_usuario(request):
+    if request.method == 'POST':
+        form = UsuarioForm(request.POST)
+        if form.is_valid():
+            usuario = form.save(commit=False)
+            usuario.password = make_password(form.cleaned_data['password'])
+            usuario.save()
+            return redirect('usuario')
+        else:
+            messages.error(request, "Hubo un error al registrar el usuario.")
+    else:
+        form = UsuarioForm()
+    return render(request, 'usuario.html', {'form':form})
 
 
 def registrar_cliente(request):
@@ -172,14 +172,16 @@ def historico_compras(request):
     db = Database()
     try:
         query="""
-        SELECT dc.id_detallecompra, dc.id_compra, c.fecha, p.nombre, dc.cantidad, dc.costo
+        SELECT dc.id_detallecompra, dc.id_compra, c.fecha, pr.razon_social ,p.nombre, dc.cantidad, dc.costo
         FROM Detalle_Compra dc
-        JOIN Compra c ON dc.id_compra = c.id_compra JOIN Producto p ON p.id_producto=dc.id_producto
+        JOIN Compra c ON dc.id_compra = c.id_compra 
+        JOIN Producto p ON p.id_producto=dc.id_producto
+        JOIN Proveedor pr ON pr.id_proveedor=dc.id_proveedor
         """
-        historial_compras = db.fetch_all(query)
+        historial_compras = db.fetch_all(query) 
         
         #calculando el total
-        total = sum(compra[4]*compra[5] for compra in historial_compras)
+        total = sum(compra[5]*compra[6] for compra in historial_compras)
         context = {
             'historial_compras': historial_compras,
             'total': total,
@@ -192,6 +194,10 @@ def historico_compras(request):
 
 def historico_ventas(request):
     return render(request, 'historico_ventas.html')
+
+
+
+
 
 
 #TEST PARA LA CONEXION DIRECTA A LA BD !!--11--1--121-01|0|020|920|93UR84U2RY2U3

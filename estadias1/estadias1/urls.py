@@ -42,6 +42,8 @@ urlpatterns = [
     
     path('registro_categoria/', views.registrar_categoria, name='altaCategoria'),
 
+    path('registro_usuario/',views.registro_usuario, name='usuario'),
+
     #prueba coneksion a la bd directo
     #path('test_db/',views.test_db_view, name='test_db'),
 

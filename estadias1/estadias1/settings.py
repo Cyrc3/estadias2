@@ -108,7 +108,7 @@ DATABASES = {
 '''
 
 
-AUTH_USER_MODEL = 'accounts.Usuario'
+#AUTH_USER_MODEL = 'accounts.Usuario'
 
 
 

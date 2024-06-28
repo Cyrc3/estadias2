@@ -3,7 +3,11 @@ from django.contrib.auth.models import AbstractUser
 
 
 #Commented bcs this isn't working
-class Usuario(AbstractUser):
+class Usuario(models.Model):
+    id_usuario = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=255)
+    privilegio = models.CharField(max_length=50)
+    password = models.CharField(max_length=50)
     class Meta:
         db_table = 'USUARIO'  
         managed = False
@@ -34,7 +38,7 @@ class Cliente(models.Model):
         return self.rfc
 
 
-class Proveedor(models.Model):
+class Proveedor(models.Model): 
     id_proveedor = models.AutoField(primary_key=True)
     razon_social = models.CharField(max_length=255)
     direccion = models.CharField(max_length=255)
