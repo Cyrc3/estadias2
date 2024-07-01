@@ -4,70 +4,65 @@
 
 {% block extra_css %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'styles/styles_ventas.css' %}">
+<link rel="stylesheet" href="{% static 'styles/styles_compras.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="container">
-    <div class="left">
-        <h2>Registro de Venta</h2>
+    <div class="top">
+        <h2 id="title">Registro de Venta</h2>
         <form id="ventaForm" method="POST">
             {% csrf_token %}
             {{ form.as_p }}
             <label for="fecha" id="lfecha">Fecha de la compra:</label>
-                <input type="date" id="fecha" name="fecha" required>
-                <script>
-                    // Obtener la fecha actual en formato ISO (YYYY-MM-DD)
-                    const today = new Date().toISOString().split('T')[0];
-
-                    // Asignar la fecha actual como el valor máximo del input de fecha
-                    document.getElementById('fecha').setAttribute('max', today);
-
-                </script>
-            
-        
-        {% if form.errors %}
-        <div class="alert alert-danger">
-            {% for field, errors in form.errors.items %}
-            <strong>{{ field|title }}</strong>: {{ errors|striptags }}
-            {% endfor %}
-        </div>
-        {% endif %}
-    </div>
-    <div class="form-group">
-        <input type="button" value="Guardar" id="btnGuardar">
-    </div>
-    <div class="right">
-        <h2>Resumen</h2>
-        <div class="resumen">
-            <table id="resumenTabla">
-                <tr>
-                    <th>Cantidad</th>
-                    <th>Articulo</th>
-                    <th>Cliente</th>
-                    <th>Costo Individual</th>
-                    <th>Precio Total</th>
-                </tr>
-                <!-- Aquí se pueden agregar filas de la tabla con JavaScript -->
-            </table>
-            <div class="total">
-                Total: $<span id="total-venta">0</span><br>
-                IVA: $<span id="total-iva">0</span><br><br>
-            </form>
+            <input type="date" id="fecha" name="fecha" required>
+            <script>
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('fecha').setAttribute('max', today);
+            </script>
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                {% for field, errors in form.errors.items %}
+                <strong>{{ field|title }}</strong>: {{ errors|striptags }}
+                {% endfor %}
             </div>
-            
-            <input type="submit" value="Registrar venta" id="registrarVentaBtn">            <input type="button" value="Imprimir Ticket">
-            <button id="editarVentaBtn" type="button" style="display:inline;">Editar Venta</button>
+            {% endif %}
+        </form>
+    </div>
+    <div class="bottom">
+        <div class="form-group">
+            <input type="button" value="Guardar" id="btnGuardar">
         </div>
-
-        <div id="eliminarVenta" class="modal">
-            <div class="modal-content">
-                <p id="eliminarModal">¿Seguro que deseas eliminar está fila?</p>
-                <button id="aceptarEliminar" type="button">Aceptar</button>
-                <button id="cancelarEliminar" type="button">Cancelar</button>
+        <div class="right">
+            <h2>Resumen</h2>
+            <div class="resumen">
+                <table id="resumenTabla">
+                    <tr>
+                        <th>Cantidad</th>
+                        <th>Articulo</th>
+                        <th>Cliente</th>
+                        <th>Costo Individual</th>
+                        <th>Precio Total</th>
+                    </tr>
+                    <!-- Aquí se pueden agregar filas de la tabla con JavaScript -->
+                </table>
+                <div class="total">
+                    Total: $<span id="total-venta">0</span><br>
+                    IVA: $<span id="total-iva">0</span><br><br>
+                </div>
+                <input type="submit" value="Registrar venta" id="registrarVentaBtn">
+                <input type="button" value="Imprimir Ticket">
+                <button id="editarVentaBtn" type="button" style="display:inline;">Editar Venta</button>
+            </div>
+            <div id="eliminarVenta" class="modal">
+                <div class="modal-content">
+                    <p id="eliminarModal">¿Seguro que deseas eliminar está fila?</p>
+                    <button id="aceptarEliminar" type="button">Aceptar</button>
+                    <button id="cancelarEliminar" type="button">Cancelar</button>
+                </div>
             </div>
         </div>
-        
+    </div>
 </div>
 <script src="{% static 'JavaScript/Registro_venta_form.js' %}"></script>
 {% endblock %}

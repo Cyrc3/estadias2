@@ -134,24 +134,24 @@ document.getElementById("registrarVentaBtn").addEventListener("click", function 
   hiddenField.type = "hidden";
   hiddenField.name = "resumen_data";
   hiddenField.value = JSON.stringify(resumenData);
-  document.getElementById("compraForm").appendChild(hiddenField);
+  document.getElementById("ventaForm").appendChild(hiddenField);
 
-  const fechaVenta = document.getElementById('fecha').value;
+  const fechaVenta = document.getElementById('fecha_venta').value;
   const totalVenta = document.getElementById('total-venta').textContent;
 
   const fechaField = document.createElement('input');
   fechaField.type = 'hidden';
   fechaField.name = 'fecha_venta';
   fechaField.value = fechaVenta;
-  document.getElementById('compraForm').appendChild(fechaField);
+  document.getElementById('ventaForm').appendChild(fechaField);
 
   const totalField = document.createElement('input');
   totalField.type = 'hidden';
   totalField.name = 'total_venta';
   totalField.value = totalVenta;
-  document.getElementById('compraForm').appendChild(totalField);
+  document.getElementById('ventaForm').appendChild(totalField);
 
-  document.getElementById('compraForm').submit();
+  document.getElementById('ventaForm').submit();
 });
 
 // Función para limpiar el formulario después de guardar los datos

@@ -53,15 +53,16 @@ class CompraForm(forms.ModelForm):
 class VentaForm(forms.ModelForm):
     id_producto = forms.ModelChoiceField(queryset=Producto.objects.all(), label='Producto', required=False)
     id_cantidad = forms.IntegerField(label='Cantidad', required=False)
-    #costo = forms.FloatField(label='Costo Individual', required=False)
-    id_precio_total = forms.FloatField(label='Precio Individual', required=False)
+    costo = forms.FloatField(label='Costo Individual', required=False)
+    total_venta = forms.FloatField(label='Precio Total', required=False)
     #id_venta1 not defined cs don't get how to link this (detalle_venta) with Venta xd
     #iva = forms.FloatField(label='IVA')
+    fecha_venta = forms.DateField(label='fecha')
     rfc = forms.ModelChoiceField(queryset=Cliente.objects.all(), label='rfc', required=False)
 
     class Meta:
         model = Detalle_Venta
-        fields = ['id_producto','id_cantidad','id_precio_total','rfc']
+        fields = ['id_producto','id_cantidad','total_venta','rfc']
     def __init__(self, *args, **kwargs):
         super(VentaForm, self).__init__(*args, **kwargs)
         self.fields['id_producto'].queryset = Producto.objects.all()
