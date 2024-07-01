@@ -9,8 +9,8 @@ document
   const formData = new FormData(document.getElementById("ventaForm"));
   const productoId = formData.get("id_producto");
   const cantidad = parseInt(formData.get("id_cantidad"));
-  const precioTotal = parseInt(formData.get("id_precio_total"));
-  const rfcId = formData.get("id_rfc");
+  const precioTotal = parseInt(formData.get("precio_total"));
+  const rfcId = formData.get("id_id_cliente");
 
   // Verificar si cantidad y precio total son números válidos
   //console.log(cantidad);

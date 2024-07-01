@@ -138,9 +138,9 @@ def registro_ventas(request):
         form = VentaForm(request.POST)
         try:
             if form.is_valid():
-                fecha_venta = form.cleaned_data['fecha_venta']
-                total_venta = form.cleaned_data['total_venta']
-                resumen_data = json.loads(request.POST.get('resumen_data', '[]'))
+                fecha_venta = form.cleaned_data['fecha_venta']#input html
+                total_venta = form.cleaned_data['total_venta']#total de las cosas que se suman
+                resumen_data = json.loads(request.POST.get('resumen_data', '[]'))#donde se guardan las tablas
                 
                 nueva_venta = Venta(fecha=fecha_venta, total=total_venta)
                 nueva_venta.save()
@@ -148,11 +148,13 @@ def registro_ventas(request):
                 for item in resumen_data:
                     cliente = item.get('cliente')
                     cantidad = item.get('cantidad')
+                    product = item.get('producto_id')
                     precio_total = item.get('precio_total')
+                    id_cliente = item.get('id_cliente')
 
                     detalle_venta = Detalle_Venta(
                         id_venta=nueva_venta,
-                        rfc=cliente,
+                        id_cliente=cliente,
                         cantidad=cantidad,
                         precio_total=precio_total
                     )
