@@ -10,7 +10,8 @@ document
   const productoId = formData.get("id_producto");
   const cantidad = parseInt(formData.get("id_cantidad"));
   const precioTotal = parseInt(formData.get("precio_total"));
-  const rfcId = formData.get("id_id_cliente");
+  const clienteId=formData.get('id_cliente');
+  
 
   // Verificar si cantidad y precio total son números válidos
   //console.log(cantidad);
@@ -24,6 +25,9 @@ document
 
   // Obtener texto de las opciones seleccionadas (si es necesario)
   const productoText = document.querySelector(`#id_id_producto option[value="${productoId}"]`).textContent;
+  const rfcId = document.querySelector(`#id_id_cliente option[value="${clienteId}"]`).textContent;
+
+
 
   // Actualizar la tabla
   const table = document.getElementById("resumenTabla");
@@ -31,7 +35,7 @@ document
   newRow.innerHTML = `
     <td>${cantidad}</td>
     <td data-id="${productoId}">${productoText}</td>
-    <td data-id="${rfcId}"></td>
+    <td data-id="${clienteId}">${rfcId}</td>
     <td>${precioFinal}</td>
   `;
   document.getElementById("editarVentaBtn").style.display = "inline";
@@ -52,6 +56,25 @@ document
   // Limpiar el formulario después de guardar
   limpiarFormulario("ventaForm");
 });
+
+function actualizarTotales(subtotal, iva) {  
+  // Actualizar SUBTOTAL
+  const subTotalCompra = document.getElementById('subtotal-compra');
+  const nuevoSubtotal = parseFloat(subTotalCompra.textContent) + subtotal;
+  subTotalCompra.textContent = nuevoSubtotal.toFixed(2);
+
+  // Actualizar el Iva
+  const ivaCompra = document.getElementById('iva-compra');
+  const nuevaIva = parseFloat(ivaCompra.textContent) + iva;
+  ivaCompra.textContent = nuevaIva.toFixed(2);
+
+  // Actualizar el total
+  const totalCompra = document.getElementById("total-compra");
+  const nuevoTotal = parseFloat(totalCompra.textContent) + subtotal + iva;
+  totalCompra.textContent = nuevoTotal.toFixed(2);
+}
+
+
 
 document.getElementById("editarVentaBtn").addEventListener("click", function (event) {
   event.preventDefault();
@@ -110,6 +133,7 @@ document.getElementById('cancelarEliminar').addEventListener('click', function(e
   filaParaEliminar = null;
   document.getElementById("eliminarVenta").style.display = "none";
 });
+
 
 document.getElementById("registrarVentaBtn").addEventListener("click", function (event) {
   event.preventDefault();

@@ -20,14 +20,8 @@
                 const today = new Date().toISOString().split('T')[0];
                 document.getElementById('fecha').setAttribute('max', today);
             </script>
-            {% if form.errors %}
-            <div class="alert alert-danger">
-                {% for field, errors in form.errors.items %}
-                <strong>{{ field|title }}</strong>: {{ errors|striptags }}
-                {% endfor %}
-            </div>
-            {% endif %}
-        </form>
+            
+
     </div>
     <div class="bottom">
         <div class="form-group">
@@ -61,6 +55,14 @@
                     <button id="cancelarEliminar" type="button">Cancelar</button>
                 </div>
             </div>
+            </form>
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                {% for field, errors in form.errors.items %}
+                <strong>{{ field|title }}</strong>: {{ errors|striptags }}
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
