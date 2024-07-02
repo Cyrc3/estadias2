@@ -28,7 +28,7 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
     const registroConIva = document.getElementById('iva').checked;
 
     const productoText = document.querySelector(`#id_id_producto option[value="${productoId}"]`).textContent;
-    const proveedorText = document.querySelector(`#id_id_proveedor option[value="${proveedorId}"]`).textContent;
+    //const proveedorText = document.querySelector(`#id_id_proveedor option[value="${proveedorId}"]`).textContent;
 
     if (isNaN(cantidad) || isNaN(costo)) {
         alert("Por favor, introduce valores válidos");
@@ -49,7 +49,6 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
     newRow.innerHTML = `
         <td>${cantidad}</td>
         <td data-id="${productoId}">${productoText}</td>
-        <td data-id="${proveedorId}">${proveedorText}</td>
         <td>${costo}</td>
         <td>${subtotal}</td>
         <td style="display:none;">${registroConIva}</td> <!-- Columna oculta para saber si el producto es registrado con IVA -->
@@ -85,9 +84,6 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
     document.getElementById('cambiarProveedorBtn').style.display = 'none';
 
 
-     // Llamar a la función de actualización de proveedores después de guardar
-    actualizarProveedores(proveedorId, proveedorText);
-    
 });
 
 
@@ -111,14 +107,12 @@ document.getElementById("editarCompraBtn").addEventListener("click", function (e
 function editarFila(row) {  
     const cantidadCell = row.cells[0];
     const productoCell = row.cells[1];
-    const proveedorCell = row.cells[2];
-    const costoCell = row.cells[3];
-    const subtotalCell = row.cells[4];
-    const ivaCell = row.cells[5];
+    const costoCell = row.cells[2];
+    const subtotalCell = row.cells[3];
+    const ivaCell = row.cells[4];
 
     const cantidad = cantidadCell.textContent;
     const productoid = productoCell.getAttribute("data-id");
-    const proveedorid = proveedorCell.getAttribute("data-id");
     const costo = parseFloat(costoCell.textContent);
     const subtotal = parseFloat(subtotalCell.textContent);
     const registroConIva = ivaCell.textContent === 'true';
@@ -128,7 +122,6 @@ function editarFila(row) {
 
     //document.getElementById("id_id_producto").value = productoid;
     $('#id_id_producto').val(productoid).trigger('change');
-    document.getElementById("id_id_proveedor").value = proveedorid;
     document.getElementById("id_cantidad").value = cantidad;
     document.getElementById("id_costo").value = costo;
     document.getElementById("iva").checked = registroConIva;
@@ -220,18 +213,6 @@ document.getElementById('aceptarCambiar').addEventListener('click', function(eve
     document.getElementById('cambiarProveedor').style.display = 'none';
 })
 
-// Función para actualizar el proveedor en todas las filas
-function actualizarProveedores(nuevoProveedorId, nuevoProveedorText) {
-    const rows = document.querySelectorAll("#resumenTabla tr");
-    rows.forEach((row, index) => {
-        if (index > 0) { // Saltar la fila del encabezado
-            const proveedorCell = row.cells[2];
-            proveedorCell.setAttribute("data-id", nuevoProveedorId);
-            proveedorCell.textContent = nuevoProveedorText;
-        }
-    });
-}
-
 
 document.getElementById('cancelarCambiar').addEventListener('click', function(event){
     event.preventDefault();
@@ -252,25 +233,27 @@ document.getElementById("registrarCompraBtn").addEventListener("click", function
         const rowData = {
             cantidad: cells[0].innerText,
             producto_id: cells[1].getAttribute("data-id"),
-            proveedor_id: cells[2].getAttribute("data-id"),
-            costo: cells[3].innerText,
-            precio_total: cells[4].innerText,
+            //proveedor_id: cells[2].getAttribute("data-id"),
+            costo: cells[2].innerText,
+            precio_total: cells[3].innerText,
         };
         resumenData.push(rowData);
     }
-
+    //-+--+--+-+-+-+-+-+-+-+            
     const hiddenField = document.createElement("input");
     hiddenField.type = "hidden";
     hiddenField.name = "resumen_data";
     hiddenField.value = JSON.stringify(resumenData);
     document.getElementById("compraForm").appendChild(hiddenField);
-
+    //-+-+-+-+-+-+-+-+-+-+-+-+- 
     const fechaCompra = document.getElementById("fecha").value;
     if(fechaCompra === ""){
         alert("INGRESA LA FECHA DE LA COMPRA")
         return;
     }
+    
     const totalCompra = document.getElementById("total-compra").textContent;
+    const proveedorId = document.getElementById('hidden_proveedor').value;
 
     const fechaField = document.createElement("input");
     fechaField.type = "hidden";
@@ -283,6 +266,13 @@ document.getElementById("registrarCompraBtn").addEventListener("click", function
     totalField.name = "total_compra";
     totalField.value = totalCompra;
     document.getElementById("compraForm").appendChild(totalField);
+
+
+    const proveedorField = document.createElement('input');
+    proveedorField.type = "hidden";
+    proveedorField.name = "proveedor_id";
+    proveedorField.value = proveedorId;
+    document.getElementById("compraForm").appendChild(proveedorField);
 
     document.getElementById("compraForm").submit();
 });

@@ -97,15 +97,18 @@ def registrar_compra(request):
             try:
                 fecha_compra = request.POST.get('fecha_compra')
                 total_compra = request.POST.get('total_compra')
+                proveedor_id = request.POST.get('proveedor_id')
                 resumen_data = json.loads(request.POST.get('resumen_data', '[]'))
 
                 # Crear nueva compra
                 nueva_compra = Compra(fecha=fecha_compra, total=total_compra)
                 nueva_compra.save()
+                
+                #obtener el proveedor 
+                proveedor = Proveedor.objects.get(id_proveedor=proveedor_id)
 
                 #insertar detalles de la compra
                 for item in resumen_data:
-                    proveedor =  Proveedor.objects.get(id_proveedor=item['proveedor_id'])
                     producto = Producto.objects.get(id_producto=item['producto_id'])
                     cantidad = item['cantidad']
                     costo = item['costo']

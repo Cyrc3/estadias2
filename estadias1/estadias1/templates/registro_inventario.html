@@ -51,6 +51,8 @@
                 <th>Stock</th>
                 <th>Categoría</th>
                 <th>Precio de Venta</th>
+                <th>Utilidad</th>
+                <th>Reorden</th>
             </tr>
         </thead>
         <tbody>
@@ -61,6 +63,8 @@
                 <td> {{producto.stock}} </td>
                 <td> {{producto.id_categoria.descripcion}} </td>
                 <td> {{producto.costo_venta}} </td>
+                <td> {{producto.porcentaje_utilidad}} </td>
+                <td> {{producto.punto_reorden}} </td>
             </tr>
             {% endfor %}
         </tbody>
