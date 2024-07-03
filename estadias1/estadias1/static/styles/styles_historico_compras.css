@@ -1,3 +1,29 @@
+#fecha_inicio{
+    margin-right:2%;
+    
+}
+
+label{
+    margin-left: 5%;
+}
+
+#filtrar{
+    margin-left: 3%;
+    background-color: #00aeff;
+    color: rgb(255, 249, 249);
+    font-weight: bold;
+    border: none;
+    padding: 1%;    
+    border-radius: 5px;
+    cursor: pointer;
+
+}
+
+form{
+    text-align: center;
+    padding-top: 2%;
+}
+
 body{
     font-family: Tahoma, Geneva, Verdana, sans-serif;
     background-color: #fbfaf6;

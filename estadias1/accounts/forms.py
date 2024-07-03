@@ -8,7 +8,7 @@ class ProductoForm(forms.ModelForm):
     id_categoria = forms.ModelChoiceField(queryset=Categoria.objects.all(), label='Categoría', to_field_name='descripcion')
     class Meta:
         model = Producto
-        fields = ['nombre','id_categoria','costo_venta','stock','porcentaje_utilidad','punto_reorden']
+        fields = ['nombre','id_categoria','stock','porcentaje_utilidad','punto_reorden']
         
 
 

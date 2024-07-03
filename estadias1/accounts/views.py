@@ -176,24 +176,53 @@ def registro_ventas(request):
 def historico_compras(request):
     db = Database()
     try:
-        query="""
-        SELECT dc.id_detallecompra, dc.id_compra, c.fecha, pr.razon_social ,p.nombre, dc.cantidad, dc.costo
+        #datos del filtro
+        producto_id = request.GET.get('producto')
+        fecha_inicio = request.GET.get('fecha_inicio')
+        fecha_fin = request.GET.get('fecha_fin')
+
+        #consulta con filtros
+        query = """
+        SELECT dc.id_detallecompra, dc.id_compra, c.fecha, pr.razon_social, p.nombre, dc.cantidad, dc.costo
         FROM Detalle_Compra dc
         JOIN Compra c ON dc.id_compra = c.id_compra 
-        JOIN Producto p ON p.id_producto=dc.id_producto
-        JOIN Proveedor pr ON pr.id_proveedor=dc.id_proveedor
+        JOIN Producto p ON p.id_producto = dc.id_producto
+        JOIN Proveedor pr ON pr.id_proveedor = dc.id_proveedor
+        WHERE 1=1
         """
-        historial_compras = db.fetch_all(query) 
-        
+
+        #añadir filtros a la consulta
+        params = []
+        if producto_id:
+            query += " AND p.id_producto = %s"
+            params.append(producto_id)
+        if fecha_inicio:
+            query += " AND c.fecha >= %s"
+            params.append(fecha_inicio)
+        if fecha_fin:
+            query += " AND c.fecha <= %s"
+            params.append(fecha_fin)
+
+        query += " ORDER BY dc.id_detallecompra ASC"
+        historial_compras = db.fetch_all(query, params)
+
         #calculando el total
-        total = sum(compra[5]*compra[6] for compra in historial_compras)
+        total = sum(compra[5] * compra[6] for compra in historial_compras)
+
+        #obtener la lista de productos para el filtro de productos
+        productos_query = "SELECT id_producto, nombre FROM Producto"
+        productos = db.fetch_all(productos_query, [])
+
+        productos_dict = [{'id_producto': producto[0], 'nombre': producto[1]} for producto in productos]
+
         context = {
             'historial_compras': historial_compras,
             'total': total,
+            'productos': productos_dict
         }
     finally:
         db.close()
-    return render(request, 'historico_compras.html',context)
+    return render(request, 'historico_compras.html', context)
 
 
 
