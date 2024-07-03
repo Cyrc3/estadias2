@@ -139,14 +139,13 @@ def registrar_compra(request):
 def registro_ventas(request):
     if request.method == 'POST':
         form = VentaForm(request.POST)
-        try:
-            if form.is_valid() or not form.has_changed():
-                
+        if form.is_valid() or not form.has_changed():
+            try:
 
                 fecha_venta = request.POST.get('fecha_venta')
                 total_venta = request.POST.get('total_venta')
                 resumen_data = json.loads(request.POST.get('resumen_data', '[]'))
-                
+                    
                 nueva_venta = Venta(fecha=fecha_venta, total=total_venta)
                 nueva_venta.save()
 
@@ -168,9 +167,10 @@ def registro_ventas(request):
                     detalle_venta.save()
 
                 return redirect('venta')
-        except Exception as e:
-            print(f"Error sabrá Dios dónde: {e}")
-
+            except Exception as e:
+                print(f"Error sabrá Dios dónde: {e}")
+        else:
+            print("El formulario no es válido")
     else:
         form = VentaForm()
 
