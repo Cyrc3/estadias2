@@ -141,35 +141,38 @@ def registro_ventas(request):
         form = VentaForm(request.POST)
         try:
             if form.is_valid():
-                fecha_venta = form.cleaned_data['fecha_venta']#input html
-                total_venta = form.cleaned_data['total_venta']#total de las cosas que se suman
-                resumen_data = json.loads(request.POST.get('resumen_data', '[]'))#donde se guardan las tablas
-                
+                fecha_venta = form.cleaned_data['fecha_venta']
+                total_venta = form.cleaned_data['total_venta']
+                resumen_data = json.loads(request.POST.get('resumen_data', '[]'))
+
                 nueva_venta = Venta(fecha=fecha_venta, total=total_venta)
                 nueva_venta.save()
-                
+
                 for item in resumen_data:
-                    cliente = item.get('cliente')
+                    cliente_rfc = item.get('rfc')
                     cantidad = item.get('cantidad')
-                    product = item.get('producto_id')
+                    producto_id = item.get('producto_id')
                     precio_total = item.get('precio_total')
-                    id_cliente = item.get('id_cliente')
+                    iva = item.get('iva')
 
                     detalle_venta = Detalle_Venta(
-                        id_venta=nueva_venta,
-                        id_cliente=cliente,
+                        id_venta1=nueva_venta,  # Aquí el campo en la tabla es 'id_venta1'
+                        id_producto=Producto.objects.get(id=producto_id),  # Obtener instancia del producto
                         cantidad=cantidad,
-                        precio_total=precio_total
+                        precio_total=precio_total,
+                        rfc=Cliente.objects.get(rfc=id_rfc),  # Obtener instancia del cliente
+                        
                     )
                     detalle_venta.save()
-                
+                    
+
                 return redirect('venta')
         except Exception as e:
             print(f"Error sabrá Dios dónde: {e}")
-            
+
     else:
         form = VentaForm()
-    
+
     return render(request, 'registro_venta.html', {'form': form})
 
 

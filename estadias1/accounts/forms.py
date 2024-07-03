@@ -62,7 +62,7 @@ class VentaForm(forms.ModelForm):
 
     class Meta:
         model = Detalle_Venta
-        fields = ['id_producto','id_cantidad','id_cliente']
+        fields = ['id_producto','id_cantidad','id_cliente', 'precio_total']
     def __init__(self, *args, **kwargs):
         super(VentaForm, self).__init__(*args, **kwargs)
         self.fields['id_producto'].queryset = Producto.objects.all()
