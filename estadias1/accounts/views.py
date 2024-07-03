@@ -160,11 +160,11 @@ def registro_ventas(request):
                         id_producto=Producto.objects.get(id=producto_id),  # Obtener instancia del producto
                         cantidad=cantidad,
                         precio_total=precio_total,
-                        rfc=Cliente.objects.get(rfc=id_rfc),  # Obtener instancia del cliente
+                        rfc=Cliente.objects.get(rfc=id_cliente),  # Obtener instancia del cliente
                         
                     )
                     detalle_venta.save()
-                    
+
 
                 return redirect('venta')
         except Exception as e:
