@@ -14,11 +14,11 @@
         <form id="ventaForm" method="POST">
             {% csrf_token %}
             {{ form.as_p }}
-            <label for="fecha" id="lfecha">Fecha de la compra:</label>
-            <input type="date" id="fecha" name="fecha" required>
+            <label for="fecha_venta" id="lfecha">Fecha de la venta:</label>
+            <input type="date" id="fecha_venta" name="fecha_venta" required>
             <script>
                 const today = new Date().toISOString().split('T')[0];
-                document.getElementById('fecha').setAttribute('max', today);
+                document.getElementById('fecha_venta').setAttribute('max', today);
             </script>
             
 
