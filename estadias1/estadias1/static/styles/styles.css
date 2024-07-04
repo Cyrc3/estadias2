@@ -16,15 +16,16 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 45%;
-    margin-right: 20px;
+    margin-right: 10px;
+    margin-left: 7%;
     float: left;
     width: 30%;
 }
 
 /* Estilos para la tabla */
 .table-container {
-    width: 60%; /* Ajusta el ancho según tus necesidades */
-    max-height: 590px; /* Establece la altura máxima deseada */
+    width: 50%; /* Ajusta el ancho según tus necesidades */
+    max-height: 525px; /* Establece la altura máxima deseada */
     overflow-y: auto; /* Habilita el scroll vertical */
     border: 1px solid #ffffff;
     background-color: #fff;
@@ -96,6 +97,7 @@ input[type="submit"]:hover {
 table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 2%;
 }
 
 thead {
@@ -134,4 +136,30 @@ tbody tr:nth-child(even) {
 
 .low-stock {
     background-color: #fad5d8; /* Rojo claro */
+}
+
+#buscarProducto{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 50%;
+    margin-left: 2%;
+}
+
+#btnBuscarProducto{
+    background-color: #006adb;
+    color: rgb(255, 249, 249);
+    font-weight: bold;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: 4%;
+}
+
+select[name="q"]{
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 13px;
 }

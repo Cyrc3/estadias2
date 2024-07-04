@@ -67,6 +67,7 @@ def registrar_proveedor(request):
     
 
 def registrar_producto(request):
+    query = request.GET.get('q','')
     if request.method == 'POST':
         form = ProductoForm(request.POST)
         if form.is_valid():
@@ -77,7 +78,12 @@ def registrar_producto(request):
     else:
         form = ProductoForm()
     productos = Producto.objects.all()
-    return render(request, 'registro_inventario.html', {'form':form, 'productos':productos})
+    #filtrar productos segun la busqueda
+    if query:
+        productos_filtrados = productos.filter(id_producto=query)
+    else:
+        productos_filtrados = productos
+    return render(request, 'registro_inventario.html', {'form':form, 'productos':productos,'productos_filtrados':productos_filtrados,'query':query})
 
 
 def registrar_categoria(request):

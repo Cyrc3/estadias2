@@ -30,6 +30,10 @@
                 placeholder: "Selecciona una categoria",
                 allowClear: true
             });
+            $('#selectBuscar').select2({
+                placeholder: "Busque un producto",
+                allowClear: true
+            });
         });
     </script>
     {% if form.errors %}
@@ -43,6 +47,16 @@
 </div>
 <div class="table-container">
     <h1>Productos Existentes</h1>
+    <form method="GET" action="{% url 'producto' %}" id="buscarProducto">
+        <select name="q" id="selectBuscar">
+            <option value="">Seleccione un producto</option>
+            {% for producto in productos %}
+            <option value="{{ producto.id_producto }}" {% if query == producto.id_producto|stringformat:"s" %}selected{% endif %}>{{ producto.nombre }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" id="btnBuscarProducto">Buscar</button>
+    </form>
+    
     <table>
         <thead>
             <tr>
@@ -56,7 +70,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for producto in productos %}
+            {% for producto in productos_filtrados %}
             <tr class="{% if producto.stock > 100 %}high-stock{% elif producto.stock >= 50 %}medium-stock{% else %}low-stock{% endif %}">
                 <td> {{producto.id_producto}} </td>
                 <td> {{producto.nombre}} </td>
