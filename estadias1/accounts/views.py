@@ -150,26 +150,28 @@ def registro_ventas(request):
 
                 fecha_venta = request.POST.get('fecha_venta')
                 total_venta = request.POST.get('total_venta')
+                cliente_id = request.POST.get('cliente_id')
                 resumen_data = json.loads(request.POST.get('resumen_data', '[]'))
                     
                 nueva_venta = Venta(fecha=fecha_venta, total=total_venta)
                 nueva_venta.save()
 
-                for item in resumen_data:
-                    id_cliente = item.get('id_cliente')
-                    cantidad = item.get('cantidad')
-                    producto_id = item.get('producto_id')
-                    precio_total = float(item.get('precio_total'))
-                    precio_base = precio_total / (1 + 0.16)
-                    iva = precio_total - precio_base
-    
+                cliente = Cliente.objects.get(id_cliente=cliente_id)
 
+                for item in resumen_data:
+                    #id_cliente = Cliente.objects.get(id_cliente=item['id_cliente'])
+                    cantidad = int(item.get('cantidad'))
+                    producto_id = Producto.objects.get(id_producto=item['producto_id'])
+                    precio_total = float(item.get('precio_total'))
+                    precio_base = precio_total / 1.16
+                    iva = precio_total - precio_base
                     detalle_venta = Detalle_Venta(
                         id_venta1=nueva_venta,  # Aquí el campo en la tabla es 'id_venta1'
-                        id_producto=Producto.objects.get(id_producto=producto_id),  # Obtener instancia del producto
+                        id_producto=producto_id,  # Obtener instancia del producto
                         cantidad=cantidad,
-                        precio_total=precio_total,
-                        id_cliente=Cliente.objects.get(id_cliente=id_cliente),  # Obtener instancia del cliente
+                        precio_total=precio_base,
+                        id_cliente=cliente,  # Obtener instancia del cliente
+                        iva=iva,
                         
                     )
                     detalle_venta.save()

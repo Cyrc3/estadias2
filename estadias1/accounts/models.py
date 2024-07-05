@@ -123,7 +123,6 @@ class Detalle_Venta(models.Model):
     id_cliente = models.ForeignKey(Cliente,on_delete=models.SET_NULL, db_column='id_cliente', null=True)
     cantidad = models.IntegerField()
     precio_total = models.DecimalField(max_digits=10, decimal_places=2)
-
     iva = models.FloatField()
     class Meta:
         db_table = 'detalle_venta'

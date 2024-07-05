@@ -1,4 +1,3 @@
-// Interceptar el evento "Enter" en los campos de entrada
 document.querySelectorAll("#id_cantidad, #id_costo", ".iva").forEach(function(input) {
     input.addEventListener("keypress", function(event) {
         if (event.key === "Enter" && input.type !== 'checkbox') {
@@ -6,10 +5,6 @@ document.querySelectorAll("#id_cantidad, #id_costo", ".iva").forEach(function(in
         }
     });
 });
-
-
-
-//BOTÓN DE GUARDAR O AÑADIR COMPRA --SIRVE PARA PASAR DATOS DEL FORM A LA TABLA DE RESUMEN
 
 document.getElementById("btnGuardar").addEventListener("click", function (event) {
     event.preventDefault();
@@ -24,33 +19,38 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
     }
 
     const cantidad = parseFloat(formData.get("cantidad"));
-    const costo = parseFloat(formData.get("costo"));
+    let costo = parseFloat(formData.get("costo"));
     const registroConIva = document.getElementById('iva').checked;
 
     const productoText = document.querySelector(`#id_id_producto option[value="${productoId}"]`).textContent;
-    //const proveedorText = document.querySelector(`#id_id_proveedor option[value="${proveedorId}"]`).textContent;
 
     if (isNaN(cantidad) || isNaN(costo)) {
         alert("Por favor, introduce valores válidos");
         return;
     }
 
+    let subtotal = 0.0;
     let iva = 0.0;
-    let subtotal = cantidad * costo;
+    let precioTotal = 0.0;
 
     if (registroConIva) {
+        precioTotal = cantidad * costo;
+        subtotal = precioTotal / 1.16;
+        iva = precioTotal - subtotal;
+    } else {
+        subtotal = cantidad * costo;
         iva = subtotal * 0.16;
+        precioTotal = subtotal + iva;
+        costo = costo * 1.16; // Agregar 16% de IVA al costo solo si se registra sin IVA
     }
-
-    const precioTotal = subtotal + iva;
 
     const table = document.getElementById("resumenTabla");
     const newRow = table.insertRow();
     newRow.innerHTML = `
         <td>${cantidad}</td>
         <td data-id="${productoId}">${productoText}</td>
-        <td>${costo}</td>
-        <td>${subtotal}</td>
+        <td>${costo.toFixed(2)}</td>
+        <td>${subtotal.toFixed(2)}</td>
         <td style="display:none;">${registroConIva}</td> <!-- Columna oculta para saber si el producto es registrado con IVA -->
     `;
 
@@ -64,7 +64,7 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
     actionsCell.innerHTML = `
         <button class="editarBtn" style="display: none;">Editar</button> 
         <button class="eliminarBtn" style="display: none;">Eliminar</button>
-    `; //CREA LOS BOTONE ELIMINAR Y EDITAR DENTRO DE LA TABLA EN LA COMLUMNA ACCIONES
+    `; //CREA LOS BOTONES ELIMINAR Y EDITAR DENTRO DE LA TABLA EN LA COLUMNA ACCIONES
 
     // SE LE AÑADEN FUNCIONES A LOS BOTONES
     newRow.querySelector(".editarBtn").addEventListener("click", function () {
@@ -75,20 +75,13 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
         eliminarFila(newRow);
     });
 
-
     //SE LIMPIA EL FORMULARIO
-    //document.getElementById("id_id_producto").value = ""; como ahora es un select2 se usa esto:
     $('#id_id_producto').val(null).trigger('change');
     document.getElementById("id_cantidad").value = "";
     document.getElementById("id_costo").value = "";
     document.getElementById('cambiarProveedorBtn').style.display = 'none';
-
-
 });
 
-
-
-//SE AÑADE FUNCION AL BOTON DE EDITAR COMPRA
 document.getElementById("editarCompraBtn").addEventListener("click", function (event) {
     event.preventDefault();
     const rows = document.querySelectorAll("#resumenTabla tr");
@@ -102,8 +95,6 @@ document.getElementById("editarCompraBtn").addEventListener("click", function (e
     document.getElementById("editarCompraBtn").style.display = "none";
 });
 
-
-//FUNCION PARA EDITAR LA FILA QUE ESTA LIGADO AL BOTON EDITAR EN LA PARTE DE ARRIBA
 function editarFila(row) {  
     const cantidadCell = row.cells[0];
     const productoCell = row.cells[1];
@@ -111,21 +102,23 @@ function editarFila(row) {
     const subtotalCell = row.cells[3];
     const ivaCell = row.cells[4];
 
-    const cantidad = cantidadCell.textContent;
+    const cantidad = parseFloat(cantidadCell.textContent);
     const productoid = productoCell.getAttribute("data-id");
-    const costo = parseFloat(costoCell.textContent);
+    let costo = parseFloat(costoCell.textContent);
     const subtotal = parseFloat(subtotalCell.textContent);
     const registroConIva = ivaCell.textContent === 'true';
-    const iva = registroConIva ? subtotal * 0.16 : 0;
+    const iva = registroConIva ? (cantidad * costo - subtotal) : subtotal * 0.16;
 
     actualizarTotales(-subtotal, -iva);
 
-    //document.getElementById("id_id_producto").value = productoid;
+    if (!registroConIva) {
+        costo = costo / 1.16; // Quitar el 16% de IVA del costo para la edición
+    }
+
     $('#id_id_producto').val(productoid).trigger('change');
     document.getElementById("id_cantidad").value = cantidad;
-    document.getElementById("id_costo").value = costo;
+    document.getElementById("id_costo").value = costo.toFixed(2);
     document.getElementById("iva").checked = registroConIva;
-
 
     document.getElementById("compraForm").setAttribute("data-editing-row-index", row.rowIndex);
 
@@ -137,30 +130,26 @@ function editarFila(row) {
     eliminarButtons.forEach(button => button.style.display = 'none');
 }
 
-
-//ELIMINA LA FILA PARA PROCEDER CON LA EDICION DE LA MISMA
 function eliminarFilaParaEditar(row) {  
     row.remove();
 }
 
-//ELIMINA LA FILA
 function eliminarFila(row) {
     filaParaEliminar = row;
     document.getElementById("eliminarCompra").style.display = "block";
 }
 
-
-//VALIDACIÓN PARA ELIMINAR
 document.getElementById('aceptarEliminar').addEventListener('click', function (event) {
     event.preventDefault();
     if (filaParaEliminar) {
-        
-        const subtotalCell = filaParaEliminar.cells[4];
-        const ivaCell = filaParaEliminar.cells[5]; // Columna oculta para IVA
+        const cantidad = parseFloat(filaParaEliminar.cells[0].textContent);
+        const costo = parseFloat(filaParaEliminar.cells[2].textContent);
+        const subtotalCell = filaParaEliminar.cells[3];
+        const ivaCell = filaParaEliminar.cells[4]; // Columna oculta para IVA
 
         const subtotal = parseFloat(subtotalCell.textContent);
         const registroConIva = ivaCell.textContent === 'true';
-        const iva = registroConIva ? subtotal * 0.16 : 0;
+        const iva = registroConIva ? (cantidad * costo - subtotal) : subtotal * 0.16;
 
         actualizarTotales(-subtotal, -iva);
 
@@ -176,27 +165,20 @@ document.getElementById('cancelarEliminar').addEventListener('click', function (
     document.getElementById("eliminarCompra").style.display = "none";
 });
 
-
-//FUNCION PARA ACTUALIZAR LOS TOTALES POR LO DEL IVA Y ESAS COSAS
 function actualizarTotales(subtotal, iva) {  
-    // Actualizar SUBTOTAL
     const subTotalCompra = document.getElementById('subtotal-compra');
     const nuevoSubtotal = parseFloat(subTotalCompra.textContent) + subtotal;
     subTotalCompra.textContent = nuevoSubtotal.toFixed(2);
 
-    // Actualizar el Iva
     const ivaCompra = document.getElementById('iva-compra');
     const nuevaIva = parseFloat(ivaCompra.textContent) + iva;
     ivaCompra.textContent = nuevaIva.toFixed(2);
 
-    // Actualizar el total
     const totalCompra = document.getElementById("total-compra");
     const nuevoTotal = parseFloat(totalCompra.textContent) + subtotal + iva;
     totalCompra.textContent = nuevoTotal.toFixed(2);
 }
 
-
-//FUNCIONES  PARA CAMBIAR DE PROVEEDOR
 document.getElementById('cambiarProveedorBtn').addEventListener('click', function(event){
     event.preventDefault();
     cambiarProveedor();
@@ -213,14 +195,11 @@ document.getElementById('aceptarCambiar').addEventListener('click', function(eve
     document.getElementById('cambiarProveedor').style.display = 'none';
 })
 
-
 document.getElementById('cancelarCambiar').addEventListener('click', function(event){
     event.preventDefault();
     document.getElementById('cambiarProveedor').style.display = 'none';
 })
 
-
-//FUNCION PARA ALMACENAR DATOS Y DESPUES EXTRAERLOS EN EL VIEWS.PY
 document.getElementById("registrarCompraBtn").addEventListener("click", function (event) {
     event.preventDefault();
 
@@ -230,25 +209,32 @@ document.getElementById("registrarCompraBtn").addEventListener("click", function
 
     for (let i = 1; i < rows.length; i++) {
         const cells = rows[i].getElementsByTagName("td");
+        const registroConIva = cells[4].textContent === 'true';
+        let costo = parseFloat(cells[2].innerText);
+
+        if (!registroConIva) {
+            costo = costo;
+            console.log(costo) // Agregar 16% de IVA al costo solo si se registró sin IVA
+        }
+
         const rowData = {
             cantidad: cells[0].innerText,
             producto_id: cells[1].getAttribute("data-id"),
-            //proveedor_id: cells[2].getAttribute("data-id"),
-            costo: cells[2].innerText,
+            costo: costo,
             precio_total: cells[3].innerText,
         };
         resumenData.push(rowData);
     }
-    //-+--+--+-+-+-+-+-+-+-+            
+            
     const hiddenField = document.createElement("input");
     hiddenField.type = "hidden";
     hiddenField.name = "resumen_data";
     hiddenField.value = JSON.stringify(resumenData);
     document.getElementById("compraForm").appendChild(hiddenField);
-    //-+-+-+-+-+-+-+-+-+-+-+-+- 
+    
     const fechaCompra = document.getElementById("fecha").value;
     if(fechaCompra === ""){
-        alert("INGRESA LA FECHA DE LA COMPRA")
+        alert("INGRESA LA FECHA DE LA COMPRA");
         return;
     }
     
@@ -266,7 +252,6 @@ document.getElementById("registrarCompraBtn").addEventListener("click", function
     totalField.name = "total_compra";
     totalField.value = totalCompra;
     document.getElementById("compraForm").appendChild(totalField);
-
 
     const proveedorField = document.createElement('input');
     proveedorField.type = "hidden";
