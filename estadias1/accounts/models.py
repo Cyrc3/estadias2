@@ -118,7 +118,7 @@ class Venta(models.Model):
 
 class Detalle_Venta(models.Model):
     id_detalleventa = models.AutoField(primary_key=True)
-    id_venta1 = models.ForeignKey(Venta, on_delete=models.SET_NULL, db_column='id_venta', null=True)
+    id_venta1 = models.ForeignKey(Venta, on_delete=models.SET_NULL, db_column='id_venta1', null=True)
     id_producto = models.ForeignKey(Producto,on_delete=models.SET_NULL, db_column='id_producto',null=True)
     id_cliente = models.ForeignKey(Cliente,on_delete=models.SET_NULL, db_column='id_cliente', null=True)
     cantidad = models.IntegerField()

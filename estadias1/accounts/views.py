@@ -156,18 +156,20 @@ def registro_ventas(request):
                 nueva_venta.save()
 
                 for item in resumen_data:
-                    cliente_rfc = item.get('id_rfc')
+                    id_cliente = item.get('id_cliente')
                     cantidad = item.get('cantidad')
                     producto_id = item.get('producto_id')
-                    precio_total = item.get('precio_total')
-                    #   iva = item.get('iva')
+                    precio_total = float(item.get('precio_total'))
+                    precio_base = precio_total / (1 + 0.16)
+                    iva = precio_total - precio_base
+    
 
                     detalle_venta = Detalle_Venta(
                         id_venta1=nueva_venta,  # Aquí el campo en la tabla es 'id_venta1'
                         id_producto=Producto.objects.get(id_producto=producto_id),  # Obtener instancia del producto
                         cantidad=cantidad,
                         precio_total=precio_total,
-                        id_cliente=Cliente.objects.get(id_cliente=cliente_rfc),  # Obtener instancia del cliente
+                        id_cliente=Cliente.objects.get(id_cliente=id_cliente),  # Obtener instancia del cliente
                         
                     )
                     detalle_venta.save()

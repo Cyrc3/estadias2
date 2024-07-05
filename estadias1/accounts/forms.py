@@ -56,7 +56,7 @@ class VentaForm(forms.ModelForm):
     #costo = forms.FloatField(label='Costo Individual', required=False)
     precio_total = forms.FloatField(label='Costo Individual', required=False)
     #id_venta1 not defined cs don't get how to link this (detalle_venta) with Venta xd
-    #iva = forms.FloatField(label='IVA')
+    #iva = forms.FloatField(label='IVA'
     #fecha_venta = forms.DateField(label='fecha')
     id_cliente = forms.ModelChoiceField(queryset=Cliente.objects.all(), label='id_cliente', required=False)
 
