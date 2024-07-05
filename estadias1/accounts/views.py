@@ -118,6 +118,18 @@ def registrar_compra(request):
                     producto = Producto.objects.get(id_producto=item['producto_id'])
                     cantidad = item['cantidad']
                     costo = item['costo']
+
+                    #calculazion de utilidad
+                    porcentaje_utilidad = producto.porcentaje_utilidad
+                    utilidad = costo * (porcentaje_utilidad/100)
+                    precio_venta = costo + utilidad
+                    
+
+                    #actualizar producto
+                    producto.costo_venta = precio_venta
+                    producto.stock += int(cantidad)
+                    producto.save()
+
                     detalle_compra = Detalle_Compra(
                         id_compra=nueva_compra,
                         id_proveedor=proveedor,
@@ -127,8 +139,7 @@ def registrar_compra(request):
                     )
                     detalle_compra.save()
                     #actualización del stock
-                    producto.stock += int(cantidad)
-                    producto.save()
+                    
                     
                 return redirect('compra')
             except Exception as e:
