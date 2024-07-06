@@ -6,6 +6,7 @@ from .models import Categoria, Producto, Cliente, Proveedor, Detalle_Compra, Det
 
 class ProductoForm(forms.ModelForm): 
     id_categoria = forms.ModelChoiceField(queryset=Categoria.objects.all(), label='Categoría', to_field_name='descripcion')
+    punto_reorden = forms.IntegerField(label='Stock Minimo')
     class Meta:
         model = Producto
         fields = ['nombre','id_categoria','stock','porcentaje_utilidad','punto_reorden']
