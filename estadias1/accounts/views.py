@@ -176,6 +176,11 @@ def registro_ventas(request):
                     precio_total = float(item.get('precio_total'))
                     precio_base = precio_total / 1.16
                     iva = precio_total - precio_base
+
+                    #descontar stock
+                    producto_id.stock -= int(cantidad)
+                    producto_id.save()
+
                     detalle_venta = Detalle_Venta(
                         id_venta1=nueva_venta,  # Aquí el campo en la tabla es 'id_venta1'
                         id_producto=producto_id,  # Obtener instancia del producto
