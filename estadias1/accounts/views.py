@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from reportlab.pdfgen import canvas
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Detalle_Venta, Compra, Venta
@@ -201,6 +203,40 @@ def registro_ventas(request):
         form = VentaForm()
 
     return render(request, 'registro_venta.html', {'form': form})
+
+def ticket_generator(request):
+    # Generate the http shit with the other shit from the shit from detalle_ventaModel or whatever
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="detalle_venta.pdf"'
+
+    # Crear un objeto de canvas de ReportLab
+    p = canvas.Canvas(response)
+
+    # Recuperar todos los detalles de compra del modelo
+    detalles_venta = Detalle_Venta.objects.all()
+
+    # Inicializar posición de escritura
+    y = 800
+
+    # Escribir los datos de cada detalle de compra en el PDF
+    for detalle in detalles_venta:
+        p.drawString(100, y, f"ID Compra: {detalle.id_detalleventa}")
+        p.drawString(100, y - 20, f"Cliente: {detalle.id_cliente}")
+        p.drawString(100, y - 40, f"ID Producto: {detalle.id_producto}")
+        p.drawString(100, y - 60, f"Cantidad: {detalle.cantidad}")
+        p.drawString(100, y - 80, f"Costo: {detalle.precio_total}")
+        y -= 100  # Mover hacia abajo para el siguiente detalle de compra
+
+        # Si la página se llena, crear una nueva página
+        if y < 100:
+            p.showPage()
+            y = 800
+
+    # Finalizar el PDF
+    p.showPage()
+    p.save()
+
+    return response
 
 
 def historico_compras(request):
