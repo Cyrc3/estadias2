@@ -127,7 +127,11 @@ def registrar_compra(request):
 
                     #actualizar producto
                     producto.costo_venta = precio_venta
-                    producto.stock += int(cantidad)
+
+                    if isinstance(producto.stock,int) :
+                        producto.stock += int(cantidad)
+                    else :
+                        producto.stock = int(cantidad)
                     producto.save()
 
                     detalle_compra = Detalle_Compra(

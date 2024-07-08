@@ -9,7 +9,7 @@ class ProductoForm(forms.ModelForm):
     punto_reorden = forms.IntegerField(label='Stock Minimo')
     class Meta:
         model = Producto
-        fields = ['nombre','id_categoria','stock','porcentaje_utilidad','punto_reorden']
+        fields = ['nombre','id_categoria','porcentaje_utilidad','punto_reorden']
         
 
 
