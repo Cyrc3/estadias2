@@ -205,32 +205,41 @@ def registro_ventas(request):
     return render(request, 'registro_venta.html', {'form': form})
 
 def ticket_generator(request):
-    # Generate the http shit with the other shit from the shit from detalle_ventaModel or whatever
+    # Generar la respuesta HTTP con el contenido PDF
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="detalle_venta.pdf"'
 
-    # Crear un objeto de canvas de ReportLab
+    # Crear un objeto canvas de ReportLab
     p = canvas.Canvas(response)
 
-    # Recuperar todos los detalles de compra del modelo
-    detalles_venta = Detalle_Venta.objects.all()
+    # Obtener el último detalle de venta según id_detalleventa
+    ultimo_detalle = Detalle_Venta.objects.latest('id_detalleventa')
+
+    # Obtener el id_venta1 del último detalle de venta
+    id_venta1 = ultimo_detalle.id_venta1_id  # Acceder al id de la venta
+
+    # Obtener todos los detalles de venta para el id_venta1 obtenido, manteniendo el último id_detalleventa
+    detalles = Detalle_Venta.objects.filter(id_venta1=id_venta1).order_by('-id_detalleventa')
+
+    # Obtener la venta asociada al id_venta1
+    venta = Venta.objects.get(id_venta=id_venta1)
 
     # Inicializar posición de escritura
     y = 800
 
-    # Escribir los datos de cada detalle de compra en el PDF
-    for detalle in detalles_venta:
-        p.drawString(100, y, f"ID Compra: {detalle.id_detalleventa}")
-        p.drawString(100, y - 20, f"Cliente: {detalle.id_cliente}")
-        p.drawString(100, y - 40, f"ID Producto: {detalle.id_producto}")
-        p.drawString(100, y - 60, f"Cantidad: {detalle.cantidad}")
-        p.drawString(100, y - 80, f"Costo: {detalle.precio_total}")
-        y -= 100  # Mover hacia abajo para el siguiente detalle de compra
+    # Escribir los datos del último detalle de venta y productos asociados en el PDF
+    p.drawString(100, y, f"ID Venta: {ultimo_detalle.id_detalleventa}")
+    p.drawString(100, y - 20, f"Cliente: {ultimo_detalle.id_cliente}")
+    p.drawString(100, y - 40, f"Fecha de Venta: {venta.fecha}")
+    p.drawString(100, y - 60, "Productos:")
 
-        # Si la página se llena, crear una nueva página
-        if y < 100:
-            p.showPage()
-            y = 800
+    # Listar todos los productos asociados al id_venta1 y último id_detalleventa
+    for detalle in detalles:
+        p.drawString(120, y - 80, f"Producto: {detalle.id_producto}, Cantidad: {detalle.cantidad}, Costo: {detalle.precio_total}, IVA: {detalle.iva}")
+        y -= 40  # Mover hacia abajo para el siguiente detalle
+
+    # Mostrar el total de la venta
+    p.drawString(100, y - 100, f"Total de la Venta: {venta.total}")
 
     # Finalizar el PDF
     p.showPage()
