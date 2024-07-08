@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from reportlab.pdfgen import canvas
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Detalle_Venta, Compra, Venta
@@ -205,6 +207,49 @@ def registro_ventas(request):
         form = VentaForm()
 
     return render(request, 'registro_venta.html', {'form': form})
+
+def ticket_generator(request):
+    # Generar la respuesta HTTP con el contenido PDF
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="detalle_venta.pdf"'
+
+    # Crear un objeto canvas de ReportLab
+    p = canvas.Canvas(response)
+
+    # Obtener el último detalle de venta según id_detalleventa
+    ultimo_detalle = Detalle_Venta.objects.latest('id_detalleventa')
+
+    # Obtener el id_venta1 del último detalle de venta
+    id_venta1 = ultimo_detalle.id_venta1_id  # Acceder al id de la venta
+
+    # Obtener todos los detalles de venta para el id_venta1 obtenido, manteniendo el último id_detalleventa
+    detalles = Detalle_Venta.objects.filter(id_venta1=id_venta1).order_by('-id_detalleventa')
+
+    # Obtener la venta asociada al id_venta1
+    venta = Venta.objects.get(id_venta=id_venta1)
+
+    # Inicializar posición de escritura
+    y = 800
+
+    # Escribir los datos del último detalle de venta y productos asociados en el PDF
+    p.drawString(100, y, f"ID Venta: {ultimo_detalle.id_detalleventa}")
+    p.drawString(100, y - 20, f"Cliente: {ultimo_detalle.id_cliente}")
+    p.drawString(100, y - 40, f"Fecha de Venta: {venta.fecha}")
+    p.drawString(100, y - 60, "Productos:")
+
+    # Listar todos los productos asociados al id_venta1 y último id_detalleventa
+    for detalle in detalles:
+        p.drawString(120, y - 80, f"Producto: {detalle.id_producto}, Cantidad: {detalle.cantidad}, Costo: {detalle.precio_total}, IVA: {detalle.iva}")
+        y -= 40  # Mover hacia abajo para el siguiente detalle
+
+    # Mostrar el total de la venta
+    p.drawString(100, y - 100, f"Total de la Venta: {venta.total}")
+
+    # Finalizar el PDF
+    p.showPage()
+    p.save()
+
+    return response
 
 
 def historico_compras(request):

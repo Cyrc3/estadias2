@@ -64,7 +64,14 @@
                     IVA: $<span id="total-iva">0</span><br><br>
                 </div>
                 <input type="submit" value="Registrar venta" id="registrarVentaBtn">
-                <input type="button" value="Imprimir Ticket" id="imprimir" style="display: none;">
+                <input type="button" value="Imprimir Ticket" id="imprimir" style="display: block;">
+    
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    document.getElementById('imprimir').addEventListener('click', function () {
+                        window.location.href = '/ticket-generator/';
+                    });
+                </script>
                 <button id="editarVentaBtn" type="button" style="display:none;">Editar Venta</button>
             </div>
             <div id="eliminarVenta" class="modal">

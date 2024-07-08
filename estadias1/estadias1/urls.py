@@ -17,10 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.views import LoginView, LogoutView
 from accounts import views
+from accounts.views import ticket_generator
 from django_select2 import views as select2_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path('ticket-generator/', ticket_generator, name='ticket_generator'),#i'm proud of this shit
     
     path('', LoginView.as_view(template_name='index.html'), name = 'login'),
 
