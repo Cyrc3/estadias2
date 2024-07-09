@@ -70,6 +70,7 @@ class Producto(models.Model):
     nombre = models.CharField(max_length=255)
     id_categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL,db_column='id_categoria',null=True)
     costo_venta = models.DecimalField(decimal_places=2, max_digits=10)
+    costo_compra = models.DecimalField(decimal_places=2, max_digits=10)
     porcentaje_utilidad = models.DecimalField(decimal_places=2, max_digits=5)
     punto_reorden = models.IntegerField()
 
@@ -97,7 +98,7 @@ class Detalle_Compra(models.Model):
     id_proveedor = models.ForeignKey(Proveedor,on_delete=models.SET_NULL, db_column='id_proveedor',null=True)
     id_producto = models.ForeignKey(Producto,on_delete=models.SET_NULL, db_column='id_producto',null=True)
     cantidad = models.IntegerField()
-    costo = models.FloatField()
+    costo = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
         db_table = 'detalle_compra'

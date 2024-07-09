@@ -9,6 +9,8 @@ from django.http import HttpResponse
 from django_select2.views import AutoResponseView
 from .db_conection import Database #conexión directa
 import json
+from decimal import Decimal
+
 #from .forms import ProductoForm
 from django.contrib import messages
 
@@ -104,7 +106,7 @@ def registrar_compra(request):
         if form.is_valid() or not form.has_changed():
             try:
                 fecha_compra = request.POST.get('fecha_compra')
-                total_compra = request.POST.get('total_compra')
+                total_compra = Decimal(request.POST.get('total_compra'))
                 proveedor_id = request.POST.get('proveedor_id')
                 resumen_data = json.loads(request.POST.get('resumen_data', '[]'))
 
@@ -118,14 +120,13 @@ def registrar_compra(request):
                 #insertar detalles de la compra
                 for item in resumen_data:
                     producto = Producto.objects.get(id_producto=item['producto_id'])
-                    cantidad = item['cantidad']
-                    costo = item['costo']
+                    cantidad = int(item['cantidad'])
+                    costo = Decimal(item['costo'])
 
                     #calculazion de utilidad
-                    porcentaje_utilidad = producto.porcentaje_utilidad
+                    porcentaje_utilidad = Decimal(producto.porcentaje_utilidad)
                     utilidad = costo * (porcentaje_utilidad/100)
                     precio_venta = costo + utilidad
-                    
 
                     #actualizar producto
                     producto.costo_venta = precio_venta
@@ -141,12 +142,10 @@ def registrar_compra(request):
                         id_proveedor=proveedor,
                         id_producto=producto,
                         cantidad=cantidad,
-                        costo=costo
+                        costo=costo 
                     )
                     detalle_compra.save()
                     #actualización del stock
-                    
-                    
                 return redirect('compra')
             except Exception as e:
                 print(f"Error al guardar la compra: {e}")

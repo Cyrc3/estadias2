@@ -41,7 +41,6 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
         subtotal = cantidad * costo;
         iva = subtotal * 0.16;
         precioTotal = subtotal + iva;
-        costo = costo * 1.16; // Agregar 16% de IVA al costo solo si se registra sin IVA
     }
 
     const table = document.getElementById("resumenTabla");
@@ -50,7 +49,7 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
         <td>${cantidad}</td>
         <td data-id="${productoId}">${productoText}</td>
         <td>${costo.toFixed(2)}</td>
-        <td>${subtotal.toFixed(2)}</td>
+        <td>${(cantidad * costo).toFixed(2)}</td>
         <td style="display:none;">${registroConIva}</td> <!-- Columna oculta para saber si el producto es registrado con IVA -->
     `;
 
@@ -58,13 +57,13 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
 
     actualizarTotales(subtotal, iva);
 
-    document.getElementById("editarCompraBtn").style.display = "inline"; //BOTÓN PARA EDITAR COMPRA, APARECE UNA VEZ QUE SE AÑADE UNA PRODUCTO A LA TABLA
+    document.getElementById("editarCompraBtn").style.display = "inline"; // BOTÓN PARA EDITAR COMPRA, APARECE UNA VEZ QUE SE AÑADE UNA PRODUCTO A LA TABLA
 
     const actionsCell = newRow.insertCell(-1);
     actionsCell.innerHTML = `
         <button class="editarBtn" style="display: none;">Editar</button> 
         <button class="eliminarBtn" style="display: none;">Eliminar</button>
-    `; //CREA LOS BOTONES ELIMINAR Y EDITAR DENTRO DE LA TABLA EN LA COLUMNA ACCIONES
+    `; // CREA LOS BOTONES ELIMINAR Y EDITAR DENTRO DE LA TABLA EN LA COLUMNA ACCIONES
 
     // SE LE AÑADEN FUNCIONES A LOS BOTONES
     newRow.querySelector(".editarBtn").addEventListener("click", function () {
@@ -75,7 +74,7 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
         eliminarFila(newRow);
     });
 
-    //SE LIMPIA EL FORMULARIO
+    // SE LIMPIA EL FORMULARIO
     $('#id_id_producto').val(null).trigger('change');
     document.getElementById("id_cantidad").value = "";
     document.getElementById("id_costo").value = "";
@@ -105,15 +104,13 @@ function editarFila(row) {
     const cantidad = parseFloat(cantidadCell.textContent);
     const productoid = productoCell.getAttribute("data-id");
     let costo = parseFloat(costoCell.textContent);
-    const subtotal = parseFloat(subtotalCell.textContent);
+    const subtotalTabla = parseFloat(subtotalCell.textContent);
     const registroConIva = ivaCell.textContent === 'true';
-    const iva = registroConIva ? (cantidad * costo - subtotal) : subtotal * 0.16;
+    const iva = registroConIva ? (subtotalTabla / 1.16 * 0.16) : (subtotalTabla * 0.16);
+
+    const subtotal = registroConIva? (subtotalTabla / 1.16) : (subtotalTabla)
 
     actualizarTotales(-subtotal, -iva);
-
-    if (!registroConIva) {
-        costo = costo / 1.16; // Quitar el 16% de IVA del costo para la edición
-    }
 
     $('#id_id_producto').val(productoid).trigger('change');
     document.getElementById("id_cantidad").value = cantidad;
@@ -142,14 +139,14 @@ function eliminarFila(row) {
 document.getElementById('aceptarEliminar').addEventListener('click', function (event) {
     event.preventDefault();
     if (filaParaEliminar) {
-        const cantidad = parseFloat(filaParaEliminar.cells[0].textContent);
-        const costo = parseFloat(filaParaEliminar.cells[2].textContent);
         const subtotalCell = filaParaEliminar.cells[3];
         const ivaCell = filaParaEliminar.cells[4]; // Columna oculta para IVA
 
-        const subtotal = parseFloat(subtotalCell.textContent);
+        const subtotalTabla = parseFloat(subtotalCell.textContent);
         const registroConIva = ivaCell.textContent === 'true';
-        const iva = registroConIva ? (cantidad * costo - subtotal) : subtotal * 0.16;
+        const iva = registroConIva ? (subtotalTabla / 1.16 * 0.16) : (subtotalTabla * 0.16);
+
+        const subtotal = registroConIva ? (subtotalTabla / 1.16) : (subtotalTabla)
 
         actualizarTotales(-subtotal, -iva);
 
@@ -165,9 +162,9 @@ document.getElementById('cancelarEliminar').addEventListener('click', function (
     document.getElementById("eliminarCompra").style.display = "none";
 });
 
-function actualizarTotales(subtotal, iva) {  
+function actualizarTotales(subtotalTabla, iva) {  
     const subTotalCompra = document.getElementById('subtotal-compra');
-    const nuevoSubtotal = parseFloat(subTotalCompra.textContent) + subtotal;
+    const nuevoSubtotal = parseFloat(subTotalCompra.textContent) + subtotalTabla;
     subTotalCompra.textContent = nuevoSubtotal.toFixed(2);
 
     const ivaCompra = document.getElementById('iva-compra');
@@ -175,7 +172,7 @@ function actualizarTotales(subtotal, iva) {
     ivaCompra.textContent = nuevaIva.toFixed(2);
 
     const totalCompra = document.getElementById("total-compra");
-    const nuevoTotal = parseFloat(totalCompra.textContent) + subtotal + iva;
+    const nuevoTotal = parseFloat(totalCompra.textContent) + subtotalTabla + iva;
     totalCompra.textContent = nuevoTotal.toFixed(2);
 }
 
@@ -210,12 +207,18 @@ document.getElementById("registrarCompraBtn").addEventListener("click", function
     for (let i = 1; i < rows.length; i++) {
         const cells = rows[i].getElementsByTagName("td");
         const registroConIva = cells[4].textContent === 'true';
-        let costo = parseFloat(cells[2].innerText);
+        let costoC = parseInt(cells[2].innerText);
+        
+        console.log('123')
 
-        if (!registroConIva) {
-            costo = costo;
-            console.log(costo) // Agregar 16% de IVA al costo solo si se registró sin IVA
+        let costo;
+        if (registroConIva) {
+            costo = costoC;
+        } else {
+            costo = costoC * 1.16;
         }
+        
+        console.log('456')
 
         const rowData = {
             cantidad: cells[0].innerText,
@@ -233,6 +236,7 @@ document.getElementById("registrarCompraBtn").addEventListener("click", function
     document.getElementById("compraForm").appendChild(hiddenField);
     
     const fechaCompra = document.getElementById("fecha").value;
+
     if(fechaCompra === ""){
         alert("INGRESA LA FECHA DE LA COMPRA");
         return;
