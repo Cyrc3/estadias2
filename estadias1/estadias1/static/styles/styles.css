@@ -16,16 +16,17 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 45%;
-    margin-right: 10px;
+    margin-right: 7px;
     margin-left: 7%;
     float: left;
     width: 30%;
+    
 }
 
 /* Estilos para la tabla */
 .table-container {
     width: 50%; /* Ajusta el ancho según tus necesidades */
-    max-height: 525px; /* Establece la altura máxima deseada */
+    max-height: 620px; /* Establece la altura máxima deseada */
     overflow-y: auto; /* Habilita el scroll vertical */
     border: 1px solid #ffffff;
     background-color: #fff;
@@ -101,18 +102,19 @@ table {
 }
 
 thead {
-    background-color: #00e5ff;
+    background-color: #ff8316;
 }
 
+
 thead th {
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
     padding: 12px;
     text-align: left;
     font-weight: bold;
 }
 
 tbody tr {
-    border-bottom: 1px solid #a9a6a6;
+    border-bottom: 1px solid #000000;
 }
 
 tbody td {
@@ -127,15 +129,15 @@ tbody tr:nth-child(even) {
 
 /* Estilos para las filas según el nivel de stock */
 .high-stock {
-    background-color: #c1ffcf; /* Verde claro */
+    background-color: #cef8d8; /* Verde claro */
 }
 
 .medium-stock {
-    background-color: #f9ebbe; /* Amarillo claro */
+    background-color: #f4ebc2; /* Amarillo claro */
 }
 
 .low-stock {
-    background-color: #fad5d8; /* Rojo claro */
+    background-color: #fecece; /* Rojo claro */
 }
 
 #buscarProducto{
@@ -166,7 +168,7 @@ select[name="q"]{
 
 
 #editarBtn {
-    background-color: rgb(255, 174, 0);
+    background-color: rgb(0, 145, 255);
     border: none;
     color: white;
     padding: 5px 12px;
