@@ -36,6 +36,8 @@ urlpatterns = [
     path('registrar_proveedor/',views.registrar_proveedor,name='proveedor'),
     
     path('registrar_inventario/',views.registrar_producto,name='producto'),
+
+    path('producto/eliminar/<int:id_producto>/', views.eliminar_producto, name='eliminar_producto'),
     
     path('menu_principal/', views.menu_principal, name='menu_principal'),
     

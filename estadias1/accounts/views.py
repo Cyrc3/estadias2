@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from reportlab.pdfgen import canvas
 from django.contrib.auth.hashers import make_password
@@ -68,26 +68,47 @@ def registrar_proveedor(request):
         form = ProveedorForm()
     proveedores = Proveedor.objects.all()
     return render(request, 'registro_proveedor.html', {'form':form, 'proveedores':proveedores})
-    
+
 
 def registrar_producto(request):
-    query = request.GET.get('q','')
+    query = request.GET.get('q', '')
     if request.method == 'POST':
-        form = ProductoForm(request.POST)
+        producto_id = request.POST.get('producto_id', None)
+        if producto_id:  # Si hay un ID, estamos actualizando un producto existente
+            producto = get_object_or_404(Producto, id_producto=producto_id)
+            form = ProductoForm(request.POST, instance=producto)
+        else:  # Si no hay ID, estamos creando un nuevo producto
+            form = ProductoForm(request.POST)
+        
         if form.is_valid():
             form.save()
+            messages.success(request, "Producto registrado exitosamente.")
             return redirect('producto')
         else:
             messages.error(request, "Hubo un error al registrar el producto.")
     else:
         form = ProductoForm()
+    
     productos = Producto.objects.all()
-    #filtrar productos segun la busqueda
     if query:
         productos_filtrados = productos.filter(id_producto=query)
     else:
         productos_filtrados = productos
-    return render(request, 'registro_inventario.html', {'form':form, 'productos':productos,'productos_filtrados':productos_filtrados,'query':query})
+    
+    return render(request, 'registro_inventario.html', {
+        'form': form,
+        'productos': productos,
+        'productos_filtrados': productos_filtrados,
+        'query': query
+    })
+
+
+def eliminar_producto(request, id_producto):
+    producto = get_object_or_404(Producto, id_producto=id_producto)
+    producto.delete()
+    messages.success(request, "Producto eliminado exitosamente.")
+    return redirect('producto')
+
 
 
 def registrar_categoria(request):

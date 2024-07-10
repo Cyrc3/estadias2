@@ -112,7 +112,7 @@ thead th {
 }
 
 tbody tr {
-    border-bottom: 1px solid #c9c9c9;
+    border-bottom: 1px solid #a9a6a6;
 }
 
 tbody td {
@@ -162,4 +162,36 @@ select[name="q"]{
     padding: 10px 20px;
     border-radius: 5px;
     font-size: 13px;
+}
+
+
+#editarBtn {
+    background-color: rgb(255, 174, 0);
+    border: none;
+    color: white;
+    padding: 5px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+
+#eliminarBtn{
+    background-color: rgb(255, 0, 0);
+    border: none;
+    color: white;
+    padding: 5px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 10px;
+    font-weight: bold;
 }
