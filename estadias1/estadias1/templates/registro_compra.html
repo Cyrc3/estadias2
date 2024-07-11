@@ -110,19 +110,39 @@
 <script src="{% static 'JavaScript/Registro_compra_form.js' %}"></script>
 
 <script>
+    $('#id_id_proveedor').select2({
+            placeholder: "Selecciona un proveedor",
+            allowClear: true
+        });
+    var productos = {};
+</script>
+
+{% for producto in productos %}
+<script>
+    productos["{{ producto.id_producto }}"] = {
+        costo: "{{ producto.costo_compra }}"
+    };
+</script>
+{% endfor %}
+
+<script>
     $(document).ready(function() {
         $('#id_id_producto').select2({
             placeholder: "Selecciona un producto",
             allowClear: true
         });
-    });
 
-    $(document).ready(function(){
-        $('#id_id_proveedor').select2({
-            placeholder: "Selecciona un proveedor",
-            allowClear: true
+        // Evento para actualizar el costo cuando se selecciona un producto
+        $('#id_id_producto').on('change', function() {
+            var productoId = $(this).val();
+            if (productoId) {
+                var costo = productos[productoId].costo;
+                $('#id_costo').val(costo);
+            } else {
+                $('#id_costo').val(''); // Limpiar el campo de costo si no hay producto seleccionado
+            }
         });
-    })
+    });
 </script>
 
 {% endblock %}

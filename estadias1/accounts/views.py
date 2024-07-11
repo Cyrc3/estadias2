@@ -7,7 +7,7 @@ from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Det
 from .forms import ProductoForm, ClienteForm, ProveedorForm, CompraForm, VentaForm, UsuarioForm
 from django.http import HttpResponse
 from django_select2.views import AutoResponseView
-from .db_conection import Database #conexión directa
+from .db_connection import Database #conexión directa
 import json
 from decimal import Decimal
 
@@ -131,6 +131,7 @@ def registrar_categoria(request):
 
 
 def registrar_compra(request):
+    productos = Producto.objects.all()
     if request.method == 'POST': 
         form = CompraForm(request.POST)
         if form.is_valid() or not form.has_changed():
@@ -159,7 +160,11 @@ def registrar_compra(request):
                     precio_venta = costo + utilidad
 
                     #actualizar producto
+                    #actualizar el precio de venta
                     producto.costo_venta = precio_venta
+                    
+                    #actualizar el costo de venta del producto
+                    producto.costo_compra = costo
 
                     if isinstance(producto.stock,int) :
                         producto.stock += int(cantidad)
@@ -184,7 +189,11 @@ def registrar_compra(request):
             print("El formulario no es válido")
     else:
         form=CompraForm()
-    return render(request, 'registro_compra.html', {'form':form})  
+    context = {
+        'form': form,
+        'productos': productos
+    }
+    return render(request, 'registro_compra.html', context)  
 
 
 
@@ -249,7 +258,7 @@ def ticket_generator(request):
     printer.write(f'Hora: {now.strftime("%H:%M:%S")}')
     detalles = Detalle_Venta.objects.all()
     
-     
+
     #get the last Detalle_Venta
     ultimo_detalle = Detalle_Venta.objects.latest('id_detalleventa')
 

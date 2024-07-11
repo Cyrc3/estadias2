@@ -207,7 +207,7 @@ document.getElementById("registrarCompraBtn").addEventListener("click", function
     for (let i = 1; i < rows.length; i++) {
         const cells = rows[i].getElementsByTagName("td");
         const registroConIva = cells[4].textContent === 'true';
-        let costoC = parseInt(cells[2].innerText);
+        let costoC = parseFloat(cells[2].innerText);
         
         console.log('123')
 
