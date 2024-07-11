@@ -238,9 +238,67 @@ def registro_ventas(request):
     return render(request, 'registro_venta.html', {'form': form})
 
 def ticket_generator(request):
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', '../estadias1/settings.py')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', '../estadias1/settings')
     django.setup()
+    printer = escpos.printer.SerialPrinter(port='/dev/ttyUSB0', baudrate=9600)
+    #The fokin config of the printer MUST be defined in the previous line.
+    #test's haven't been, you know, tested xd
+    printer.write('**Electronic Store UTSJR or something**')
+    now = timezone.now()
+    printer.write(f'Fecha: {now.strftime("%Y-%m-%d")}')
+    printer.write(f'Hora: {now.strftime("%H:%M:%S")}')
+    detalles = Detalle_Venta.objects.all()
     
+     
+    #get the last Detalle_Venta
+    ultimo_detalle = Detalle_Venta.objects.latest('id_detalleventa')
+
+    #get the last detalle_venta1 to use it as a reference
+    id_venta1 = ultimo_detalle.id_venta1_id 
+
+    #Get the things inside detalle_ventas, not VENTAS, DETALLE you filthy fucker
+    detalles = Detalle_Venta.objects.filter(id_venta1=id_venta1).order_by('-id_detalleventa')
+
+    #get the VENTA, not de DETALLE,the VENTA, based on the asociated VENTA1 id in detalle
+    #kinda confusing but not so bad my dude
+    venta = Venta.objects.get(id_venta=id_venta1)
+
+    #header of tha shi
+    printer.write('**Electronic Store UTSJR or whatever**\n')
+    now = timezone.now()
+    printer.write(f'Date: {now.strftime("%Y-%m-%d")}\n')
+    printer.write(f'Time: {now.strftime("%H:%M:%S")}\n')
+
+    #Sell data
+    printer.write(f"Sell number: {ultimo_detalle.id_detalleventa}\n")
+    #printer.write(f"Cliente: {ultimo_detalle.id_cliente}")
+    #printer.write(f"Fecha de Venta: {venta.fecha}")
+    #printer.write("Products:")
+    printer.write("Cantidad     |Costo         |Total\n")
+
+    #pradacts
+    for detalle in detalles:
+        cantidad = detalle.cantidad
+        individualPrice = detalle.precio_total
+        total_articulo = cantidad * precio_total
+        printer.write(f"{detalle.id_producto}\n")
+        printer.write(f"{detalle.cantidad}    ")
+        printer.write(f"{detalle.precio_total}    ")
+        printer.write(f"{individualPrice}\n")        
+        #printer.write(f"IVA: {detalle.iva}")
+        printer.write('---------------------\n')
+    #Total
+    printer.write(f"Total de la Venta: {venta.total}")
+
+
+    printer.cut()
+# Further tests haven't been applied because, you know, we need a printer
+# if this doesn't work you have below this message the original generator
+# it generates ugly tickets in PDF but at least that fucking works
+# That's it for today, i have an urgent call to buy an hamburguer cs i'm hungry as fuck
+# -fakeCirc3
+
+
 
 '''
 def ticket_generator(request):
