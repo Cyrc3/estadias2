@@ -14,6 +14,15 @@ from decimal import Decimal
 #from .forms import ProductoForm
 from django.contrib import messages
 
+#shit for test, do not fokin delit
+
+import os
+import django
+import escpos
+import PIL.Image
+from django.utils import timezone
+from accounts.models import Detalle_Venta, Venta
+
 
 
 
@@ -229,6 +238,12 @@ def registro_ventas(request):
     return render(request, 'registro_venta.html', {'form': form})
 
 def ticket_generator(request):
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', '../estadias1/settings.py')
+    django.setup()
+    
+
+'''
+def ticket_generator(request):
     # Generar la respuesta HTTP con el contenido PDF
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="detalle_venta.pdf"'
@@ -270,7 +285,7 @@ def ticket_generator(request):
     p.save()
 
     return response
-
+'''
 
 def historico_compras(request):
     db = Database()
@@ -283,10 +298,10 @@ def historico_compras(request):
         #consulta con filtros
         query = """
         SELECT dc.id_detallecompra, dc.id_compra, c.fecha, pr.razon_social, p.nombre, dc.cantidad, dc.costo
-        FROM Detalle_Compra dc
-        JOIN Compra c ON dc.id_compra = c.id_compra 
-        JOIN Producto p ON p.id_producto = dc.id_producto
-        JOIN Proveedor pr ON pr.id_proveedor = dc.id_proveedor
+        FROM detalle_compra dc
+        JOIN compra c ON dc.id_compra = c.id_compra 
+        JOIN producto p ON p.id_producto = dc.id_producto
+        JOIN proveedor pr ON pr.id_proveedor = dc.id_proveedor
         WHERE 1=1
         """
 
@@ -309,7 +324,7 @@ def historico_compras(request):
         total = sum(compra[5] * compra[6] for compra in historial_compras)
 
         #obtener la lista de productos para el filtro de productos
-        productos_query = "SELECT id_producto, nombre FROM Producto"
+        productos_query = "SELECT id_producto, nombre FROM producto"
         productos = db.fetch_all(productos_query, [])
 
         productos_dict = [{'id_producto': producto[0], 'nombre': producto[1]} for producto in productos]
