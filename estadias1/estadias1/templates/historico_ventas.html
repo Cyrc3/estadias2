@@ -8,21 +8,79 @@
 {% endblock %}
 
 {% block content %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
 <h1>Historial de Ventas</h1>
+
+<form method="get" action="">
+    <h3>Filtrar por:</h3>
+    <label for="producto">Producto:</label>
+    <select name="producto" id="producto">
+        <option value="">Todos</option>
+        {% for producto in productos %}
+        <option value="{{ producto.id_producto }}">{{ producto.nombre }}</option>
+        {% endfor %}
+    </select>
+    <script>
+        $(document).ready(function() {
+            $('#producto').select2({
+                placeholder: "Selecciona un producto",
+                allowClear: true
+            });
+        });
+    </script>
+
+    <label for="fecha_inicio">Fecha Inicio:</label>
+    <input type="date" name="fecha_inicio" id="fecha_inicio">
+
+    <label for="fecha_fin">Fecha Fin:</label>
+    <input type="date" name="fecha_fin" id="fecha_fin">
+
+    <input type="submit" value="Filtrar" id="filtrar">
+</form>
+<script>
+    // Obtener la fecha actual en formato ISO (YYYY-MM-DD)
+    const today = new Date().toISOString().split('T')[0];
+
+    // Asignar la fecha actual como el valor máximo del input de fecha
+    document.getElementById('fecha_inicio').setAttribute('max', today);
+    document.getElementById('fecha_fin').setAttribute('max', today);
+</script>
 <div class="table-container">
     <table>
         <thead>
             <tr>
-                <th>ID Venta</th>
+                <th>No.</th>
+                <th>Venta No.</th>
                 <th>Fecha</th>
-                <th>Productos</th>
+                <th>Cliente</th>
+                <th>Producto</th>
                 <th>Cantidad</th>
-                <th>Costo Individual</th>
-                <th>Costo Total</th>
+                <th>Precio Total</th>
+                <th>IVA</th>
             </tr>
         </thead>
         <tbody>
-            <!-- Aquí se mostrarán las filas de datos dinámicos -->
+            {% for venta in historial_ventas %}
+            <tr>
+                <td>{{ venta.0 }}</td>
+                <td>{{ venta.1 }}</td>
+                <td>{{ venta.2 }}</td>
+                <td>{{ venta.3 }}</td>
+                <td>{{ venta.4 }}</td>
+                <td>{{ venta.5 }}</td>
+                <td>$ {{ venta.6 }}</td>
+                <td>$ {{ venta.7 }}</td>
+            </tr>
+            {% endfor %}
+            <tr id="ttal">
+                <td colspan="7" style="text-align: right;">Total:</td>
+                <td>$ {{ total }}</td>
+            </tr>
         </tbody>
     </table>
 </div>

@@ -408,7 +408,56 @@ def historico_compras(request):
 
 
 def historico_ventas(request):
-    return render(request, 'historico_ventas.html')
+    db = Database()
+    try:
+        #datos del filtro
+        producto_id = request.GET.get('producto')
+        fecha_inicio = request.GET.get('fecha_inicio')
+        fecha_fin = request.GET.get('fecha_fin')
+
+        #consulta con filtros
+        query = """
+        SELECT dv.id_detalleventa, dv.id_venta1, v.fecha, cl.razon_social, p.nombre, dv.cantidad, dv.precio_total, dv.iva
+        FROM detalle_venta dv
+        JOIN venta v ON dv.id_venta1 = v.id_venta 
+        JOIN producto p ON p.id_producto = dv.id_producto
+        JOIN cliente cl ON cl.id_cliente = dv.id_cliente
+        WHERE 1=1
+        """
+
+        #añadir filtros a la consulta
+        params = []
+        if producto_id:
+            query += " AND p.id_producto = %s"
+            params.append(producto_id)
+        if fecha_inicio:
+            query += " AND v.fecha >= %s"
+            params.append(fecha_inicio)
+        if fecha_fin:
+            query += " AND v.fecha <= %s"
+            params.append(fecha_fin)
+
+        query += " ORDER BY dv.id_detalleventa ASC"
+        historial_ventas = db.fetch_all(query, params)
+
+        #calculando el total
+        total = sum(venta[5] * (venta[6] + venta[7]) for venta in historial_ventas)
+
+        #obtener la lista de productos para el filtro de productos
+        productos_query = "SELECT id_producto, nombre FROM producto"
+        productos = db.fetch_all(productos_query, [])
+
+        productos_dict = [{'id_producto': producto[0], 'nombre': producto[1]} for producto in productos]
+
+        context = {
+            'historial_ventas': historial_ventas,
+            'total': total,
+            'productos': productos_dict
+        }
+    finally:
+        db.close()
+    return render(request, 'historico_ventas.html', context)
+
 
 
 
