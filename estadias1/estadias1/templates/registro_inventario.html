@@ -18,7 +18,7 @@
 <!-- Select2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
-<div class="form-container">
+<div class="form-container" id="form-container">
     <h1>Registro de Producto</h1>
     <form method="POST">
         {% csrf_token %}
@@ -46,6 +46,7 @@
     </div>
     {% endif %}
     <a href="{% url 'altaCategoria' %}" class="value">Añadir Categoría</a>
+    
 </div>
 <div class="table-container">
     <h1>Productos Existentes</h1>

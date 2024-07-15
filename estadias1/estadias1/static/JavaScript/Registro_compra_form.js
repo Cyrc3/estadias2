@@ -264,4 +264,5 @@ document.getElementById("registrarCompraBtn").addEventListener("click", function
     document.getElementById("compraForm").appendChild(proveedorField);
 
     document.getElementById("compraForm").submit();
+
 });

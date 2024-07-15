@@ -11,10 +11,10 @@ body {
 
 
 .form-container {
-    background-color: #fff;
+    background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgb(229, 229, 229);
     width: 45%;
     margin-right: 7px;
     margin-left: 7%;
@@ -22,11 +22,15 @@ body {
     width: 30%;
     
 }
-
+.clicked {
+    border: 1px solid #ff9d00;
+    box-shadow: 0 0 12px rgb(255, 203, 131);
+    transition: border 0.3s ease; /* Agrega una transición suave */
+}
 /* Estilos para la tabla */
 .table-container {
     width: 50%; /* Ajusta el ancho según tus necesidades */
-    max-height: 620px; /* Establece la altura máxima deseada */
+    max-height: 652px; /* Establece la altura máxima deseada */
     overflow-y: auto; /* Habilita el scroll vertical */
     border: 1px solid #ffffff;
     background-color: #fff;

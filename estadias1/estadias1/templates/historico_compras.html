@@ -25,15 +25,6 @@
         <option value="{{ producto.id_producto }}">{{ producto.nombre }}</option>
         {% endfor %}
     </select>
-    <script>
-        $(document).ready(function() {
-            $('#producto').select2({
-                placeholder: "Selecciona un producto",
-                allowClear: true
-            });
-        });
-    </script>
-
     <label for="fecha_inicio">Fecha Inicio:</label>
     <input type="date" name="fecha_inicio" id="fecha_inicio">
 
@@ -50,35 +41,88 @@
     document.getElementById('fecha_inicio').setAttribute('max', today);
     document.getElementById('fecha_fin').setAttribute('max', today);
 </script>
+<script>
+    $(document).ready(function () {
+        // Inicializar Select2 para el filtro de productos
+        $('#producto').select2({
+            placeholder: "Selecciona un producto",
+            allowClear: true
+        });
+
+        // Manejar clic en "Ver detalle"
+        $(document).on('click', '.ver-detalle', function (event) {
+            event.preventDefault();
+            var compraId = $(this).data('compra-id').trim();
+            console.log("Compra ID:", compraId);
+
+            $.ajax({
+                url: '{% url "detalle_compra" %}',
+                data: {
+                    'compra_id': compraId
+                },
+                success: function (data) {
+                    $('#detalleContent').html(data);
+                    $('#detalleModal').show();
+                    console.log("Modal abierto con datos:", data);
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error en la solicitud AJAX:", error);
+                }
+            });
+        });
+
+        // Cerrar el modal
+        $(document).on('click', '.close', function () {
+            $('#detalleModal').hide();
+        });
+
+        // Cerrar el modal si se hace clic fuera de él
+        $(window).on('click', function (event) {
+            if ($(event.target).is('#detalleModal')) {
+                $('#detalleModal').hide();
+            }
+        });
+    });
+
+</script>
 <div class="table-container">
     <table>
         <thead>
             <tr>
-                <th>No.</th>
-                <th>Compra No.</th>
+                <th>Detalle</th>
+                <th>No. Compra</th>
                 <th>Fecha</th>
                 <th>Proveedor</th>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Costo Unitario</th>
+                <th>Total</th>
+
+
             </tr>
         </thead>
         <tbody>
             {% for compra in historial_compras %}
             <tr>
-                <td>{{ compra.0 }}</td>
+                <td> <button class="ver-detalle" data-compra-id=" {{compra.1}} ">Ver detalle</button> </td>
                 <td>{{ compra.1 }}</td>
                 <td>{{ compra.2}}</td>
                 <td>{{ compra.3 }}</td>
-                <td>{{ compra.4 }}</td>
-                <td>{{ compra.5 }}</td>
-                <td>$ {{ compra.6 }}</td>            </tr>
+                <td>{{ compra.7 }}</td>
+
+            </tr>
             {% endfor %}
             <tr id="ttal">
-                <td colspan="6" style="text-align: right;">Total:</td>
+                <td colspan="4" style="text-align: right;">Total:</td>
                 <td>$ {{ total }}</td>
             </tr>
         </tbody>
     </table>
+</div>
+<div id="detalleModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Detalle de la Compra</h2>
+        <div id="detalleContent">
+            <!-- Aquí se cargarán los detalles de la compra -->
+        </div>
+    </div>
 </div>
 {% endblock %}

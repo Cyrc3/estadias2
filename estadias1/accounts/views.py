@@ -364,7 +364,7 @@ def historico_compras(request):
 
         #consulta con filtros
         query = """
-        SELECT dc.id_detallecompra, dc.id_compra, c.fecha, pr.razon_social, p.nombre, dc.cantidad, dc.costo
+        SELECT dc.id_detallecompra, dc.id_compra, c.fecha, pr.razon_social, p.nombre, dc.cantidad, dc.costo, c.total
         FROM detalle_compra dc
         JOIN compra c ON dc.id_compra = c.id_compra 
         JOIN producto p ON p.id_producto = dc.id_producto
@@ -404,6 +404,23 @@ def historico_compras(request):
     finally:
         db.close()
     return render(request, 'historico_compras.html', context)
+
+
+def detalle_compra(request): #EXTENSION DEL HISTORICO DE COMPRA PARA VER EL DETALLE DE LA COMPRA SJSJ
+    compra_id = request.GET.get('compra_id')
+    db = Database()
+    try:
+        query = """
+        SELECT dc.id_detallecompra, p.nombre, dc.cantidad, dc.costo, (dc.cantidad * dc.costo) as total
+        FROM detalle_compra dc
+        JOIN producto p ON p.id_producto = dc.id_producto
+        WHERE dc.id_compra = %s
+        """
+        detalles_compra = db.fetch_all(query, [compra_id])
+    finally:
+        db.close()
+
+    return render(request, 'detalle_compra.html', {'detalles_compra': detalles_compra})
 
 
 

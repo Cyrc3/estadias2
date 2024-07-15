@@ -1,0 +1,20 @@
+<table>
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Costo</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for detalle in detalles_compra %}
+        <tr>
+            <td>{{ detalle.1 }}</td>
+            <td>{{ detalle.2 }}</td>
+            <td>{{ detalle.3 }}</td>
+            <td>{{ detalle.4 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

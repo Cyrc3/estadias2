@@ -19,6 +19,11 @@ label{
 
 }
 
+#producto{
+    width: 15%;
+}
+
+
 form{
     text-align: center;
     padding-top: 2%;
@@ -105,4 +110,48 @@ tbody tr:nth-child(even) {
     background-color: rgb(4, 255, 0);
     font-weight: bold;
     font-size: 18px;
+}
+
+/* Modal container */
+/* Modal container */
+.modal {
+    display: none; /* Ocultar el modal por defecto */
+    position: fixed; /* Mantener el modal en una posición fija */
+    z-index: 1000; /* Asegurarse de que el modal esté sobre otros elementos */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Habilitar scroll si el contenido es mayor que la pantalla */
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+}
+
+/* Modal content */
+.modal-content {
+    background-color: #fff;
+    margin: auto; /* Centrar horizontalmente */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Ancho del modal */
+    max-width: 600px; /* Máximo ancho del modal */
+    position: relative; /* Necesario para posicionar el botón de cerrar */
+    top: 50%; /* Posicionarlo al centro verticalmente */
+    transform: translateY(-50%); /* Ajustar para centrar verticalmente */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Close button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
