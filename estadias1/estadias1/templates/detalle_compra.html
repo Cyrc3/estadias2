@@ -3,8 +3,8 @@
         <tr>
             <th>Producto</th>
             <th>Cantidad</th>
-            <th>Costo</th>
-            <th>Total</th>
+            <th>Costo Individual</th>
+            <th>Subtotal</th>
         </tr>
     </thead>
     <tbody>
@@ -16,5 +16,9 @@
             <td>{{ detalle.4 }}</td>
         </tr>
         {% endfor %}
+        <tr id="ttal">
+            <td colspan="3">Total</td>
+            <td>{{total}}</td>
+        </tr>
     </tbody>
 </table>

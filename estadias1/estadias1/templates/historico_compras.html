@@ -18,13 +18,6 @@
 
 <form method="get" action="">
     <h3>Filtrar por:</h3>
-    <label for="producto">Producto:</label>
-    <select name="producto" id="producto">
-        <option value="">Todos</option>
-        {% for producto in productos %}
-        <option value="{{ producto.id_producto }}">{{ producto.nombre }}</option>
-        {% endfor %}
-    </select>
     <label for="fecha_inicio">Fecha Inicio:</label>
     <input type="date" name="fecha_inicio" id="fecha_inicio">
 
@@ -93,7 +86,7 @@
                 <th>No. Compra</th>
                 <th>Fecha</th>
                 <th>Proveedor</th>
-                <th>Total</th>
+                <th>Subtotal</th>
 
 
             </tr>
@@ -106,7 +99,7 @@
                         <td>{{ compra.0 }}</td>
                         <td>{{ compra.1}}</td>
                         <td>{{ compra.2 }}</td>
-                        <td>{{ compra.6 }}</td>
+                        <td>{{ compra.3 }}</td>
 
                     </tr>
             {% endfor %}

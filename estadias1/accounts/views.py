@@ -358,25 +358,20 @@ def historico_compras(request):
     db = Database()
     try:
         #datos del filtro
-        producto_id = request.GET.get('producto')
         fecha_inicio = request.GET.get('fecha_inicio')
         fecha_fin = request.GET.get('fecha_fin')
 
         #consulta con filtros
         query = """
-        SELECT c.id_compra, c.fecha, pr.razon_social, p.nombre, dc.cantidad, dc.costo, c.total
+        SELECT c.id_compra, c.fecha, pr.razon_social, c.total
         FROM compra c
         JOIN detalle_compra dc ON c.id_compra = dc.id_compra 
-        JOIN producto p ON p.id_producto = dc.id_producto
         JOIN proveedor pr ON pr.id_proveedor = dc.id_proveedor
         WHERE 1=1
         """
 
         #añadir filtros a la consulta
         params = []
-        if producto_id:
-            query += " AND p.id_producto = %s"
-            params.append(producto_id)
         if fecha_inicio:
             query += " AND c.fecha >= %s"
             params.append(fecha_inicio)
@@ -384,21 +379,15 @@ def historico_compras(request):
             query += " AND c.fecha <= %s"
             params.append(fecha_fin)
 
-        query += "order by c.id_compra"
+        query += "group by c.id_compra,pr.razon_social"
         historial_compras = db.fetch_all(query, params)
-
-        #calculando el total
-        total = sum(compra[4] * compra[5] for compra in historial_compras)
-
-        #obtener la lista de productos para el filtro de productos
-        productos_query = "SELECT id_producto, nombre FROM producto"
-        productos = db.fetch_all(productos_query, [])
-        productos_dict = [{'id_producto': producto[0], 'nombre': producto[1]} for producto in productos]
+        suma = """SELECT SUM(total) FROM compra""" 
+        data = db.fetch_all(suma)
+        total = data[0][0]
 
         context = {
             'historial_compras': historial_compras,
-            'total': total,
-            'productos': productos_dict
+            'total' : total
         }
     finally:
         db.close()
@@ -416,10 +405,17 @@ def detalle_compra(request): #EXTENSION DEL HISTORICO DE COMPRA PARA VER EL DETA
         WHERE dc.id_compra = %s
         """
         detalles_compra = db.fetch_all(query, [compra_id])
+
+        total = sum(detalle[4] for detalle in detalles_compra)
+
+        context = {
+            'detalles_compra':detalles_compra,
+            'total':total
+        }
     finally:
         db.close()
 
-    return render(request, 'detalle_compra.html', {'detalles_compra': detalles_compra})
+    return render(request, 'detalle_compra.html', context)
 
 
 
