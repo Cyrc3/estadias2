@@ -29,7 +29,7 @@ body {
 /* Estilos para la sección "top" */
 .top {
     padding: 15px;
-    background-color: #ecf9f8;
+    background-color: #e8e8e8;
     border-radius: 8px 8px 0 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     text-align: left;
@@ -107,7 +107,8 @@ body {
 
 /* Estilos para el encabezado de la tabla */
 #resumenTabla th {
-    background-color: #00ff99;
+    background-color: #575757;
+    color: #fff;
 }
 
 /* Estilos para la tabla de resumen */
@@ -159,7 +160,7 @@ body {
 /* Estilos para el botón de registrar */
 #registrarVentaBtn {
     margin-top: 100px;
-    background-color: #04db00;
+    background-color: #0036a9;
     color: rgb(255, 249, 249);
     font-weight: bold;
     border: none;
@@ -170,13 +171,14 @@ body {
 }
 
 #registrarVentaBtn:hover {
-    background-color: #cf0080;
+    background-color: #029200;
 }
 
 /* Estilos para los botones de editar y eliminar */
 #editarVentaBtn, .editarBtn {
-    background-color: #ffa200f3;
+    background-color: #d08400f3;
     color: white;
+    font-weight: bold;
     border: none;
     padding: 10px 15px;
     border-radius: 5px;
@@ -185,7 +187,7 @@ body {
 }
 
 #editarVentaBtn:hover, .editarBtn:hover {
-    background-color: #007acc;
+    background-color: #ff8800;
 }
 
 .eliminarBtn {

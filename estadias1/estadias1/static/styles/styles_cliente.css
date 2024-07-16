@@ -35,7 +35,7 @@ select {
     border-radius: 5px;
 }
 input[type="submit"] {
-    background-color: #15ff00; /* Color azul cielo */
+    background-color: #00329e; /* Color azul cielo */
     color: white; /* Letra blanca */
     font-weight: bold;
     border: none;
@@ -49,5 +49,5 @@ input[type="submit"] {
     cursor: pointer;
 }
 input[type="submit"]:hover {
-    background-color: #ffa600; /* Un tono más oscuro para el hover */
+    background-color: #2d5cc3; /* Un tono más oscuro para el hover */
 }

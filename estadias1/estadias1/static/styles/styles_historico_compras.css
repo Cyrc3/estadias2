@@ -9,7 +9,7 @@ label{
 
 #filtrar{
     margin-left: 3%;
-    background-color: #00aeff;
+    background-color: #005ba6;
     color: rgb(255, 249, 249);
     font-weight: bold;
     border: none;
@@ -21,6 +21,7 @@ label{
 
 #producto{
     width: 15%;
+    
 }
 
 
@@ -65,7 +66,7 @@ table {
 }
 
 thead {
-    background-color: #ff9900;
+    background-color: #575757;
 }
 
 thead th {
@@ -73,7 +74,7 @@ thead th {
     padding: 12px;
     text-align: left;
     font-weight: bold;
-    border: 1px solid #fe7b00;
+    border: 1px solid #575757;
 }
 
 tbody tr {
@@ -107,7 +108,7 @@ tbody tr:nth-child(even) {
 }
 
 #ttal{
-    background-color: rgb(4, 255, 0);
+    background-color: rgb(11, 181, 8);
     font-weight: bold;
     font-size: 18px;
 }

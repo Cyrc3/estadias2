@@ -33,13 +33,19 @@
         <script>
             const toggleButton = document.getElementById('toggle-menu');
             const menuList = document.querySelector('.menu-list');
+            const menuHamburguesa = document.getElementById('menu-hamburguesa');
 
             toggleButton.addEventListener('click', () => {
                 menuList.classList.toggle('show-menu');
-                document.getElementById('menu-hamburguesa').style.backgroundColor = 'white';
-
+                menuHamburguesa.style.backgroundColor = menuList.classList.contains('show-menu') ? 'white' : 'transparent';
             });
 
+            document.addEventListener('click', (event) => {
+                if (!menuHamburguesa.contains(event.target) && menuList.classList.contains('show-menu')) {
+                    menuList.classList.remove('show-menu');
+                    menuHamburguesa.style.backgroundColor = 'transparent';
+                }
+            });
         </script>
     </header>
     <main>
@@ -50,7 +56,7 @@
     <footer>
         <p>SOMOS LOBOS - UTSJR 2024</p>
     </footer>
-    -->  
+    -->
 
 </body>
 

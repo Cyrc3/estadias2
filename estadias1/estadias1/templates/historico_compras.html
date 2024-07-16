@@ -100,14 +100,15 @@
         </thead>
         <tbody>
             {% for compra in historial_compras %}
-            <tr>
-                <td> <button class="ver-detalle" data-compra-id=" {{compra.0}} ">Ver detalle</button> </td>
-                <td>{{ compra.0 }}</td>
-                <td>{{ compra.1}}</td>
-                <td>{{ compra.2 }}</td>
-                <td>{{ compra.6 }}</td>
+                
+                    <tr>
+                        <td> <button class="ver-detalle" data-compra-id=" {{compra.0}} ">Ver detalle</button> </td>
+                        <td>{{ compra.0 }}</td>
+                        <td>{{ compra.1}}</td>
+                        <td>{{ compra.2 }}</td>
+                        <td>{{ compra.6 }}</td>
 
-            </tr>
+                    </tr>
             {% endfor %}
             <tr id="ttal">
                 <td colspan="4" style="text-align: right;">Total:</td>

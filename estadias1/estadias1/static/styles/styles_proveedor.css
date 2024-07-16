@@ -59,7 +59,7 @@ input[type="submit"] {
 }
 
 input[type="submit"] {
-    background-color: #00ff3c; /* Color azul cielo */
+    background-color: #0050a5; /* Color azul cielo */
     color: white; /* Letra blanca */
     border: none;
     padding: 10px 15px;
@@ -88,7 +88,8 @@ table {
 }
 
 thead{
-    background-color: #00e5ff;
+    background-color: #515050;
+    color: #fff;
 }
 
 th, td {

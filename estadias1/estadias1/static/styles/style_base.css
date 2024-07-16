@@ -9,16 +9,6 @@ header {
     z-index: 100; /* Asegura que el encabezado esté por encima del contenido */
 }
 
-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    top: auto;
-    width: 100%;
-    background-color: #ffffff;
-    color: chocolate;
-    z-index: 100;
-}
 
 
 .menu-hamburguesa {

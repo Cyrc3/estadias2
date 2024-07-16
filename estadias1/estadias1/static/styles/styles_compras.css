@@ -28,7 +28,7 @@ body{
 /* Estilos para la sección "top" */
 .top {
     padding: 20px;
-    background-color: #ecf9f8;
+    background-color: #e8e8e8;
     border-radius: 8px 8px 0 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     text-align: left;
@@ -153,7 +153,8 @@ body{
 
 /* Estilos para el encabezado de la tabla */
 #resumenTabla th {
-    background-color: #00ff99;
+    background-color: #575757;
+    color: #fff;
 }
 
 /* Estilos para la tabla de resumen */
@@ -237,7 +238,7 @@ body{
 }
 
 input[type="submit"] {
-    background-color: #04db00;
+    background-color: #0036a9;
     color: rgb(255, 249, 249);
     font-weight: bold;
     border: none;
@@ -250,11 +251,11 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-    background-color: #cf0080;
+    background-color: #00b734;
 }
 
 #editarCompraBtn {
-    background-color: #ffa200; /* Color de fondo amarillo */
+    background-color: #e18f00; /* Color de fondo amarillo */
     margin-left: 10px; /* Espacio a la izquierda para separarlo del otro botón */
     color: rgb(255, 249, 249);
     font-weight: bold;
