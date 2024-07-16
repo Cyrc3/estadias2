@@ -43,7 +43,11 @@ class Proveedor(models.Model):
     id_proveedor = models.AutoField(primary_key=True)
     razon_social = models.CharField(max_length=255)
     direccion = models.CharField(max_length=255)
-    numero_telefono = models.CharField(max_length=255)
+    comunidad = models.CharField(max_length=255)
+    municipio = models.CharField(max_length=255)
+    estado = models.CharField(max_length=255)
+    cp = models.IntegerField()
+    numero_telefono = models.CharField(max_length=20)
     rfc = models.CharField(max_length=12)
 
     class Meta:

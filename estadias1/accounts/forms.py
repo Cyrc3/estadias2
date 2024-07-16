@@ -25,10 +25,12 @@ class UsuarioForm(forms.ModelForm):
         fields = ['nombre','privilegio','password'] 
 
 
+
+
 class ProveedorForm(forms.ModelForm):
     class Meta:
         model = Proveedor 
-        fields = ['id_proveedor','razon_social','direccion','numero_telefono','rfc']
+        fields = ['id_proveedor','razon_social','direccion','comunidad','estado','municipio','cp','numero_telefono','rfc']
 
 
 

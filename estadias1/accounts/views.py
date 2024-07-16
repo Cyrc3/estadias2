@@ -69,6 +69,7 @@ def registrar_proveedor(request):
     if request.method == 'POST' :
         form = ProveedorForm(request.POST)
         if form.is_valid():
+            
             form.save()
             return redirect('proveedor')
         else:
@@ -381,9 +382,7 @@ def historico_compras(request):
 
         query += "group by c.id_compra,pr.razon_social"
         historial_compras = db.fetch_all(query, params)
-        suma = """SELECT SUM(total) FROM compra""" 
-        data = db.fetch_all(suma)
-        total = data[0][0]
+        total = sum(compra[3] for compra in historial_compras)
 
         context = {
             'historial_compras': historial_compras,

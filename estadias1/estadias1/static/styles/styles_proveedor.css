@@ -12,8 +12,9 @@ body {
 
 .container {
     display: flex;
-    margin-top: 5%;
+    margin-top: 20%;
     width: 100%; /* Ancho total del contenedor */
+    margin-bottom: 5%;
 }
 
 .form-container {
@@ -21,7 +22,7 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 30%; /* Ancho del formulario */
+    width: 50%; /* Ancho del formulario */
     margin-right: 20px;
 }
 
@@ -30,7 +31,7 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 60%; /* Ancho de la tabla */
+    width: 80%; /* Ancho de la tabla */
     max-height: 470px; /* Altura máxima para la tabla */
     overflow-y: auto; /* Scroll vertical */
 }
@@ -46,6 +47,10 @@ h1, h2 {
 label {
     display: block;
     margin: 10px 0 5px;
+}
+
+#estado{
+    width: 197%;
 }
 
 input[type="text"],

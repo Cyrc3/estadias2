@@ -1,3 +1,46 @@
+
+<div id="detalleModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Categoria</h2>
+        <div id="detalleContent">
+            <!-- Aquí se cargarán los detalles de la compra -->
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const categoriaLink = document.querySelector(".value[data-url]");
+        const detalleModal = document.getElementById("detalleModal");
+        const detalleContent = document.getElementById("detalleContent");
+
+        categoriaLink.addEventListener("click", function (event) {
+            event.preventDefault(); // Evita que se abra una nueva pestaña
+
+            const url = categoriaLink.getAttribute("data-url");
+
+            // Carga el contenido real desde la URL utilizando fetch
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    detalleContent.innerHTML = data; // Actualiza el contenido del modal
+                    detalleModal.style.display = "block"; // Muestra el modal
+                })
+                .catch(error => {
+                    console.error("Error al cargar el contenido:", error);
+                });
+        });
+
+        // Cierra el modal al hacer clic en la "X"
+        const closeBtn = document.querySelector(".close");
+        closeBtn.addEventListener("click", function () {
+            detalleModal.style.display = "none";
+        });
+    });
+
+</script>
+
 -- tabla categoria_producto
 create table categoria_producto (
     id_categoria int primary key auto_increment,

@@ -46,7 +46,7 @@
     </div>
     {% endif %}
     <a href="{% url 'altaCategoria' %}" class="value">Añadir Categoría</a>
-    
+
 </div>
 <div class="table-container">
     <h1>Productos Existentes</h1>
@@ -54,12 +54,14 @@
         <select name="q" id="selectBuscar">
             <option value="">Seleccione un producto</option>
             {% for producto in productos %}
-            <option value="{{ producto.id_producto }}" {% if query == producto.id_producto|stringformat:"s" %}selected{% endif %}>{{ producto.nombre }}</option>
+            <option value="{{ producto.id_producto }}"
+                {% if query == producto.id_producto|stringformat:"s" %}selected{% endif %}>{{ producto.nombre }}
+            </option>
             {% endfor %}
         </select>
         <button type="submit" id="btnBuscarProducto">Buscar</button>
     </form>
-    
+
     <table>
         <thead>
             <tr>
@@ -76,7 +78,8 @@
         </thead>
         <tbody>
             {% for producto in productos_filtrados %}
-            <tr  class="{% if producto.stock > producto.punto_reorden %}high-stock{% elif producto.stock == producto.punto_reorden %}medium-stock{% else %}low-stock{% endif %}">
+            <tr
+                class="{% if producto.stock > producto.punto_reorden %}high-stock{% elif producto.stock == producto.punto_reorden %}medium-stock{% else %}low-stock{% endif %}">
                 <td> {{producto.id_producto}} </td>
                 <td> {{producto.nombre}} </td>
                 <td> {{producto.stock}} </td>
@@ -86,8 +89,10 @@
                 <td> {{producto.porcentaje_utilidad}} </td>
                 <td> {{producto.punto_reorden}} </td>
                 <td>
-                    <button type="button" id="editarBtn" onclick="editarProducto('{{ producto.id_producto }}', '{{ producto.nombre }}', '{{ producto.id_categoria.descripcion }}', '{{ producto.stock }}', '{{ producto.costo_venta }}', '{{ producto.costo_compra }}', '{{ producto.porcentaje_utilidad }}', '{{ producto.punto_reorden }}')">Editar</button>
-                    <form method="POST" action="{% url 'eliminar_producto' producto.id_producto %}" style="display:inline;">
+                    <button type="button" id="editarBtn"
+                        onclick="editarProducto('{{ producto.id_producto }}', '{{ producto.nombre }}', '{{ producto.id_categoria.descripcion }}', '{{ producto.stock }}', '{{ producto.costo_venta }}', '{{ producto.costo_compra }}', '{{ producto.porcentaje_utilidad }}', '{{ producto.punto_reorden }}')">Editar</button>
+                    <form method="POST" action="{% url 'eliminar_producto' producto.id_producto %}"
+                        style="display:inline;">
                         {% csrf_token %}
                         <button type="submit" id="eliminarBtn">Eliminar</button>
                     </form>
@@ -97,4 +102,14 @@
         </tbody>
     </table>
 </div>
+<div id="eliminarProducto" class="modal">
+    <div class="modal-content">
+        <p id="eliminarModal">¿Seguro que deseas eliminar está fila?</p>
+        <button id="aceptarEliminar" type="button">Aceptar</button>
+        <button id="cancelarEliminar" type="button">Cancelar</button>
+    </div>
+</div>
+<!-- -->
+
+
 {% endblock %}
