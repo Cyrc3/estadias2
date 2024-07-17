@@ -16,7 +16,7 @@ class ProductoForm(forms.ModelForm):
 class ClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente 
-        fields = ['rfc','razon_social','uso_factura','regimen_fiscal','codigo_postal']
+        fields = ['razon_social','codigo_postal']
 
 
 class UsuarioForm(forms.ModelForm):

@@ -369,6 +369,7 @@ def historico_compras(request):
         JOIN detalle_compra dc ON c.id_compra = dc.id_compra 
         JOIN proveedor pr ON pr.id_proveedor = dc.id_proveedor
         WHERE 1=1
+        group by c.id_compra,pr.razon_social 
         """
 
         #añadir filtros a la consulta
@@ -380,7 +381,7 @@ def historico_compras(request):
             query += " AND c.fecha <= %s"
             params.append(fecha_fin)
 
-        query += "group by c.id_compra,pr.razon_social"
+        query += "order by c.id_compra asc"
         historial_compras = db.fetch_all(query, params)
         total = sum(compra[3] for compra in historial_compras)
 
