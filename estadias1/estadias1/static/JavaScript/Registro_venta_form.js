@@ -1,3 +1,4 @@
+
 document.getElementById("btnGuardar").addEventListener("click", function (event) {
   event.preventDefault();
 
@@ -29,6 +30,7 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
   newRow.innerHTML = `
       <td>${cantidad}</td>
       <td data-id="${productoId}">${productoText}</td>
+      <td>$</td>
       <td>${precioFinal.toFixed(2)}</td>
 
   `;
@@ -58,6 +60,7 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
 
   //SE LIMPIA EL FORMULARIO
   $('#id_id_producto').val(null).trigger('change');
+  $('#id_id_cliente').val(null).trigger('change');
   document.getElementById("id_id_cantidad").value = "";
   document.getElementById("id_precio_total").value = "";
 
@@ -92,7 +95,7 @@ document.getElementById("editarVentaBtn").addEventListener("click", function (ev
 function editarFila(row) {
   const cantidadCell = row.cells[0];
   const productoCell = row.cells[1];
-  const costoCell = row.cells[2];
+  const costoCell = row.cells[3];
 
 
   const cantidad = parseFloat(cantidadCell.textContent)
@@ -132,7 +135,7 @@ function eliminarFila(row) {
 document.getElementById("aceptarEliminar").addEventListener("click", function (event) {
   event.preventDefault();
   if (filaParaEliminar) {
-      const precioTotalCell = filaParaEliminar.cells[2];
+      const precioTotalCell = filaParaEliminar.cells[3];
       const precioTotal = parseFloat(precioTotalCell.textContent);
       actualizarTotales(-precioTotal, -(precioTotal * 0.16));
       filaParaEliminar.remove();
@@ -168,7 +171,7 @@ document.getElementById("registrarVentaBtn").addEventListener("click", function 
       const rowData = {
           cantidad: cells[0].innerText,
           producto_id: cells[1].getAttribute("data-id"),
-          precio_total: cells[2].innerText,
+          precio_total: cells[3].innerText,
       };
       resumenData.push(rowData);
   }

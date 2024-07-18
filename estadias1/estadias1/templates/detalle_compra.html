@@ -12,13 +12,13 @@
         <tr>
             <td>{{ detalle.1 }}</td>
             <td>{{ detalle.2 }}</td>
-            <td>{{ detalle.3 }}</td>
-            <td>{{ detalle.4 }}</td>
+            <td style="text-align: right;">${{ detalle.3 }}</td>
+            <td style="text-align: right;">${{ detalle.4 }}</td>
         </tr>
         {% endfor %}
         <tr id="ttal">
-            <td colspan="3">Total</td>
-            <td>{{total}}</td>
+            <td colspan="3" style="text-align: right;">Total</td>
+            <td style="text-align: right;">${{total}}</td>
         </tr>
     </tbody>
 </table>

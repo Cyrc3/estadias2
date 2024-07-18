@@ -33,6 +33,9 @@
     // Asignar la fecha actual como el valor máximo del input de fecha
     document.getElementById('fecha_inicio').setAttribute('max', today);
     document.getElementById('fecha_fin').setAttribute('max', today);
+    // Establecer la fecha de hoy en los campos de entrada
+    document.getElementById('fecha_inicio').value = today;
+    document.getElementById('fecha_fin').value = today;
 </script>
 <script>
     $(document).ready(function () {
@@ -78,8 +81,10 @@
     });
 
 </script>
+
+{% load custom_filters %}
 <div class="table-container">
-    <table>
+    <table class="table">
         <thead>
             <tr>
                 <th>Detalle</th>
@@ -99,13 +104,12 @@
                         <td>{{ compra.0 }}</td>
                         <td>{{ compra.1}}</td>
                         <td>{{ compra.2 }}</td>
-                        <td>{{ compra.3 }}</td>
-
+                        <td id="subtotalHead">$ {{ compra.3|currency_format }}</td>
                     </tr>
             {% endfor %}
             <tr id="ttal">
                 <td colspan="4" style="text-align: right;">Total:</td>
-                <td>$ {{ total }}</td>
+                <td style="text-align: right;">$ {{ total|currency_format }}</td>
             </tr>
         </tbody>
     </table>

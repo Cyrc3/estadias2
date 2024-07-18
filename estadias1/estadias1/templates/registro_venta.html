@@ -54,6 +54,7 @@
                     <tr>
                         <th>Cantidad</th>
                         <th>Producto</th>
+                        <th style="text-align: right; width: 7px;"></th>
                         <th>Total</th>
                         <th>Acciones</th>
                     </tr>
@@ -65,8 +66,7 @@
                 </div>
                 <input type="submit" value="Registrar venta" id="registrarVentaBtn">
                 <input type="button" value="Imprimir Ticket" id="imprimir" style="display: block;">
-    
-                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
                 <script>
                     document.getElementById('imprimir').addEventListener('click', function () {
                         window.location.href = '/ticket-generator/';
@@ -81,31 +81,55 @@
                     <button id="cancelarEliminar" type="button">Cancelar</button>
                 </div>
             </div>
-        </form>
-        {% if form.errors %}
-        <div class="alert alert-danger">
-            {% for field, errors in form.errors.items %}
-            <strong>{{ field|title }}</strong>: {{ errors|striptags }}
-            {% endfor %}
+            </form>
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                {% for field, errors in form.errors.items %}
+                <strong>{{ field|title }}</strong>: {{ errors|striptags }}
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
-        {% endif %}
     </div>
 </div>
-</div>
+
+<script>
+    $('#id_id_cliente').select2({
+            placeholder: "Selecciona un cliente",
+            allowClear: true
+        });
+    var productos = {};
+</script>
+
+{% for producto in productos %}
+<script>
+    productos["{{ producto.id_producto }}"] = {
+        costo: "{{ producto.costo_venta }}"
+    };
+</script>
+{% endfor %}
+
 <script>
     $(document).ready(function() {
         $('#id_id_producto').select2({
             placeholder: "Selecciona un producto",
             allowClear: true
         });
-    });
 
-    $(document).ready(function(){
-        $('#id_id_cliente').select2({
-            placeholder: "Selecciona un cliente",
-            allowClear: true
+        $('#id_id_producto').on('change', function() {
+            var productoId = $(this).val();
+            if (productoId) {
+                var costo = productos[productoId].costo;
+                $('#id_precio_total').val(costo);
+            } else {
+                $('#id_precio_total').val(''); // Limpiar el campo de costo si no hay producto seleccionado
+            }
         });
-    })
+    });
 </script>
+
+
+
+
 <script src="{% static 'JavaScript/Registro_venta_form.js' %}"></script>
 {% endblock %}

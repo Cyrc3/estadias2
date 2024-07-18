@@ -199,12 +199,13 @@ def registrar_compra(request):
 
 
 def registro_ventas(request):
+    productos = Producto.objects.all()
     if request.method == 'POST':
         form = VentaForm(request.POST)
         if form.is_valid() or not form.has_changed():
             try:
 
-                fecha_venta = request.POST.get('fecha_venta')
+                fecha_venta = request.POST.get('fecha_venta')       
                 total_venta = request.POST.get('total_venta')
                 cliente_id = request.POST.get('cliente_id')
                 resumen_data = json.loads(request.POST.get('resumen_data', '[]'))
@@ -244,8 +245,11 @@ def registro_ventas(request):
             print("El formulario no es válido")
     else:
         form = VentaForm()
-
-    return render(request, 'registro_venta.html', {'form': form})
+    context = {
+        'form': form,
+        'productos': productos
+    }
+    return render(request, 'registro_venta.html', context)
 
 def ticket_generator(request):
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', '../estadias1/settings')
@@ -383,7 +387,7 @@ def historico_compras(request):
 
         query += """
         group by c.id_compra,pr.razon_social
-        order by c.id_compra
+        order by c.id_compra desc
         """
         historial_compras = db.fetch_all(query, params)
         total = sum(compra[3] for compra in historial_compras)

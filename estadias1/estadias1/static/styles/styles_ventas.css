@@ -65,6 +65,13 @@ body {
     font-size: 14px;
     margin: 5px;
 }
+#id_id_cliente{
+    width: 15%;
+}
+
+#id_id_producto{
+    width: 100%;
+}
 
 /* Estilos para las opciones del select */
 #id_id_cliente option, #fecha_venta option, #id_id_producto option {

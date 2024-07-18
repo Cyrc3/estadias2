@@ -30,11 +30,13 @@
 
                     // Asignar la fecha actual como el valor máximo del input de fecha
                     document.getElementById('fecha').setAttribute('max', today);
+                    document.getElementById('fecha').value = today;
 
                 </script>
                 <button id="cambiarProveedorBtn" style="display: none;">Cambiar Proveedor</button>
             </div>
     </div>
+    {% load custom_filters %}
     <div class="bottom">
         <div class="form-row">
             <div class="form-group">
@@ -59,8 +61,10 @@
                 <tr> 
                     <th>Cantidad</th>
                     <th>Producto</th>
-                    <th>Costo indivudual <!-- <span class="tooltip">(?)<span class="tooltiptext">Costo por unidad incluyendo IVA</span></span>--> </th>
-                    <th>Total</th>
+                    <th style="text-align: right; width: 3px;"></th>
+                    <th style="text-align: left;">Costo indivudual</th>
+                    <th style="text-align: right; width: 3px;"></th>
+                    <th style="text-align: left;">Total</th>
                     <th>Acciones</th>
                 </tr>
 
@@ -76,9 +80,10 @@
             </div>
             <input type="submit" value="Registrar compra" id="registrarCompraBtn">
             <button id="editarCompraBtn" type="button" style="display: none;">Editar Compra</button>
-
+            
         </div>
         </form>
+
 
         {% if form.errors %}
         <div class="alert alert-danger">
@@ -132,7 +137,6 @@
             allowClear: true
         });
 
-        // Evento para actualizar el costo cuando se selecciona un producto
         $('#id_id_producto').on('change', function() {
             var productoId = $(this).val();
             if (productoId) {

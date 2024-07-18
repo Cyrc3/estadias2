@@ -48,7 +48,9 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
     newRow.innerHTML = `
         <td>${cantidad}</td>
         <td data-id="${productoId}">${productoText}</td>
+        <td>$</td>
         <td>${costo.toFixed(2)}</td>
+        <td>$</td>
         <td>${(cantidad * costo).toFixed(2)}</td>
         <td style="display:none;">${registroConIva}</td> <!-- Columna oculta para saber si el producto es registrado con IVA -->
     `;
@@ -58,6 +60,7 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
     actualizarTotales(subtotal, iva);
 
     document.getElementById("editarCompraBtn").style.display = "inline"; // BOTÓN PARA EDITAR COMPRA, APARECE UNA VEZ QUE SE AÑADE UNA PRODUCTO A LA TABLA
+
 
     const actionsCell = newRow.insertCell(-1);
     actionsCell.innerHTML = `
@@ -97,9 +100,9 @@ document.getElementById("editarCompraBtn").addEventListener("click", function (e
 function editarFila(row) {  
     const cantidadCell = row.cells[0];
     const productoCell = row.cells[1];
-    const costoCell = row.cells[2];
-    const subtotalCell = row.cells[3];
-    const ivaCell = row.cells[4];
+    const costoCell = row.cells[3];
+    const subtotalCell = row.cells[5];
+    const ivaCell = row.cells[6];
 
     const cantidad = parseFloat(cantidadCell.textContent);
     const productoid = productoCell.getAttribute("data-id");
@@ -139,8 +142,8 @@ function eliminarFila(row) {
 document.getElementById('aceptarEliminar').addEventListener('click', function (event) {
     event.preventDefault();
     if (filaParaEliminar) {
-        const subtotalCell = filaParaEliminar.cells[3];
-        const ivaCell = filaParaEliminar.cells[4]; // Columna oculta para IVA
+        const subtotalCell = filaParaEliminar.cells[5];
+        const ivaCell = filaParaEliminar.cells[6]; // Columna oculta para IVA
 
         const subtotalTabla = parseFloat(subtotalCell.textContent);
         const registroConIva = ivaCell.textContent === 'true';
@@ -206,8 +209,8 @@ document.getElementById("registrarCompraBtn").addEventListener("click", function
 
     for (let i = 1; i < rows.length; i++) {
         const cells = rows[i].getElementsByTagName("td");
-        const registroConIva = cells[4].textContent === 'true';
-        let costoC = parseFloat(cells[2].innerText);
+        const registroConIva = cells[6].textContent === 'true';
+        let costoC = parseFloat(cells[3].innerText);
         
         console.log('123')
 
@@ -224,7 +227,7 @@ document.getElementById("registrarCompraBtn").addEventListener("click", function
             cantidad: cells[0].innerText,
             producto_id: cells[1].getAttribute("data-id"),
             costo: costo,
-            precio_total: cells[3].innerText,
+            precio_total: cells[5].innerText,
         };
         resumenData.push(rowData);
     }
@@ -236,11 +239,17 @@ document.getElementById("registrarCompraBtn").addEventListener("click", function
     document.getElementById("compraForm").appendChild(hiddenField);
     
     const fechaCompra = document.getElementById("fecha").value;
+    const TotalCompra = document.getElementById('total-compra').innerText;
+    const TotalCompraValor = parseFloat(TotalCompra);
 
     if(fechaCompra === ""){
-        alert("INGRESA LA FECHA DE LA COMPRA");
+        alert("Ingrese la fecha de la compra");
+        return;
+    }else if(TotalCompraValor === 0){
+        alert("Ingrese una compra");
         return;
     }
+    
     
     const totalCompra = document.getElementById("total-compra").textContent;
     const proveedorId = document.getElementById('hidden_proveedor').value;
