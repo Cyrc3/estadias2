@@ -10,6 +10,7 @@ from django_select2.views import AutoResponseView
 from .db_connection import Database #conexión directa
 import json
 from decimal import Decimal
+import bcrypt
 
 #from .forms import ProductoForm
 from django.contrib import messages
@@ -33,7 +34,32 @@ def menu_principal(request):
 
 
 def index(request):
-    return render(request,'index.html')
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        entered_password = request.POST.get('password')
+
+        try:
+            # Busca al usuario en la base de datos
+            usuario = Usuario.objects.get(nombre=username)
+
+            # Verifica si la contraseña ingresada coincide con la almacenada
+            if bcrypt.checkpw(entered_password.encode('utf-8'), usuario.password.encode('utf-8')):
+                # Iniciar sesión: Guarda la información del usuario en la sesión
+                request.session['user_id'] = usuario.id_usuario
+                request.session['username'] = usuario.nombre
+                request.session['role'] = usuario.privilegio
+
+                # Redirigir basándose en el privilegio del usuario
+                return redirect('ventas' if usuario.privilegio == 'user' else 'admin_dashboard')
+
+        except Usuario.DoesNotExist:
+            # El usuario no existe
+            messages.error(request, "Usuario o contraseña incorrectos")
+            return render(request, 'index.html')
+
+    return render(request, 'index.html')
+
+
 
 
 def registro_usuario(request):

@@ -6,10 +6,11 @@ from django.contrib.auth.models import AbstractUser
 class Usuario(models.Model):
     id_usuario = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=255)
-    privilegio = models.CharField(max_length=50)
-    password = models.CharField(max_length=50)
+    privilegio = models.BooleanField(default=False)  # Cambiado a BooleanField
+    password = models.CharField(max_length=255)  # Asegúrate de permitir más caracteres para el hash
+
     class Meta:
-        db_table = 'USUARIO'  
+        db_table = 'usuario'
         managed = False
 
 

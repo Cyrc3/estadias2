@@ -22,7 +22,14 @@ class ClienteForm(forms.ModelForm):
 class UsuarioForm(forms.ModelForm):
     class Meta: 
         model = Usuario
-        fields = ['nombre','privilegio','password'] 
+        fields = ['nombre', 'privilegio', 'password']
+        widgets = {
+            'privilegio': forms.CheckboxInput(),  # Usa un checkbox para valores booleanos
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(UsuarioForm, self).__init__(*args, **kwargs)
+        self.fields['privilegio'].label = "¿Es administrador?"
 
 
 
