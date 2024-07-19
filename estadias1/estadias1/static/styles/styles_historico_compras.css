@@ -1,3 +1,13 @@
+.ver-detalle{
+    background-color: #626ab0; /* Color de fondo amarillo */
+    color: rgb(255, 249, 249);
+    font-weight: bold;
+    padding: 3px 3px;
+    border-radius: 5px;
+    cursor: pointer;
+
+}
+
 #fecha_inicio{
     margin-right:2%;
     
