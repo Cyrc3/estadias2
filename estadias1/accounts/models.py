@@ -78,6 +78,7 @@ class Producto(models.Model):
     costo_compra = models.DecimalField(decimal_places=2, max_digits=10)
     porcentaje_utilidad = models.DecimalField(decimal_places=2, max_digits=5)
     punto_reorden = models.IntegerField()
+    estado = models.BooleanField(default=False)
 
     class Meta :
         db_table = 'producto'

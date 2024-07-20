@@ -58,7 +58,7 @@
         </select>
         <button type="submit" id="btnBuscarProducto">Buscar</button>
     </form>
-
+    {% load custom_filters %}
     <table>
         <thead>
             <tr>
@@ -70,6 +70,7 @@
                 <th>Precio de Compra</th>
                 <th>Utilidad</th>
                 <th>Stock minimo</th>
+                <th>Estado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -81,18 +82,21 @@
                 <td> {{producto.nombre}} </td>
                 <td> {{producto.stock}} </td>
                 <td> {{producto.id_categoria.descripcion}} </td>
-                <td>${{producto.costo_venta}} </td>
-                <td>${{producto.costo_compra}} </td>
+                <td>${{producto.costo_venta|currency_format }} </td>
+                <td>${{producto.costo_compra|currency_format }} </td>
                 <td>{{producto.porcentaje_utilidad}}% </td>
                 <td> {{producto.punto_reorden}} </td>
+                <td
+                class=" {% if producto.estado == True %}activo {% elif producto.estado == False %}inactivo {% endif %} ">
+                    {% if producto.estado %}
+                        Activo
+                    {% else %}
+                        Inactivo
+                    {% endif %}
+                </td>
                 <td>
                     <button type="button" id="editarBtn"
                         onclick="editarProducto('{{ producto.id_producto }}', '{{ producto.nombre }}', '{{ producto.id_categoria.descripcion }}', '{{ producto.stock }}', '{{ producto.costo_venta }}', '{{ producto.costo_compra }}', '{{ producto.porcentaje_utilidad }}', '{{ producto.punto_reorden }}')">Editar</button>
-                    <form method="POST" action="{% url 'eliminar_producto' producto.id_producto %}"
-                        style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" id="eliminarBtn">Eliminar</button>
-                    </form>
                 </td>
             </tr>
             {% endfor %}
