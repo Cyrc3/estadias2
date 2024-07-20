@@ -21,6 +21,7 @@ body{
     width: 100%;
     margin: 0 auto;
     margin-top: 1%;
+    padding-bottom: 2%;
     overflow-y: auto; /* Agrega desplazamiento vertical */
     max-height: 90vh; /* Limita la altura del contenedor */
 }

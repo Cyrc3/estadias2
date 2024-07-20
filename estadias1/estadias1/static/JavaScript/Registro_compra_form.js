@@ -59,6 +59,8 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
 
     actualizarTotales(subtotal, iva);
 
+
+    document.getElementById('registrarCompraBtn').style.display='inline';
     document.getElementById("editarCompraBtn").style.display = "inline"; // BOTÓN PARA EDITAR COMPRA, APARECE UNA VEZ QUE SE AÑADE UNA PRODUCTO A LA TABLA
 
 

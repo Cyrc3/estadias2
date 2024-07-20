@@ -18,6 +18,13 @@
 
 <form method="get" action="">
     <h3>Filtrar por:</h3>
+    <label for="proveedor">Proveedor:</label>
+    <select name="proveedor" id="proveedor">
+        <option value="">Todos</option>
+        {% for proveedor in proveedores %}
+        <option value="{{ proveedor.id_proveedor }}">{{ proveedor.razon_social }}</option>
+        {% endfor %}
+    </select>
     <label for="fecha_inicio">Fecha Inicio:</label>
     <input type="date" name="fecha_inicio" id="fecha_inicio">
 
@@ -40,8 +47,8 @@
 <script>
     $(document).ready(function () {
         // Inicializar Select2 para el filtro de productos
-        $('#producto').select2({
-            placeholder: "Selecciona un producto",
+        $('#proveedor').select2({
+            placeholder: "Selecciona un proveedor",
             allowClear: true
         });
 

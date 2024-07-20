@@ -389,6 +389,7 @@ def historico_compras(request):
     db = Database()
     try:
         #datos del filtro
+        proveedor_id = request.GET.get('proveedor')
         fecha_inicio = request.GET.get('fecha_inicio')
         fecha_fin = request.GET.get('fecha_fin')
 
@@ -404,6 +405,9 @@ def historico_compras(request):
 
         #añadir filtros a la consulta
         params = []
+        if proveedor_id:
+            query += " AND pr.id_proveedor = %s"
+            params.append(proveedor_id)
         if fecha_inicio:
             query += " AND c.fecha >= %s"
             params.append(fecha_inicio)
@@ -415,12 +419,19 @@ def historico_compras(request):
         group by c.id_compra,pr.razon_social
         order by c.id_compra desc
         """
+
+        #obttener la lista de proveedores segun el filtro
+        proveedores_query = "SELECT id_proveedor, razon_social FROM proveedor"
+        proveedores = db.fetch_all(proveedores_query,[])
+        proveedor_dict = [{'id_proveedor':proveedor[0],'razon_social': proveedor[1]} for proveedor in proveedores]
+
         historial_compras = db.fetch_all(query, params)
         total = sum(compra[3] for compra in historial_compras)
 
         context = {
             'historial_compras': historial_compras,
-            'total' : total
+            'total' : total,
+            'proveedores' : proveedor_dict
         }
     finally:
         db.close()
