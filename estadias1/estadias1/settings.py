@@ -9,6 +9,10 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+# settings.py
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+
+
 
 from pathlib import Path
 
@@ -77,12 +81,12 @@ WSGI_APPLICATION = 'estadias1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'EstadiaPruebas',
+        'NAME': 'CONTROL_INVENTARIO',
         'USER': 'root',
-        'PASSWORD': '3Sa1s87873!',
+        'PASSWORD': 'miau',
         'HOST': 'localhost',
-        'PORT': '3306',
-    }
+        'w': '3306',
+    } 
 }
 #honestly i have no idea what this section do, is here tho, if it works, don't touch it.
 
