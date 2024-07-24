@@ -27,6 +27,9 @@ urlpatterns = [
     
     #path('', LoginView.as_view(template_name='index.html'), name = 'login'),
     path('', views.index, name='login'),
+
+    path('registro_voasdasdasntas_xd/',views.registro_ventas,name="vontas_xd"),
+
     path('registro_venta/',views.registro_ventas,name="ventas"),
     
     path('registrar_clientes/',views.registrar_cliente,name='cliente'),

@@ -54,7 +54,7 @@ def index(request):
                 if usuario.privilegio:
                     return redirect('menu_principal')
                 else:  # 0 representa False (usuario regular)
-                    return redirect('ventas')
+                    return redirect('vontas_xd')
             else:
                 messages.error(request, 'Nombre o contraseña incorrectos')
         except Usuario.DoesNotExist:

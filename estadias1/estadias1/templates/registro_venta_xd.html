@@ -1,0 +1,135 @@
+
+
+{% block title %}<title>Registro de Venta</title>{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'styles/styles_ventas.css' %}">
+{% endblock %}
+
+{% block content %}
+<h2 id="title">Registro de Venta</h2>
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<div class="container">
+    <div class="top">
+        <form id="ventaForm" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.id_cliente.label_tag }} {{ form.id_cliente }}
+                <input type="hidden" id="hidden_cliente" name="hidden_cliente">
+                <label for="fecha_venta" id="lfecha">Fecha de la venta:</label>
+                <input type="date" id="fecha_venta" name="fecha_venta" required>
+                <script>
+                    // Obtener la fecha actual en formato ISO (YYYY-MM-DD)
+                    const today = new Date().toISOString().split('T')[0];
+                    // Asignar la fecha actual como el valor máximo del input de fecha
+                    document.getElementById('fecha_venta').setAttribute('max', today);
+                </script>
+                <button id="cambiarClienteBtn" style="display: none;">Cambiar Cliente</button>
+            </div>
+    </div>
+    <div class="bottom">
+        <div class="form-row">
+            <div class="form-group">
+                {{ form.id_producto.label_tag }} {{ form.id_producto }}
+            </div>
+            <div class="form-group">
+                {{ form.id_cantidad.label_tag }} {{ form.id_cantidad }}
+            </div>
+            <div class="form-group">
+                {{ form.precio_total.label_tag }} {{ form.precio_total }}
+            </div>
+            <div class="form-group">
+                <input type="button" value="Guardar" id="btnGuardar">
+            </div>
+        </div>
+        <div class="right">
+            <div class="resumen">
+                <table id="resumenTabla">
+                    <tr>
+                        <th>Cantidad</th>
+                        <th>Producto</th>
+                        <th style="text-align: right; width: 7px;"></th>
+                        <th>Total</th>
+                        <th>Acciones</th>
+                    </tr>
+                    <!-- Aquí se pueden agregar filas de la tabla con JavaScript -->
+                </table>
+                <div class="total">
+                    Total: $<span id="total-venta">0</span><br>
+                    IVA: $<span id="total-iva">0</span><br><br>
+                </div>
+                <input type="submit" value="Registrar venta" id="registrarVentaBtn">
+                <input type="button" value="Imprimir Ticket" id="imprimir" style="display: block;">
+
+                <script>
+                    document.getElementById('imprimir').addEventListener('click', function () {
+                        window.location.href = '/ticket-generator/';
+                    });
+                </script>
+                <button id="editarVentaBtn" type="button" style="display:none;">Editar Venta</button>
+            </div>
+            <div id="eliminarVenta" class="modal">
+                <div class="modal-content">
+                    <p id="eliminarModal">¿Seguro que deseas eliminar esta fila?</p>
+                    <button id="aceptarEliminar" type="button">Aceptar</button>
+                    <button id="cancelarEliminar" type="button">Cancelar</button>
+                </div>
+            </div>
+            </form>
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                {% for field, errors in form.errors.items %}
+                <strong>{{ field|title }}</strong>: {{ errors|striptags }}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#id_id_cliente').select2({
+            placeholder: "Selecciona un cliente",
+            allowClear: true
+        });
+    var productos = {};
+</script>
+
+{% for producto in productos %}
+<script>
+    productos["{{ producto.id_producto }}"] = {
+        costo: "{{ producto.costo_venta }}"
+    };
+</script>
+{% endfor %}
+
+<script>
+    $(document).ready(function() {
+        $('#id_id_producto').select2({
+            placeholder: "Selecciona un producto",
+            allowClear: true
+        });
+
+        $('#id_id_producto').on('change', function() {
+            var productoId = $(this).val();
+            if (productoId) {
+                var costo = productos[productoId].costo;
+                $('#id_precio_total').val(costo);
+            } else {
+                $('#id_precio_total').val(''); // Limpiar el campo de costo si no hay producto seleccionado
+            }
+        });
+    });
+</script>
+
+
+
+
+<script src="{% static 'JavaScript/Registro_venta_form.js' %}"></script>
+{% endblock %}
