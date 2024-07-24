@@ -54,7 +54,7 @@ def index(request):
                 if usuario.privilegio:
                     return redirect('menu_principal')
                 else:  # 0 representa False (usuario regular)
-                    return redirect('ventas')
+                    return redirect('vontas_xd')
             else:
                 messages.error(request, 'Nombre o contraseña incorrectos')
         except Usuario.DoesNotExist:
@@ -465,30 +465,53 @@ def detalle_compra(request): #EXTENSION DEL HISTORICO DE COMPRA PARA VER EL DETA
     return render(request, 'detalle_compra.html', context)
 
 
+def detalle_venta(request):
+    venta_id = request.GET.get('venta_id')
+    db = Database()
+    try:
+        query = """
+        SELECT dv.id_detalleventa, p.nombre, dv.cantidad, dv.precio_total, dv.iva, (dv.cantidad * dv.precio_total) as subtotal
+        FROM detalle_venta dv
+        JOIN producto p ON p.id_producto = dv.id_producto
+        WHERE dv.id_venta1 = %s
+        """
+        detalles_venta = db.fetch_all(query, [venta_id])
+
+        total = sum(detalle[5] for detalle in detalles_venta)  # Suma de subtotales
+
+        context = {
+            'detalles_venta': detalles_venta,
+            'total': total
+        }
+    finally:
+        db.close()
+
+    return render(request, 'detalle_venta.html', context)
+
+
 
 def historico_ventas(request):
     db = Database()
     try:
-        #datos del filtro
-        producto_id = request.GET.get('producto')
+        # Datos del filtro
+        cliente_id = request.GET.get('cliente')
         fecha_inicio = request.GET.get('fecha_inicio')
         fecha_fin = request.GET.get('fecha_fin')
 
-        #consulta con filtros
+        # Consulta con filtros
         query = """
-        SELECT dv.id_detalleventa, dv.id_venta1, v.fecha, cl.razon_social, p.nombre, dv.cantidad, dv.precio_total, dv.iva
-        FROM detalle_venta dv
-        JOIN venta v ON dv.id_venta1 = v.id_venta 
-        JOIN producto p ON p.id_producto = dv.id_producto
+        SELECT v.id_venta, v.fecha, cl.razon_social, v.total
+        FROM venta v
+        JOIN detalle_venta dv ON v.id_venta = dv.id_venta1
         JOIN cliente cl ON cl.id_cliente = dv.id_cliente
         WHERE 1=1
         """
 
-        #añadir filtros a la consulta
+        # Añadir filtros a la consulta
         params = []
-        if producto_id:
-            query += " AND p.id_producto = %s"
-            params.append(producto_id)
+        if cliente_id:
+            query += " AND cl.id_cliente = %s"
+            params.append(cliente_id)
         if fecha_inicio:
             query += " AND v.fecha >= %s"
             params.append(fecha_inicio)
@@ -496,22 +519,23 @@ def historico_ventas(request):
             query += " AND v.fecha <= %s"
             params.append(fecha_fin)
 
-        query += " ORDER BY dv.id_detalleventa ASC"
+        query += """
+        GROUP BY v.id_venta, cl.razon_social
+        ORDER BY v.id_venta DESC
+        """
+
+        # Obtener la lista de clientes para el filtro
+        clientes_query = "SELECT id_cliente, razon_social FROM cliente"
+        clientes = db.fetch_all(clientes_query, [])
+        clientes_dict = [{'id_cliente': cliente[0], 'razon_social': cliente[1]} for cliente in clientes]
+
         historial_ventas = db.fetch_all(query, params)
-
-        #calculando el total
-        total = sum(venta[5] * (venta[6] + venta[7]) for venta in historial_ventas)
-
-        #obtener la lista de productos para el filtro de productos
-        productos_query = "SELECT id_producto, nombre FROM producto"
-        productos = db.fetch_all(productos_query, [])
-
-        productos_dict = [{'id_producto': producto[0], 'nombre': producto[1]} for producto in productos]
+        total = sum(venta[3] for venta in historial_ventas)
 
         context = {
             'historial_ventas': historial_ventas,
             'total': total,
-            'productos': productos_dict
+            'clientes': clientes_dict
         }
     finally:
         db.close()

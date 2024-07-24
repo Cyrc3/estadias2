@@ -23,8 +23,8 @@ class Database:
         self.connection = pymysql.connect(
             host = 'localhost',
             user = 'root',
-            password = '3Sa1s87873!',
-            database = 'EstadiaPruebas',
+            password = 'miau',
+            database = 'CONTROL_INVENTARIO',
             port = 3306
         )
 

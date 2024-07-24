@@ -140,7 +140,6 @@ tbody tr:nth-child(even) {
 }
 */
 
-/* Estilos para las filas según el nivel de stock */
 .high-stock {
     background-color: #a7f5b9; /* Verde claro */
 }

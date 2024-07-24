@@ -27,6 +27,9 @@ urlpatterns = [
     
     #path('', LoginView.as_view(template_name='index.html'), name = 'login'),
     path('', views.index, name='login'),
+
+    path('registro_voasdasdasntas_xd/',views.registro_ventas,name="vontas_xd"),
+
     path('registro_venta/',views.registro_ventas,name="ventas"),
     
     path('registrar_clientes/',views.registrar_cliente,name='cliente'),
@@ -52,6 +55,8 @@ urlpatterns = [
     path('registro_usuario/',views.registro_usuario, name='usuario'),
 
     path('detalle_compra/',views.detalle_compra, name='detalle_compra'),
+    
+    path('detalle_venta/',views.detalle_venta, name='detalle_venta'),
 
     #prueba coneksion a la bd directo
     #path('test_db/',views.test_db_view, name='test_db'),

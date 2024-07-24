@@ -30,8 +30,8 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
   newRow.innerHTML = `
       <td>${cantidad}</td>
       <td data-id="${productoId}">${productoText}</td>
-      <td>$</td>
-      <td>${precioFinal.toFixed(2)}</td>
+      
+      <td>$${precioFinal.toFixed(2)}</td>
 
   `;
 
