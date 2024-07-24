@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from reportlab.pdfgen import canvas
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.forms import AuthenticationForm
-from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Detalle_Venta, Compra, Venta
+from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Detalle_Venta, Compra, Venta, Usuario
 from .forms import ProductoForm, ClienteForm, ProveedorForm, CompraForm, VentaForm, UsuarioForm
 from django.http import HttpResponse
 from django_select2.views import AutoResponseView
@@ -20,6 +20,7 @@ from django.contrib import messages
 import os
 import django
 import escpos
+import hashlib
 import PIL.Image
 from django.utils import timezone
 from accounts.models import Detalle_Venta, Venta
@@ -33,29 +34,31 @@ def menu_principal(request):
     return render(request, 'menu_principal.html')
 
 
+
 def index(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        entered_password = request.POST.get('password')
-
+        nombre = request.POST.get('nombre')
+        password = request.POST.get('password')
+        print(nombre)
+        print(password)
+        # Buscar usuario en la base de datos
         try:
-            # Busca al usuario en la base de datos
-            usuario = Usuario.objects.get(nombre=username)
+            usuario = Usuario.objects.get(nombre=nombre)
+            # Usar check_password para verificar la contraseña
+           
+            if check_password(password, usuario.password):
+                request.session['usuario_id'] = usuario.id_usuario
+                request.session['privilegio'] = usuario.privilegio
 
-            # Verifica si la contraseña ingresada coincide con la almacenada
-            if bcrypt.checkpw(entered_password.encode('utf-8'), usuario.password.encode('utf-8')):
-                # Iniciar sesión: Guarda la información del usuario en la sesión
-                request.session['user_id'] = usuario.id_usuario
-                request.session['username'] = usuario.nombre
-                request.session['role'] = usuario.privilegio
-
-                # Redirigir basándose en el privilegio del usuario
-                return redirect('ventas' if usuario.privilegio == 'user' else 'admin_dashboard')
-
+                # Verificar privilegio como booleano usando el valor de TINYINT
+                if usuario.privilegio:
+                    return redirect('menu_principal')
+                else:  # 0 representa False (usuario regular)
+                    return redirect('ventas')
+            else:
+                messages.error(request, 'Nombre o contraseña incorrectos')
         except Usuario.DoesNotExist:
-            # El usuario no existe
-            messages.error(request, "Usuario o contraseña incorrectos")
-            return render(request, 'index.html')
+            messages.error(request, 'Nombre o contraseña incorrectos')
 
     return render(request, 'index.html')
 

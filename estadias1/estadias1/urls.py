@@ -18,15 +18,15 @@ from django.urls import path, include
 from django.contrib.auth.views import LoginView, LogoutView
 from accounts import views
 from accounts.views import ticket_generator
-from django_select2 import views as select2_views
+#from django_select2 import views as select2_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('ticket-generator/', ticket_generator, name='ticket_generator'),#i'm proud of this shit
     
-    path('', LoginView.as_view(template_name='index.html'), name = 'login'),
-
+    #path('', LoginView.as_view(template_name='index.html'), name = 'login'),
+    path('', views.index, name='login'),
     path('registro_venta/',views.registro_ventas,name="ventas"),
     
     path('registrar_clientes/',views.registrar_cliente,name='cliente'),
@@ -40,6 +40,8 @@ urlpatterns = [
     path('producto/eliminar/<int:id_producto>/', views.eliminar_producto, name='eliminar_producto'),
     
     path('menu_principal/', views.menu_principal, name='menu_principal'),
+    
+    path('menu_principal_xd/', views.menu_principal, name='menu_principal_xd'),
     
     path('historico_compras/', views.historico_compras, name='historicoCompras'),
     
