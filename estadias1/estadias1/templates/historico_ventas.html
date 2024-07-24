@@ -18,17 +18,17 @@
 
 <form method="get" action="">
     <h3>Filtrar por:</h3>
-    <label for="producto">Producto:</label>
-    <select name="producto" id="producto">
+    <label for="cliente">Cliente:</label>
+    <select name="cliente" id="cliente">
         <option value="">Todos</option>
-        {% for producto in productos %}
-        <option value="{{ producto.id_producto }}">{{ producto.nombre }}</option>
+        {% for cliente in clientes %}
+        <option value="{{ cliente.id_cliente }}">{{ cliente.razon_social }}</option>
         {% endfor %}
     </select>
     <script>
         $(document).ready(function() {
-            $('#producto').select2({
-                placeholder: "Selecciona un producto",
+            $('#cliente').select2({
+                placeholder: "Selecciona un cliente",
                 allowClear: true
             });
         });
@@ -49,39 +49,85 @@
     // Asignar la fecha actual como el valor máximo del input de fecha
     document.getElementById('fecha_inicio').setAttribute('max', today);
     document.getElementById('fecha_fin').setAttribute('max', today);
+    // Establecer la fecha de hoy en los campos de entrada
+    document.getElementById('fecha_inicio').value = today;
+    document.getElementById('fecha_fin').value = today;
 </script>
+<script>
+    $(document).ready(function () {
+        // Manejar clic en "Ver detalle"
+        $(document).on('click', '.ver-detalle', function (event) {
+            event.preventDefault();
+            var ventaId = $(this).data('venta-id').trim();
+            console.log("Venta ID:", ventaId);
+
+            $.ajax({
+                url: '{% url "detalle_venta" %}',
+                data: {
+                    'venta_id': ventaId
+                },
+                success: function (data) {
+                    $('#detalleContent').html(data);
+                    $('#detalleModal').show();
+                    console.log("Modal abierto con datos:", data);
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error en la solicitud AJAX:", error);
+                }
+            });
+        });
+
+        // Cerrar el modal
+        $(document).on('click', '.close', function () {
+            $('#detalleModal').hide();
+        });
+
+        // Cerrar el modal si se hace clic fuera de él
+        $(window).on('click', function (event) {
+            if ($(event.target).is('#detalleModal')) {
+                $('#detalleModal').hide();
+            }
+        });
+    });
+</script>
+
+{% load custom_filters %}
 <div class="table-container">
-    <table>
+    <table class="table">
         <thead>
             <tr>
-                <th>No.</th>
-                <th>Venta No.</th>
+                <th>Detalle</th>
+                <th>No. Venta</th>
                 <th>Fecha</th>
                 <th>Cliente</th>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Precio Total</th>
-                <th>IVA</th>
+                <th>Subtotal</th>
             </tr>
         </thead>
         <tbody>
             {% for venta in historial_ventas %}
-            <tr>
-                <td>{{ venta.0 }}</td>
-                <td>{{ venta.1 }}</td>
-                <td>{{ venta.2 }}</td>
-                <td>{{ venta.3 }}</td>
-                <td>{{ venta.4 }}</td>
-                <td>{{ venta.5 }}</td>
-                <td>$ {{ venta.6 }}</td>
-                <td>$ {{ venta.7 }}</td>
-            </tr>
+                
+                <tr>
+                    <td><button class="ver-detalle" data-venta-id="{{ venta.0 }}">Ver detalle</button></td>
+                    <td>{{ venta.0 }}</td>
+                    <td>{{ venta.1 }}</td>
+                    <td>{{ venta.2 }}</td>
+                    <td id="subtotalHead">$ {{ venta.3|currency_format }}</td>
+                </tr>
             {% endfor %}
             <tr id="ttal">
-                <td colspan="7" style="text-align: right;">Total:</td>
-                <td>$ {{ total }}</td>
+                <td colspan="4" style="text-align: right;">Total:</td>
+                <td style="text-align: right;">$ {{ total|currency_format }}</td>
             </tr>
         </tbody>
     </table>
+</div>
+<div id="detalleModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Detalle de la Venta</h2>
+        <div id="detalleContent">
+            <!-- Aquí se cargarán los detalles de la venta -->
+        </div>
+    </div>
 </div>
 {% endblock %}
