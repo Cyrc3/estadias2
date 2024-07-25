@@ -1,122 +1,99 @@
 
-<div id="detalleModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Categoria</h2>
-        <div id="detalleContent">
-            <!-- Aquí se cargarán los detalles de la compra -->
-        </div>
-    </div>
-</div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const categoriaLink = document.querySelector(".value[data-url]");
-        const detalleModal = document.getElementById("detalleModal");
-        const detalleContent = document.getElementById("detalleContent");
-
-        categoriaLink.addEventListener("click", function (event) {
-            event.preventDefault(); // Evita que se abra una nueva pestaña
-
-            const url = categoriaLink.getAttribute("data-url");
-
-            // Carga el contenido real desde la URL utilizando fetch
-            fetch(url)
-                .then(response => response.text())
-                .then(data => {
-                    detalleContent.innerHTML = data; // Actualiza el contenido del modal
-                    detalleModal.style.display = "block"; // Muestra el modal
-                })
-                .catch(error => {
-                    console.error("Error al cargar el contenido:", error);
-                });
-        });
-
-        // Cierra el modal al hacer clic en la "X"
-        const closeBtn = document.querySelector(".close");
-        closeBtn.addEventListener("click", function () {
-            detalleModal.style.display = "none";
-        });
-    });
-
-</script>
-
--- tabla categoria_producto
-create table categoria_producto (
-    id_categoria int primary key auto_increment,
-    descripcion varchar(255)
+-- TABLA CLIENTE
+CREATE TABLE CLIENTE (
+    ID_CLIENTE INT NOT NULL auto_increment PRIMARY KEY,
+    RFC VARCHAR(20),
+    RAZON_SOCIAL VARCHAR(255),
+    USO_FACTURA VARCHAR(255),
+    REGIMEN_FISCAL VARCHAR(255),
+    CODIGO_POSTAL int
 );
 
--- tabla producto
-create table producto (
-    id_producto int primary key auto_increment,
-    stock int,
-    nombre varchar(255),
-    id_categoria int,
-    costo_venta decimal(10, 2),
-    foreign key (id_categoria) references categoria_producto(id_categoria)
+-- TABLA PROVEEDOR
+CREATE TABLE PROVEEDOR (
+    ID_PROVEEDOR INT PRIMARY KEY AUTO_INCREMENT,
+    RAZON_SOCIAL VARCHAR(255),
+    DIRECCION VARCHAR(255),
+    COMUNIDAD varchar(255),
+    CIUDAD varchar(255),
+    ESTADO varchar(255),
+    CP int,
+    NUMERO_TELEFONO VARCHAR(20),
+    RFC VARCHAR(20)
 );
 
--- tabla detalle_venta
-create table detalle_venta (
-    id_detalleventa int primary key auto_increment,
-    id_producto int,
-    cantidad int,
-    precio_total decimal(10, 2),
-    foreign key (id_producto) references producto(id_producto)
-    id_venta1 int foreign key,
-    foreign key(id_venta1) references venta(id_venta)
+-- TABLA CATEGORIA_PRODUCTO
+CREATE TABLE CATEGORIA_PRODUCTO (
+    ID_CATEGORIA INT PRIMARY KEY AUTO_INCREMENT,
+    DESCRIPCION VARCHAR(255)
 );
 
--- tabla venta
-create table venta (
-    id_venta int primary key auto_increment,
-    fecha date,
-    total decimal(10, 2),
+-- TABLA PRODUCTO
+CREATE TABLE PRODUCTO (
+    ID_PRODUCTO INT PRIMARY KEY AUTO_INCREMENT,
+    -- ID_PROVEEDOR INT,
+    STOCK INT,
+    NOMBRE VARCHAR(255),
+    ID_CATEGORIA INT,
+    COSTO_VENTA DECIMAL(10, 2),
+    COSTO_COMPRA DECIMAL(10, 2),
+    PORCENTAJE_UTILIDAD DECIMAL(5,2),
+    PUNTO_REORDEN INT,
+    ESTADO BOOLEAN,
+    FOREIGN KEY (ID_CATEGORIA) REFERENCES CATEGORIA_PRODUCTO(ID_CATEGORIA)
+    -- FOREIGN KEY (ID_PROVEEDOR) REFERENCES PROVEEDOR(ID_PROVEEDOR)
 );
 
--- tabla proveedor
-create table proveedor (
-    id_proveedor int primary key auto_increment,
-    razon_social varchar(255),
-    direccion varchar(255),
-    numero_telefono varchar(20),
-    rfc varchar(20)
+-- TABLA VENTA
+CREATE TABLE VENTA (
+    ID_VENTA INT PRIMARY KEY AUTO_INCREMENT,
+    FECHA DATE,
+    TOTAL DECIMAL(10, 2)
 );
 
--- tabla detalle_compra
-create table detalle_compra (
-    id_detallecompra int primary key auto_increment,
-    id_proveedor int,
-    cantidad int,
-    costo decimal(10, 2),
-    id_producto int,
-    foreign key (id_proveedor) references proveedor(id_proveedor),
-    foreign key (id_producto) references producto(id_producto)
+
+-- TABLA DETALLE_VENTA
+CREATE TABLE DETALLE_VENTA (
+    ID_DETALLEVENTA INT PRIMARY KEY AUTO_INCREMENT,
+    ID_PRODUCTO INT,
+    ID_VENTA1 INT,
+    ID_CLIENTE INT,
+    CANTIDAD INT,
+    PRECIO_TOTAL FLOAT,
+    IVA FLOAT,
+    FOREIGN KEY (ID_PRODUCTO) REFERENCES PRODUCTO(ID_PRODUCTO),
+    FOREIGN KEY (ID_VENTA1) references VENTA(ID_VENTA),
+    foreign key (ID_CLIENTE) references CLIENTE(ID_CLIENTE)
 );
 
--- tabla compra
-create table compra (
-    id_compra int primary key auto_increment,
-    total decimal(10, 2),
-    id_detallecompra int,
-    fecha date,
-    foreign key (id_detallecompra) references detalle_compra(id_detallecompra)
+
+-- TABLA COMPRA
+CREATE TABLE COMPRA (
+    ID_COMPRA INT PRIMARY KEY AUTO_INCREMENT,
+    TOTAL DECIMAL(10, 2),
+    FECHA DATE
 );
 
--- tabla cliente
-create table cliente (
-    rfc varchar(20) primary key,
-    razon_social varchar(255),
-    uso_factura varchar(255),
-    regimen_fiscal varchar(255),
-    codigo_postal varchar(10)
+
+-- TABLA DETALLE_COMPRA
+CREATE TABLE DETALLE_COMPRA (
+	ID_DETALLECOMPRA INT auto_increment PRIMARY KEY,
+    ID_PROVEEDOR INT,
+    CANTIDAD INT,
+    COSTO DECIMAL(10, 2),
+    ID_PRODUCTO INT,
+    ID_COMPRA INT,
+    FOREIGN KEY (ID_PROVEEDOR) REFERENCES PROVEEDOR(ID_PROVEEDOR),
+    FOREIGN KEY (ID_PRODUCTO) REFERENCES PRODUCTO(ID_PRODUCTO),
+	FOREIGN KEY (ID_COMPRA) REFERENCES COMPRA (ID_COMPRA)
 );
 
--- tabla usuario
-create table usuario (
-    id_usuario int primary key auto_increment,
-    nombre varchar(255),
-    privilegio varchar(50),
-    password varchar(255)
+
+-- TABLA USUARIO
+CREATE TABLE USUARIO (
+    ID_USUARIO INT PRIMARY KEY AUTO_INCREMENT,
+    NOMBRE VARCHAR(255),
+    PRIVILEGIO boolean,	
+    PASSWORD VARCHAR(255)
 );
