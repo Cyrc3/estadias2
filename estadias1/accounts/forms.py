@@ -90,8 +90,17 @@ class VentaForm(forms.ModelForm):
         self.fields['id_cliente'].queryset = Cliente.objects.all()
 
 class CajaForm(forms.ModelForm):
-    id_usuario = forms.ModelChoiceField(queryset=Usuario.objects.all(), label='Nombre', required=True)
-    fecha_asignacion = forms.DateField(label='Fecha de Asignación', required=True, widget=forms.TextInput(attrs={'type': 'date'}))
+    id_usuario = forms.ModelChoiceField(
+        queryset=Usuario.objects.all(),  # Asegúrate de que esto traiga todos los usuarios.
+        label='Nombre',
+        required=True,
+        to_field_name='id_usuario',  # Esto asegura que el ID se guarde en la base de datos.
+    )
+    fecha_asignacion = forms.DateField(
+        label='Fecha de Asignación',
+        required=True,
+        widget=forms.TextInput(attrs={'type': 'date'})
+    )
 
     class Meta:
         model = Caja

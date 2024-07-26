@@ -623,6 +623,8 @@ def open_caja(request):
 
     return render(request, 'open_caja.html', {'form': form, 'usuarios': usuarios})
 
+
+
 def caja(request):
     
     return render(request, 'first_caja.html')
