@@ -36,15 +36,15 @@ class UsuarioForm(forms.ModelForm):
 
 
 class ProveedorForm(forms.ModelForm):
-    id_proveedor = forms.CharField(label='Id Proveedor')
+    
     razon_social = forms.CharField(label='Razón Social')
     direccion = forms.CharField(label='Dirección')
     comunidad = forms.CharField(label='Comunidad')
     estado = forms.CharField(label='Estado')
     municipio = forms.CharField(label='Municipio')
     cp = forms.CharField(label='Código Postal')
-    numero_telefono = forms.CharField(label='Número de Teléfono')
-    rfc = forms.CharField(label='RFC')
+    numero_telefono = forms.CharField(label='Número de Teléfono',max_length=13)
+    rfc = forms.CharField(label='RFC', max_length=12)
     class Meta:
         model = Proveedor 
         fields = ['id_proveedor','razon_social','direccion','comunidad','estado','municipio','cp','numero_telefono','rfc']
