@@ -12,6 +12,8 @@ class Usuario(models.Model):
     class Meta:
         db_table = 'usuario'
         managed = False
+    def __str__(self):
+        return self.nombre
 
 
 #class Usuario(models.Model):
@@ -133,4 +135,21 @@ class Detalle_Venta(models.Model):
     iva = models.FloatField()
     class Meta:
         db_table = 'detalle_venta'
+        managed = False
+
+class Caja(models.Model):
+    id_caja = models.AutoField(primary_key=True)
+    id_usuario = models.CharField(max_length=255) 
+    mil =models.IntegerField()
+    quinientos =models.IntegerField()
+    doscientos =models.IntegerField()
+    cien =models.IntegerField()
+    cincuenta =models.IntegerField()
+    veinte =models.IntegerField()
+    monedas =models.IntegerField()
+    monto_asignado =models.DecimalField(max_digits=10, decimal_places=2)
+    fecha_asignacion = models.DateField()
+
+    class Meta:
+        db_table = 'caja'
         managed = False

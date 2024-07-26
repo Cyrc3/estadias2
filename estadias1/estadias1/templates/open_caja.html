@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}<title>Registro de Caja</title>{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+<h2>Registro de Caja</h2>
+<div class="container"> 
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Registrar Caja">
+    </form>
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        {% for field in form %}
+            {% if field.errors %}
+                <strong>{{ field.label|title }}</strong>: {{ field.errors.as_text|striptags }}
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

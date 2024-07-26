@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
+    'django_select2',
 ]
 
 MIDDLEWARE = [
@@ -81,12 +82,12 @@ WSGI_APPLICATION = 'estadias1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'estadiapruebas',
+        'NAME': 'CONTROL_INVENTARIO',
         'USER': 'root',
-        'PASSWORD': '3Sa1s87873!',
+        'PASSWORD': 'miau',
         'HOST': 'localhost',
         'w': '3306',
-    } 
+    }
 }
 #honestly i have no idea what this section do, is here tho, if it works, don't touch it.
 

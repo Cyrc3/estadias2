@@ -1,5 +1,6 @@
 from django import forms
-from .models import Categoria, Producto, Cliente, Proveedor, Detalle_Compra, Detalle_Venta, Usuario
+from django.utils import timezone
+from .models import Categoria, Producto, Cliente, Proveedor, Detalle_Compra, Detalle_Venta, Usuario, Caja
 
 #ESTE ARCHIVO SE UTILIZA PARA LOS FORMULARIOS Y HACER QUE DJANGO HAGA TODO EL TRABAJO AJIJIJI
 
@@ -88,4 +89,35 @@ class VentaForm(forms.ModelForm):
         self.fields['id_producto'].queryset = Producto.objects.all()
         self.fields['id_cliente'].queryset = Cliente.objects.all()
 
+class CajaForm(forms.ModelForm):
+    id_usuario = forms.ModelChoiceField(queryset=Usuario.objects.all(), label='Nombre', required=True)
+    fecha_asignacion = forms.DateField(label='Fecha de Asignación', required=True, widget=forms.TextInput(attrs={'type': 'date'}))
 
+    class Meta:
+        model = Caja
+        fields = ['id_usuario', 'mil', 'quinientos', 'doscientos', 'cien', 'cincuenta', 'veinte', 'monedas', 'monto_asignado', 'fecha_asignacion']
+
+    def __init__(self, *args, **kwargs):
+        super(CajaForm, self).__init__(*args, **kwargs)
+        self.fields['id_usuario'].queryset = Usuario.objects.all()
+        self.fields['fecha_asignacion'].initial = timezone.now().date()
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        # Obtén los valores de cada denominación
+        mil = cleaned_data.get('mil', 0) * 1000
+        quinientos = cleaned_data.get('quinientos', 0) * 500
+        doscientos = cleaned_data.get('doscientos', 0) * 200
+        cien = cleaned_data.get('cien', 0) * 100
+        cincuenta = cleaned_data.get('cincuenta', 0) * 50
+        veinte = cleaned_data.get('veinte', 0) * 20
+        monedas = cleaned_data.get('monedas', 0)  # Suponiendo que este es el total de monedas en valor
+
+        # Calcula la suma total
+        total_asignado = mil + quinientos + doscientos + cien + cincuenta + veinte + monedas
+
+        # Asigna el total al campo 'monto_asignado'
+        cleaned_data['monto_asignado'] = total_asignado
+
+        return cleaned_data

@@ -3,8 +3,8 @@ from django.http import HttpResponse
 from reportlab.pdfgen import canvas
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.forms import AuthenticationForm
-from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Detalle_Venta, Compra, Venta, Usuario
-from .forms import ProductoForm, ClienteForm, ProveedorForm, CompraForm, VentaForm, UsuarioForm
+from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Detalle_Venta, Compra, Venta, Usuario, Caja
+from .forms import ProductoForm, ClienteForm, ProveedorForm, CompraForm, VentaForm, UsuarioForm, CajaForm
 from django.http import HttpResponse
 from django_select2.views import AutoResponseView
 from .db_connection import Database #conexión directa
@@ -280,6 +280,60 @@ def registro_ventas(request):
     }
     return render(request, 'registro_venta.html', context)
 
+
+def registro_venta_xd(request):
+    productos = Producto.objects.all()
+    if request.method == 'POST':
+        form = VentaForm(request.POST)
+        if form.is_valid() or not form.has_changed():
+            try:
+                fecha_venta = request.POST.get('fecha_venta')
+                total_venta = request.POST.get('total_venta')
+                cliente_id = request.POST.get('cliente_id')
+                resumen_data = json.loads(request.POST.get('resumen_data', '[]'))
+
+                nueva_venta = Venta(fecha=fecha_venta, total=total_venta)
+                nueva_venta.save()
+
+                cliente = Cliente.objects.get(id_cliente=cliente_id)
+
+                for item in resumen_data:
+                    # id_cliente = Cliente.objects.get(id_cliente=item['id_cliente'])
+                    cantidad = int(item.get('cantidad'))
+                    producto_id = Producto.objects.get(id_producto=item['producto_id'])
+                    precio_total = float(item.get('precio_total'))
+                    precio_base = precio_total / 1.16
+                    iva = precio_total - precio_base
+
+                    # Descontar stock
+                    producto_id.stock -= int(cantidad)
+                    producto_id.save()
+
+                    detalle_venta = Detalle_Venta(
+                        id_venta1=nueva_venta,  # Aquí el campo en la tabla es 'id_venta1'
+                        id_producto=producto_id,  # Obtener instancia del producto
+                        cantidad=cantidad,
+                        precio_total=precio_base,
+                        id_cliente=cliente,  # Obtener instancia del cliente
+                        iva=iva,
+                    )
+                    detalle_venta.save()
+
+                return redirect('venta')
+            except Exception as e:
+                print(f"Error sabrá Dios dónde: {e}")
+        else:
+            print("El formulario no es válido")
+    else:
+        form = VentaForm()
+    
+    context = {
+        'form': form,
+        'productos': productos
+    }
+    return render(request, 'registro_venta_xd.html', context)
+
+
 def ticket_generator(request):
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', '../estadias1/settings')
     django.setup()
@@ -542,10 +596,40 @@ def historico_ventas(request):
     return render(request, 'historico_ventas.html', context)
 
 
+def open_caja(request):
+    usuarios = Usuario.objects.all()
+    if request.method == 'POST':
+        form = CajaForm(request.POST)
+        if form.is_valid():
+            # Obtener el usuario_id desde el formulario
+            usuario_id = form.cleaned_data['id_usuario']
 
+            # Obtener el objeto Usuario correspondiente
+            usuario = get_object_or_404(Usuario, id_usuario=usuario_id)
 
+            # Obtener el nombre del usuario
+            nombre_usuario = usuario.nombre
 
+            # Ahora puedes usar nombre_usuario para cualquier propósito que necesites, 
+            # por ejemplo, registrarlo en un log o mostrarlo en una plantilla.
 
+            # Guardar el formulario y crear una nueva instancia de Caja
+            form.save()
+
+            # Redirigir a una página de éxito o lista de cajas
+            return redirect('caja/')
+    else:
+        form = CajaForm()
+
+    return render(request, 'open_caja.html', {'form': form, 'usuarios': usuarios})
+
+def caja(request):
+    
+    return render(request, 'first_caja.html')
+
+def close_caja(request):
+    
+    return render(request, 'close_caja.html')
 
 #TEST PARA LA CONEXION DIRECTA A LA BD !!--11--1--121-01|0|020|920|93UR84U2RY2U3
 '''
