@@ -320,6 +320,7 @@ input[type="date"] {
 .editarBtn {
     background-color: #0095ff; /* Color de fondo azul */
     color: white; /* Texto en color blanco */
+    font-weight: bold;
     border: none; /* Sin bordes */
     padding: 10px 15px; /* Espaciado interno */
     border-radius: 5px; /* Bordes redondeados */
@@ -330,6 +331,7 @@ input[type="date"] {
 .eliminarBtn {
     background-color: #ff0019; /* Color de fondo rojo */
     color: white; /* Texto en color blanco */
+    font-weight: bold;
     border: none; /* Sin bordes */
     padding: 10px 15px; /* Espaciado interno */
     border-radius: 5px; /* Bordes redondeados */
