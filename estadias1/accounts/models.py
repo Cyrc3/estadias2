@@ -153,3 +153,4 @@ class Caja(models.Model):
     class Meta:
         db_table = 'caja'
         managed = False
+

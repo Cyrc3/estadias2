@@ -56,9 +56,12 @@ header {
 .menu-list a {
     text-decoration: none; /* Quita el subrayado de los enlaces */
     color: rgb(0, 0, 0); /* Color del texto de los enlaces */
+    font-size: 18px;
 }
 
 /* Estilos para mostrar la lista de enlaces */
 .menu-list.show-menu {
     display: block;
 }
+
+

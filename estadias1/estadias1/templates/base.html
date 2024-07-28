@@ -20,14 +20,22 @@
                 <span class="bar"></span>
             </button>
             <ul class="menu-list">
-                <li><a href="{% url 'menu_principal' %}">Inicio</a></li>
-                <li><a href="{% url 'proveedor' %}">Registrar Proveedor</a></li>
-                <li><a href="{% url 'producto' %}">Registrar Productos</a></li>
-                <li><a href="{% url 'ventas' %}">Registrar Venta</a></li>
-                <li><a href="{% url 'compra' %}">Registrar Compra</a></li>
-                <li><a href="{% url 'cliente' %}">Registrar Cliente</a></li>
-                <li><a href="{% url 'historicoCompras' %}">Historial de Compras</a></li>
-                <li><a href="{% url 'historicoVentas' %}">Historial de Ventas</a></li>
+                {% if request.session.privilegio %}
+                    <li><a href="{% url 'menu_principal' %}">Inicio</a></li>
+                    <li><a href="{% url 'proveedor' %}">Registrar Proveedor</a></li>
+                    <li><a href="{% url 'producto' %}">Registrar Productos</a></li>
+                    <li><a href="{% url 'ventas' %}">Registrar Venta</a></li>
+                    <li><a href="{% url 'compra' %}">Registrar Compra</a></li>
+                    <li><a href="{% url 'cliente' %}">Registrar Cliente</a></li>
+                    <li><a href="{% url 'historicoCompras' %}">Historial de Compras</a></li>
+                    <li><a href="{% url 'historicoVentas' %}">Historial de Ventas</a></li>
+                {% else %}
+                    <li><a href="{% url 'ventas' %}">Registrar Venta</a></li>
+                {% endif %}
+                {% if request.session.usuario_id %}
+                    <!-- Enlace de logout -->
+                    <li><a href="{% url 'logout' %}" style="font-weight: bold; color: rgb(196, 19, 19);">Cerrar Sesión</a></li>
+                {% endif %}
             </ul>
         </nav>
         <script>

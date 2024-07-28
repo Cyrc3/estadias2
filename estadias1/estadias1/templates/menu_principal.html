@@ -11,6 +11,7 @@
 </head>
 <body>
     <div class="container">
+        <a href="{% url 'logout' %}" class="logout-link">Cerrar Sesión</a>
         <h2>Bienvenido</h2>
         <div class="menu">
             {% csrf_token %}
@@ -40,7 +41,7 @@
                 <div class="text">Historial Ventas</div>
             </a>            
             <a href="{% url 'caja' %}" class="button">
-                <div class="icon"><img src="../static/images/JEMINWEY.png" alt="Icon"></div>
+                <div class="icon"><img src="../static/images/caja_icono.png" alt="Icon"></div>
                 <div class="text">Caja</div>
             </a>
             <a href="{% url 'usuario' %}" class="button">

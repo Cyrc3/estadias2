@@ -6,7 +6,8 @@ function editarProducto(
     costo_venta,
     costo_compra,
     porcentaje_utilidad,
-    punto_reorden
+    punto_reorden,
+    estado
 ) {
     $("#producto_id").val(id);
     $("#id_nombre").val(nombre);
@@ -19,6 +20,7 @@ function editarProducto(
     $("#id_costo_compra").val(costo_compra);
     $("#id_porcentaje_utilidad").val(porcentaje_utilidad);
     $("#id_punto_reorden").val(punto_reorden);
+    $("#id_estado").prop("checked", estado == 'True' || estado == 'true' || estado == '1');
     $("#submitButton").val("Actualizar");
 
     const formContainer = document.getElementById("form-container");

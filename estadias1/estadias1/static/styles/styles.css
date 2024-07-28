@@ -115,6 +115,9 @@ table {
 
 thead {
     background-color: #515050;
+    position: sticky;
+    top: 0;
+    z-index: 1; 
 }
 
 
@@ -123,6 +126,7 @@ thead th {
     padding: 12px;
     text-align: center;
     font-weight: bold;
+
 }
 
 tbody tr {

@@ -25,27 +25,25 @@ import PIL.Image
 from django.utils import timezone
 from accounts.models import Detalle_Venta, Venta
 
+#validacion de adminnn o kajero
+from .decorators import admin_required, login_required
 
 
-
-
+@admin_required
 def menu_principal(request):
     
     return render(request, 'menu_principal.html')
 
 
 
-def index(request):
+def index(request): #INICIO DE SESIÓN 
     if request.method == 'POST':
         nombre = request.POST.get('nombre')
         password = request.POST.get('password')
-        print(nombre)
-        print(password)
         # Buscar usuario en la base de datos
         try:
             usuario = Usuario.objects.get(nombre=nombre)
             # Usar check_password para verificar la contraseña
-           
             if check_password(password, usuario.password):
                 request.session['usuario_id'] = usuario.id_usuario
                 request.session['privilegio'] = usuario.privilegio
@@ -54,7 +52,7 @@ def index(request):
                 if usuario.privilegio:
                     return redirect('menu_principal')
                 else:  # 0 representa False (usuario regular)
-                    return redirect('vontas_xd')
+                    return redirect('ventas')
             else:
                 messages.error(request, 'Nombre o contraseña incorrectos')
         except Usuario.DoesNotExist:
@@ -63,8 +61,13 @@ def index(request):
     return render(request, 'index.html')
 
 
+def logout_view(request):
+    request.session.flush()  # Elimina todos los datos de la sesión
+    messages.success(request, 'Has cerrado sesión correctamente.')  # Opción: Mostrar un mensaje de éxito
+    return redirect('login') 
 
 
+@admin_required
 def registro_usuario(request):
     if request.method == 'POST':
         form = UsuarioForm(request.POST)
@@ -72,7 +75,7 @@ def registro_usuario(request):
             usuario = form.save(commit=False)
             usuario.password = make_password(form.cleaned_data['password'])
             usuario.save()
-            return redirect('usuario')
+            return redirect('menu_principal')
         else:
             messages.error(request, "Hubo un error al registrar el usuario.")
     else:
@@ -80,6 +83,7 @@ def registro_usuario(request):
     return render(request, 'usuario.html', {'form':form})
 
 
+@admin_required
 def registrar_cliente(request):
     if request.method == 'POST' :
         form = ClienteForm(request.POST)
@@ -94,6 +98,7 @@ def registrar_cliente(request):
     return render(request, 'registro_cliente.html', {'form':form})
     
 
+@admin_required
 def registrar_proveedor(request):
     if request.method == 'POST' :
         form = ProveedorForm(request.POST)
@@ -109,6 +114,7 @@ def registrar_proveedor(request):
     return render(request, 'registro_proveedor.html', {'form':form, 'proveedores':proveedores})
 
 
+@admin_required
 def registrar_producto(request):
     query = request.GET.get('q', '')
     if request.method == 'POST':
@@ -142,6 +148,7 @@ def registrar_producto(request):
     })
 
 
+@admin_required
 def eliminar_producto(request, id_producto):
     producto = get_object_or_404(Producto, id_producto=id_producto)
     producto.delete()
@@ -149,7 +156,7 @@ def eliminar_producto(request, id_producto):
     return redirect('producto')
 
 
-
+@admin_required
 def registrar_categoria(request):
     if request.method == 'POST':
         nueva_categoria = Categoria()
@@ -160,6 +167,7 @@ def registrar_categoria(request):
     return render(request, 'registro_categoria.html')
 
 
+@admin_required
 def registrar_compra(request):
     productos = Producto.objects.all()
     if request.method == 'POST': 
@@ -226,7 +234,7 @@ def registrar_compra(request):
     return render(request, 'registro_compra.html', context)  
 
 
-
+@login_required
 def registro_ventas(request):
     productos = Producto.objects.all()
     if request.method == 'POST':
@@ -279,59 +287,6 @@ def registro_ventas(request):
         'productos': productos
     }
     return render(request, 'registro_venta.html', context)
-
-
-def registro_venta_xd(request):
-    productos = Producto.objects.all()
-    if request.method == 'POST':
-        form = VentaForm(request.POST)
-        if form.is_valid() or not form.has_changed():
-            try:
-                fecha_venta = request.POST.get('fecha_venta')
-                total_venta = request.POST.get('total_venta')
-                cliente_id = request.POST.get('cliente_id')
-                resumen_data = json.loads(request.POST.get('resumen_data', '[]'))
-
-                nueva_venta = Venta(fecha=fecha_venta, total=total_venta)
-                nueva_venta.save()
-
-                cliente = Cliente.objects.get(id_cliente=cliente_id)
-
-                for item in resumen_data:
-                    # id_cliente = Cliente.objects.get(id_cliente=item['id_cliente'])
-                    cantidad = int(item.get('cantidad'))
-                    producto_id = Producto.objects.get(id_producto=item['producto_id'])
-                    precio_total = float(item.get('precio_total'))
-                    precio_base = precio_total / 1.16
-                    iva = precio_total - precio_base
-
-                    # Descontar stock
-                    producto_id.stock -= int(cantidad)
-                    producto_id.save()
-
-                    detalle_venta = Detalle_Venta(
-                        id_venta1=nueva_venta,  # Aquí el campo en la tabla es 'id_venta1'
-                        id_producto=producto_id,  # Obtener instancia del producto
-                        cantidad=cantidad,
-                        precio_total=precio_base,
-                        id_cliente=cliente,  # Obtener instancia del cliente
-                        iva=iva,
-                    )
-                    detalle_venta.save()
-
-                return redirect('venta')
-            except Exception as e:
-                print(f"Error sabrá Dios dónde: {e}")
-        else:
-            print("El formulario no es válido")
-    else:
-        form = VentaForm()
-    
-    context = {
-        'form': form,
-        'productos': productos
-    }
-    return render(request, 'registro_venta_xd.html', context)
 
 
 def ticket_generator(request):
@@ -442,6 +397,8 @@ def ticket_generator(request):
     return response
 '''
 
+
+@admin_required
 def historico_compras(request):
     db = Database()
     try:
@@ -495,6 +452,7 @@ def historico_compras(request):
     return render(request, 'historico_compras.html', context)
 
 
+@admin_required
 def detalle_compra(request): #EXTENSION DEL HISTORICO DE COMPRA PARA VER EL DETALLE DE LA COMPRA SJSJ
     compra_id = request.GET.get('compra_id')
     db = Database()
@@ -519,6 +477,7 @@ def detalle_compra(request): #EXTENSION DEL HISTORICO DE COMPRA PARA VER EL DETA
     return render(request, 'detalle_compra.html', context)
 
 
+@admin_required
 def detalle_venta(request):
     venta_id = request.GET.get('venta_id')
     db = Database()
@@ -543,7 +502,7 @@ def detalle_venta(request):
     return render(request, 'detalle_venta.html', context)
 
 
-
+@admin_required
 def historico_ventas(request):
     db = Database()
     try:
@@ -596,6 +555,7 @@ def historico_ventas(request):
     return render(request, 'historico_ventas.html', context)
 
 
+@admin_required
 def open_caja(request):
     usuarios = Usuario.objects.all()
     if request.method == 'POST':
@@ -624,11 +584,13 @@ def open_caja(request):
     return render(request, 'open_caja.html', {'form': form, 'usuarios': usuarios})
 
 
-
+@admin_required
 def caja(request):
     
     return render(request, 'first_caja.html')
 
+
+@admin_required
 def close_caja(request):
     
     return render(request, 'close_caja.html')

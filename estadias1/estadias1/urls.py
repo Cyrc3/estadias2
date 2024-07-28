@@ -28,8 +28,6 @@ urlpatterns = [
     #path('', LoginView.as_view(template_name='index.html'), name = 'login'),
     path('', views.index, name='login'),
 
-    path('registro_ventas_xd/',views.registro_venta_xd,name="vontas_xd"),
-
     path('first_caja/',views.caja,name="caja"),
 
     path('open_caja/',views.open_caja,name="open_caja"),
@@ -50,8 +48,6 @@ urlpatterns = [
     
     path('menu_principal/', views.menu_principal, name='menu_principal'),
     
-    path('menu_principal_xd/', views.menu_principal, name='menu_principal_xd'),
-    
     path('historico_compras/', views.historico_compras, name='historicoCompras'),
     
     path('historico_ventas/', views.historico_ventas, name='historicoVentas'),
@@ -64,6 +60,7 @@ urlpatterns = [
     
     path('detalle_venta/',views.detalle_venta, name='detalle_venta'),
 
+    path('logout/', views.logout_view, name='logout'),
     #prueba coneksion a la bd directo
     #path('test_db/',views.test_db_view, name='test_db'),
 

@@ -77,6 +77,9 @@ table {
 
 thead {
     background-color: #575757;
+    position: sticky;
+    top: 0;
+    z-index: 1; 
 }
 
 thead th {

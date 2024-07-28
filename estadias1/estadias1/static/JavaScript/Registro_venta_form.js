@@ -45,7 +45,6 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
   `;
   newRow.querySelector(".editarBtn").addEventListener("click", function () {
       editarFila(newRow);
-      console.log('alejo')
   });
   newRow.querySelector(".eliminarBtn").addEventListener("click", function () {
       eliminarFila(newRow);
