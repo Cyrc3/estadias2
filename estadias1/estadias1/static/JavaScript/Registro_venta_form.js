@@ -30,8 +30,8 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
   newRow.innerHTML = `
       <td>${cantidad}</td>
       <td data-id="${productoId}">${productoText}</td>
-      
-      <td>$${precioFinal.toFixed(2)}</td>
+      <td>$</td>
+      <td>${precioFinal.toFixed(2)}</td>
 
   `;
 
@@ -55,26 +55,22 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
   //habilitar el boton imprimir ticket
   document.getElementById('imprimir').style.display='inline';
 
-  actualizarTotales(precioFinal, precioFinal * 0.16); // Asumiendo que el IVA es del 16%
+  actualizarTotales(precioFinal); // Asumiendo que el IVA es del 16%
 
   //SE LIMPIA EL FORMULARIO
   $('#id_id_producto').val(null).trigger('change');
-  $('#id_id_cliente').val(null).trigger('change');
+  console.log(clienteId);
   document.getElementById("id_id_cantidad").value = "";
   document.getElementById("id_precio_total").value = "";
 
 });
 
-function actualizarTotales(subtotal, iva) {
+function actualizarTotales(subtotal) {
   // Actualizar el subtotal
   const subTotalCompra = document.getElementById("total-venta");
   const nuevoSubtotal = parseFloat(subTotalCompra.textContent) + subtotal;
   subTotalCompra.textContent = nuevoSubtotal.toFixed(2);
 
-  // Actualizar el IVA
-  const ivaCompra = document.getElementById("total-iva");
-  const nuevaIva = parseFloat(ivaCompra.textContent) + iva;
-  ivaCompra.textContent = nuevaIva.toFixed(2);
 }
 
 document.getElementById("editarVentaBtn").addEventListener("click", function (event) {
@@ -112,7 +108,7 @@ function editarFila(row) {
   document.getElementById("ventaForm").setAttribute("data-editing-row-index", row.rowIndex);
 
   // Actualizar los totales antes de eliminar la fila
-  actualizarTotales(-costoT, -(costoT * 0.16));
+  actualizarTotales(-costoT);
 
   eliminarFilaParaEditar(row);
 
@@ -136,7 +132,7 @@ document.getElementById("aceptarEliminar").addEventListener("click", function (e
   if (filaParaEliminar) {
       const precioTotalCell = filaParaEliminar.cells[3];
       const precioTotal = parseFloat(precioTotalCell.textContent);
-      actualizarTotales(-precioTotal, -(precioTotal * 0.16));
+      actualizarTotales(-precioTotal);
       filaParaEliminar.remove();
       filaParaEliminar = null;
       document.getElementById("eliminarVenta").style.display = "none";
