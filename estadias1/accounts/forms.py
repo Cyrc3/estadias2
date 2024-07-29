@@ -92,7 +92,7 @@ class VentaForm(forms.ModelForm):
 class CajaForm(forms.ModelForm):
     id_usuario = forms.ModelChoiceField(
         queryset=Usuario.objects.all(),  # Asegúrate de que esto traiga todos los usuarios.
-        label='Nombre',
+        label='Usuario',
         required=True,
         to_field_name='id_usuario',  # Esto asegura que el ID se guarde en la base de datos.
     )
