@@ -155,3 +155,23 @@ class Caja(models.Model):
     class Meta:
         db_table = 'caja'
         managed = False
+
+
+
+class Cierre_Caja(models.Model):
+    id_cierre = models.AutoField(primary_key=True)
+    id_caja = models.ForeignKey(Caja, on_delete=models.CASCADE, db_column='id_caja')
+    mil = models.IntegerField()
+    quinientos = models.IntegerField()
+    doscientos = models.IntegerField()
+    cien = models.IntegerField()
+    cincuenta = models.IntegerField()
+    veinte = models.IntegerField()
+    monedas = models.IntegerField()
+    total_suma = models.DecimalField(max_digits=10, decimal_places=2)
+    total_diferencia = models.DecimalField(max_digits=10, decimal_places=2)
+    fecha_asignacion = models.DateField()
+
+    class Meta:
+        db_table = 'cierre_caja'
+        managed = False

@@ -4,7 +4,7 @@ from reportlab.pdfgen import canvas
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Detalle_Venta, Compra, Venta, Usuario, Caja
-from .forms import ProductoForm, ClienteForm, ProveedorForm, CompraForm, VentaForm, UsuarioForm, CajaForm
+from .forms import ProductoForm, ClienteForm, ProveedorForm, CompraForm, VentaForm, UsuarioForm, CajaForm, CierreForm
 from django.http import HttpResponse
 from django_select2.views import AutoResponseView
 from .db_connection import Database #conexión directa
@@ -571,7 +571,7 @@ def open_caja(request):
             form.save()
 
             # Redirigir a una página de éxito o lista de cajas
-            return redirect('caja/')
+            return redirect('caja')
     else:
         form = CajaForm()
 
@@ -582,11 +582,20 @@ def caja(request):
     
     return render(request, 'first_caja.html')
 
-
 @admin_required
 def close_caja(request):
-    
-    return render(request, 'close_caja.html')
+    cajas = Caja.objects.all()
+    if request.method == 'POST':
+        form = CierreForm(request.POST)
+        if form.is_valid():
+            # Guardar el formulario y crear una nueva instancia de CierreCaja
+            form.save()
+
+            # Redirigir a una página de éxito o lista de cierres de caja
+            return redirect('close_caja')
+    else:
+        form = CierreForm()
+    return render(request, 'close_caja.html', {'form': form, 'cajas': cajas})
 
 #TEST PARA LA CONEXION DIRECTA A LA BD !!--11--1--121-01|0|020|920|93UR84U2RY2U3
 '''

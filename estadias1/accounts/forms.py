@@ -1,6 +1,6 @@
 from django import forms
 from django.utils import timezone
-from .models import Categoria, Producto, Cliente, Proveedor, Detalle_Compra, Detalle_Venta, Usuario, Caja
+from .models import Categoria, Producto, Cliente, Proveedor, Detalle_Compra, Detalle_Venta, Usuario, Caja, Cierre_Caja
 
 #ESTE ARCHIVO SE UTILIZA PARA LOS FORMULARIOS Y HACER QUE DJANGO HAGA TODO EL TRABAJO AJIJIJI
 
@@ -128,5 +128,135 @@ class CajaForm(forms.ModelForm):
 
         # Asigna el total al campo 'monto_asignado'
         cleaned_data['monto_asignado'] = total_asignado
+
+        return cleaned_data
+
+
+
+
+
+class CajaForm(forms.ModelForm):
+    id_usuario = forms.ModelChoiceField(
+        queryset=Usuario.objects.all(),  # Asegúrate de que esto traiga todos los usuarios.
+        label='Usuario',
+        required=True,
+        to_field_name='id_usuario',  # Esto asegura que el ID se guarde en la base de datos.
+    )
+    fecha_asignacion = forms.DateField(
+        label='Fecha de Asignación',
+        required=True,
+        widget=forms.TextInput(attrs={'type': 'date'})
+    )
+
+    class Meta:
+        model = Caja
+        fields = ['id_usuario', 'mil', 'quinientos', 'doscientos', 'cien', 'cincuenta', 'veinte', 'monedas', 'monto_asignado', 'fecha_asignacion']
+
+    def __init__(self, *args, **kwargs):
+        super(CajaForm, self).__init__(*args, **kwargs)
+        self.fields['id_usuario'].queryset = Usuario.objects.all()
+        self.fields['fecha_asignacion'].initial = timezone.now().date()
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        # Obtén los valores de cada denominación
+        mil = cleaned_data.get('mil', 0) * 1000
+        quinientos = cleaned_data.get('quinientos', 0) * 500
+        doscientos = cleaned_data.get('doscientos', 0) * 200
+        cien = cleaned_data.get('cien', 0) * 100
+        cincuenta = cleaned_data.get('cincuenta', 0) * 50
+        veinte = cleaned_data.get('veinte', 0) * 20
+        monedas = cleaned_data.get('monedas', 0)  # Suponiendo que este es el total de monedas en valor
+
+        # Calcula la suma total
+        total_asignado = mil + quinientos + doscientos + cien + cincuenta + veinte + monedas
+
+        # Asigna el total al campo 'monto_asignado'
+        cleaned_data['monto_asignado'] = total_asignado
+
+        return cleaned_data
+
+
+
+class CierreForm(forms.ModelForm):
+    id_caja = forms.ModelChoiceField(
+        queryset=Caja.objects.all(),
+        label='Caja',
+        required=True,
+        to_field_name='id_caja',
+    )
+    fecha_asignacion = forms.DateField(
+        label='Fecha de Asignación',
+        required=True,
+        widget=forms.TextInput(attrs={'type': 'date'})
+    )
+
+    class Meta:
+        model = Cierre_Caja  # Asegúrate de que este sea el modelo correcto
+        fields = ['id_caja', 'mil', 'quinientos', 'doscientos', 'cien', 'cincuenta', 'veinte', 'monedas', 'total_suma', 'total_diferencia', 'fecha_asignacion']
+
+    def __init__(self, *args, **kwargs):
+        super(CierreForm, self).__init__(*args, **kwargs)
+        self.fields['id_caja'].queryset = Caja.objects.all()
+        self.fields['fecha_asignacion'].initial = timezone.now().date()
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        # Obtén los valores de cada denominación
+        mil = cleaned_data.get('mil', 0) * 1000
+        quinientos = cleaned_data.get('quinientos', 0) * 500
+        doscientos = cleaned_data.get('doscientos', 0) * 200
+        cien = cleaned_data.get('cien', 0) * 100
+        cincuenta = cleaned_data.get('cincuenta', 0) * 50
+        veinte = cleaned_data.get('veinte', 0) * 20
+        monedas = cleaned_data.get('monedas', 0)  # Suponiendo que este es el total de monedas en valor
+
+        # Calcula la suma total
+        total_suma = mil + quinientos + doscientos + cien + cincuenta + veinte + monedas
+        cleaned_data['total_suma'] = total_suma
+
+        # Obtener el valor de la otra tabla
+        id_caja_obj = cleaned_data.get('id_caja')
+        id_caja = id_caja_obj.id_caja if id_caja_obj else None
+        try:
+            monto_asignado = Caja.objects.get(id_caja=id_caja).monto_asignado  # Ajusta esto según tu modelo
+        except Caja.DoesNotExist:
+            raise ValidationError("No se encontró la caja con el ID especificado.")
+
+
+
+        # Calcula la diferencia
+        total_diferencia = total_suma - monto_asignado
+        cleaned_data['total_diferencia'] = total_diferencia
+
+        return cleaned_data
+        cleaned_data = super().clean()
+
+        # Obtén los valores de cada denominación
+        mil = cleaned_data.get('mil', 0) * 1000
+        quinientos = cleaned_data.get('quinientos', 0) * 500
+        doscientos = cleaned_data.get('doscientos', 0) * 200
+        cien = cleaned_data.get('cien', 0) * 100
+        cincuenta = cleaned_data.get('cincuenta', 0) * 50
+        veinte = cleaned_data.get('veinte', 0) * 20
+        monedas = cleaned_data.get('monedas', 0)  # Suponiendo que este es el total de monedas en valor
+
+        # Calcula la suma total
+        total_suma = mil + quinientos + doscientos + cien + cincuenta + veinte + monedas
+        cleaned_data['total_suma'] = total_suma
+
+        # Obtener el valor de la otra tabla
+        #from .models import Caja 
+        id_caja = cleaned_data.get('id_caja')
+        try:
+            monto_asignado = Caja.objects.get(id_caja=id_caja).valor_numerico  # Ajusta esto según tu modelo
+        except Caja.DoesNotExist:
+            monto_asignado = 0  # Maneja el caso donde no existe el valor en la otra tabla
+
+        # Calcula la diferencia
+        total_diferencia = total_suma - valor_otro
+        cleaned_data['total_diferencia'] = total_diferencia
 
         return cleaned_data

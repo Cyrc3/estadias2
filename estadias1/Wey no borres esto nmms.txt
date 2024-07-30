@@ -110,6 +110,28 @@ create table caja(
 foreign key (id_usuario) references usuario(id_usuario)
 
 
+WAWAWAWAWAWa
+CREATE TABLE cierre_caja (
+    id_cierre INT(11) NOT NULL AUTO_INCREMENT,
+    id_caja INT(11) NULL,
+    mil INT(11) NULL,
+    quinientos INT(11) NULL,
+    doscientos INT(11) NULL,
+    cien INT(11) NULL,
+    cincuenta INT(11) NULL,
+    veinte INT(11) NULL,
+    monedas INT(11) NULL,
+    total_suma DECIMAL(10, 2) NOT NULL,
+    total_diferencia DECIMAL(10, 2) NOT NULL,
+    fecha_asignacion DATETIME NOT NULL,
+    PRIMARY KEY (id_cierre),
+    FOREIGN KEY (id_caja) REFERENCES caja(id_caja)
+);
+
+
+
+
+
 
 All the pip programs needed to mount the server, this should be already in the virtEnv
 So is here just in case
