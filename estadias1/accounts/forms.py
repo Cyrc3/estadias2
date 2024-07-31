@@ -102,6 +102,10 @@ class CajaForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'type': 'date'})
     )
 
+    monto_asignado = forms.DecimalField(
+        required=False
+    )
+
     class Meta:
         model = Caja
         fields = ['id_usuario', 'mil', 'quinientos', 'doscientos', 'cien', 'cincuenta', 'veinte', 'monedas', 'monto_asignado', 'fecha_asignacion']
@@ -148,6 +152,10 @@ class CajaForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'type': 'date'})
     )
 
+    monto_asignado = forms.DecimalField(
+        required=False
+    )
+
     class Meta:
         model = Caja
         fields = ['id_usuario', 'mil', 'quinientos', 'doscientos', 'cien', 'cincuenta', 'veinte', 'monedas', 'monto_asignado', 'fecha_asignacion']
@@ -190,6 +198,14 @@ class CierreForm(forms.ModelForm):
         label='Fecha de Asignación',
         required=True,
         widget=forms.TextInput(attrs={'type': 'date'})
+    )
+
+    total_suma=forms.DecimalField(
+        required=False
+    )
+
+    total_diferencia=forms.DecimalField(
+        required=False
     )
 
     class Meta:
