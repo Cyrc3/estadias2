@@ -4,16 +4,27 @@
 
 {% block extra_css %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+<link rel="stylesheet" href="{% static 'styles/CAJAS.css' %}">
 {% endblock %}
 
 {% block content %}
 <h2>Cierre de Caja</h2>
 <div class="container"> 
-    <form method="POST">
+    <form method="POST" id="cierreForm">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Registrar Caja">
+        {{ form.id_caja.label_tag }} {{ form.id_caja }}
+        {{ form.mil.label_tag }} {{ form.mil }}
+        {{ form.quinientos.label_tag }} {{ form.quinientos }}
+        {{ form.doscientos.label_tag }} {{ form.doscientos }}
+        {{ form.cien.label_tag }} {{ form.cien }}
+        {{ form.cincuenta.label_tag }} {{ form.cincuenta }}
+        {{ form.veinte.label_tag }} {{ form.veinte }}
+        {{ form.monedas.label_tag }} {{ form.monedas }}
+        <div class="form-bottom">
+            {{ form.fecha_asignacion.label_tag }} {{ form.fecha_asignacion }}
+            <br> <!-- Alinea el botón en una nueva línea -->
+            <input type="submit" value="Registrar Caja">
+        </div>
     </form>
     {% if form.errors %}
     <div class="alert alert-danger">
@@ -25,8 +36,30 @@
     </div>
     {% endif %}
 </div>
+
 <script>
-    document.getElementById('id_total_suma').style.visibility = "hidden"
-    document.getElementById('id_total_diferencia').style.visibility = "hidden"
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const form = document.getElementById('cierreForm');
+        const inputs = form.querySelectorAll('input, textarea, select');
+        
+        inputs.forEach(input => {
+            if (input.type === 'text' || input.type === 'number' || input.type === 'hidden') {
+                input.value = '0';
+            } else if (input.type === 'radio' || input.type === 'checkbox') {
+                input.checked = false;
+            }
+        });
+    });
+
+    // Ocultar los campos "id_total_suma" y "id_total_diferencia"
+    document.getElementById('id_total_suma')?.style.setProperty('visibility', 'hidden');
+    document.getElementById('id_total_diferencia')?.style.setProperty('visibility', 'hidden');
+
+    // Ocultar el campo "id_monto_asignado" y su etiqueta
+    document.getElementById('id_monto_asignado')?.style.setProperty('display', 'none');
+    var label = document.querySelector("label[for='id_monto_asignado']");
+    if (label) {
+        label.style.setProperty('display', 'none');
+    }
 </script>
 {% endblock %}

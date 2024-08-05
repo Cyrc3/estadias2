@@ -61,6 +61,8 @@ urlpatterns = [
     path('detalle_venta/',views.detalle_venta, name='detalle_venta'),
 
     path('logout/', views.logout_view, name='logout'),
+
+    path('historico_caja/', views.historico_caja, name='historico_caja'),
     #prueba coneksion a la bd directo
     #path('test_db/',views.test_db_view, name='test_db'),
 
