@@ -11,7 +11,7 @@ class ProductoForm(forms.ModelForm):
     estado = forms.BooleanField(label='¿Activo o Inactivo?', required=False)
     class Meta:
         model = Producto
-        fields = ['nombre','id_categoria','stock','costo_venta','costo_compra','porcentaje_utilidad','punto_reorden','estado']
+        fields = ['nombre','id_categoria','stock','costo_compra','porcentaje_utilidad','costo_venta','punto_reorden','estado']
         
 
 
@@ -149,7 +149,7 @@ class CajaForm(forms.ModelForm):
     fecha_asignacion = forms.DateField(
         label='Fecha de Asignación',
         required=True,
-        widget=forms.TextInput(attrs={'type': 'date'})
+        widget=forms.TextInput(attrs={'type': 'datetime-local'})
     )
 
     monto_asignado = forms.DecimalField(
