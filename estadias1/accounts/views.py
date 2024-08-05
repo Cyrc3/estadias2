@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from reportlab.pdfgen import canvas
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.forms import AuthenticationForm
-from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Detalle_Venta, Compra, Venta, Usuario, Caja
+from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Detalle_Venta, Compra, Venta, Usuario, Caja, Cierre_Caja
 from .forms import ProductoForm, ClienteForm, ProveedorForm, CompraForm, VentaForm, UsuarioForm, CajaForm, CierreForm
 from django.http import HttpResponse
 from django_select2.views import AutoResponseView
@@ -596,6 +596,25 @@ def close_caja(request):
     else:
         form = CierreForm()
     return render(request, 'close_caja.html', {'form': form, 'cajas': cajas})
+
+
+
+
+@admin_required
+def historico_caja(request):
+    # Obtener todos los datos de apertura de caja
+    aperturas = Caja.objects.all().order_by('fecha_asignacion')
+
+    # Obtener todos los datos de cierre de caja
+    cierres = Cierre_Caja.objects.all().order_by('fecha_asignacion')
+
+    # Combinar aperturas y cierres
+    data = list(aperturas) + list(cierres)
+    data.sort(key=lambda x: x.fecha_asignacion)
+
+    return render(request, 'historico_caja.html', {'data': data})
+
+
 
 #TEST PARA LA CONEXION DIRECTA A LA BD !!--11--1--121-01|0|020|920|93UR84U2RY2U3
 '''

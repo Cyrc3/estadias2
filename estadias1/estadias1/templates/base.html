@@ -29,6 +29,9 @@
                     <li><a href="{% url 'cliente' %}">Registrar Cliente</a></li>
                     <li><a href="{% url 'historicoCompras' %}">Historial de Compras</a></li>
                     <li><a href="{% url 'historicoVentas' %}">Historial de Ventas</a></li>
+                    <li><a href="{% url 'open_caja' %}">Abrir Caja</a></li>
+                    <li><a href="{% url 'close_caja' %}">Cerrar Caja</a></li>
+
                 {% else %}
                     <li><a href="{% url 'ventas' %}">Registrar Venta</a></li>
                 {% endif %}

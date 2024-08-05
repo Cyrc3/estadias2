@@ -4,7 +4,7 @@
 
 {% block extra_css %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+<link rel="stylesheet" href="{% static 'styles/CAJAS.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -26,7 +26,32 @@
     {% endif %}
 </div>
 <script>
-    document.getElementById('id_monto_asignado').style.visibility = "hidden"
-    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Lista de IDs de campos numéricos
+        var numericFieldIds = [
+            'id_mil',
+            'id_quinientos',
+            'id_doscientos',
+            'id_cien',
+            'id_cincuenta',
+            'id_veinte',
+            'id_monedas'
+        ];
+        
+        // Establece el valor de cada campo numérico a 0
+        numericFieldIds.forEach(function(id) {
+            var field = document.getElementById(id);
+            if (field) {
+                field.value = '0';
+            }
+        });
+        
+        // Oculta el campo monto_asignado
+        var montoAsignadoField = document.getElementById('id_monto_asignado');
+        if (montoAsignadoField) {
+            montoAsignadoField.style.visibility = "hidden";
+            montoAsignadoField.parentElement.style.display = "none";
+        }
+    });
 </script>
 {% endblock %}
