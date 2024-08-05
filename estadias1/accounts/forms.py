@@ -79,15 +79,15 @@ class VentaForm(forms.ModelForm):
     #id_venta1 not defined cs don't get how to link this (detalle_venta) with Venta xd
     #iva = forms.FloatField(label='IVA'
     #fecha_venta = forms.DateField(label='fecha')
-    id_cliente = forms.ModelChoiceField(queryset=Cliente.objects.all(), label='Cliente', required=False)
+    #id_cliente = forms.ModelChoiceField(queryset=Cliente.objects.all(), label='Cliente', required=False)
 
     class Meta:
         model = Detalle_Venta
-        fields = ['id_producto','id_cantidad','id_cliente', 'precio_total']
+        fields = ['id_producto','id_cantidad', 'precio_total']
     def __init__(self, *args, **kwargs):
         super(VentaForm, self).__init__(*args, **kwargs)
         self.fields['id_producto'].queryset = Producto.objects.all()
-        self.fields['id_cliente'].queryset = Cliente.objects.all()
+        #self.fields['id_cliente'].queryset = Cliente.objects.all()
 
 class CajaForm(forms.ModelForm):
     id_usuario = forms.ModelChoiceField(

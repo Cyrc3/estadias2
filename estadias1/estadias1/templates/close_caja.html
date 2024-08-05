@@ -37,6 +37,39 @@
     {% endif %}
 </div>
 
+
+<script>
+    document.getElementById('id_total_suma')?.style.setProperty('visibility', 'hidden');
+    document.getElementById('id_total_diferencia')?.style.setProperty('visibility', 'hidden');
+    document.addEventListener('DOMContentLoaded', function() {
+        // Lista de IDs de campos numéricos
+        var numericFieldIds = [
+            'id_mil',
+            'id_quinientos',
+            'id_doscientos',
+            'id_cien',
+            'id_cincuenta',
+            'id_veinte',
+            'id_monedas'
+        ];
+        
+        // Establece el valor de cada campo numérico a 0
+        numericFieldIds.forEach(function(id) {
+            var field = document.getElementById(id);
+            if (field) {
+                field.value = '0';
+            }
+        });
+        
+        // Oculta el campo monto_asignado
+        var montoAsignadoField = document.getElementById('id_monto_asignado');
+        if (montoAsignadoField) {
+            montoAsignadoField.style.visibility = "hidden";
+            montoAsignadoField.parentElement.style.display = "none";
+        }
+    });
+</script>
+<!--
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
         const form = document.getElementById('cierreForm');
@@ -62,4 +95,5 @@
         label.style.setProperty('display', 'none');
     }
 </script>
+-->
 {% endblock %}
