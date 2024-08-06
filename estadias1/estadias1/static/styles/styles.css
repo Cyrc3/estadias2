@@ -286,3 +286,18 @@ select[name="q"]{
     border: 1px solid #888;
     width: 80%;
 }
+
+.stockAlto-color{
+    color:#008b13;
+    font-weight: bold;
+}
+
+.stockMedio-color{
+    color:#8b5100;
+    font-weight: bold;
+}
+
+.stockBajo-color{
+    color:#8b0000;
+    font-weight: bold;
+}

@@ -80,14 +80,14 @@
             class="{% if producto.stock > producto.punto_reorden %}high-stock{% elif producto.stock == producto.punto_reorden %}medium-stock{% else %}low-stock{% endif %} {% if producto.estado == 0 %} inactive {% endif %}">
                 <td> {{producto.id_producto}} </td>
                 <td> {{producto.nombre}} </td>
-                <td> {{producto.stock}} </td>
+                <td class=" {% if producto.stock > producto.punto_reorden %} stockAlto-color {% elif producto.stock == producto.punto_reorden %} stockMedio-color {% else %} stockBajo-color {% endif %} "> {{producto.stock}} </td>
                 <td> {{producto.id_categoria.descripcion}} </td>
                 <td>${{producto.costo_venta|currency_format }} </td>
                 <td>${{producto.costo_compra|currency_format }} </td>
                 <td>{{producto.porcentaje_utilidad}}% </td>
                 <td> {{producto.punto_reorden}} </td>
                 <td
-                class=" {% if producto.estado == True %}activo {% elif producto.estado == False %}inactivo {% endif %} ">
+                class=" {% if producto.estado == True %}activo {% elif producto.estado == False %}inactivo {% endif %} " style="font-weight: bold;">
                     {% if producto.estado %}
                         Activo
                     {% else %}
