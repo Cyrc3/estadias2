@@ -150,7 +150,7 @@ class Caja(models.Model):
     veinte = models.IntegerField()
     monedas = models.IntegerField()
     monto_asignado = models.DecimalField(max_digits=10, decimal_places=2)
-    fecha_asignacion = models.DateField()
+    fecha_asignacion = models.DateTimeField()
 
     class Meta:
         db_table = 'caja'

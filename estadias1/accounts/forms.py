@@ -163,7 +163,7 @@ class CajaForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(CajaForm, self).__init__(*args, **kwargs)
         self.fields['id_usuario'].queryset = Usuario.objects.all()
-        self.fields['fecha_asignacion'].initial = timezone.now().date()
+        self.fields['fecha_asignacion'].initial = timezone.now()
 
     def clean(self):
         cleaned_data = super().clean()

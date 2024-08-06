@@ -77,7 +77,7 @@
         <tbody>
             {% for producto in productos_filtrados %}
             <tr
-            class="{% if producto.stock > producto.punto_reorden %}high-stock{% elif producto.stock == producto.punto_reorden %}medium-stock{% else %}low-stock{% endif %}">
+            class="{% if producto.stock > producto.punto_reorden %}high-stock{% elif producto.stock == producto.punto_reorden %}medium-stock{% else %}low-stock{% endif %} {% if producto.estado == 0 %} inactive {% endif %}">
                 <td> {{producto.id_producto}} </td>
                 <td> {{producto.nombre}} </td>
                 <td> {{producto.stock}} </td>
