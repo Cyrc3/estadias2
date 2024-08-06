@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
 
+# Asegúrate de que estas configuraciones están en su lugar
+CSRF_COOKIE_SECURE = False  # Configura esto según tus necesidades
+CSRF_COOKIE_HTTPONLY = True
+
 
 from pathlib import Path
 

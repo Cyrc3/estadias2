@@ -244,13 +244,13 @@ def registro_ventas(request):
 
                 fecha_venta = request.POST.get('fecha_venta')       
                 total_venta = request.POST.get('total_venta')
-                cliente_id = request.POST.get('cliente_id')
+                #cliente_id = request.POST.get('cliente_id')
                 resumen_data = json.loads(request.POST.get('resumen_data', '[]'))
                     
                 nueva_venta = Venta(fecha=fecha_venta, total=total_venta)
                 nueva_venta.save()
 
-                cliente = Cliente.objects.get(id_cliente=cliente_id)
+                #cliente = Cliente.objects.get(id_cliente=cliente_id)
 
                 for item in resumen_data:
                     #id_cliente = Cliente.objects.get(id_cliente=item['id_cliente'])
@@ -269,7 +269,7 @@ def registro_ventas(request):
                         id_producto=producto_id,  # Obtener instancia del producto
                         cantidad=cantidad,
                         precio_total=precio_base,
-                        id_cliente=cliente,  # Obtener instancia del cliente
+                       # id_cliente=cliente,  # Obtener instancia del cliente
                         iva=iva,
                         
                     )
@@ -483,7 +483,7 @@ def detalle_venta(request):
     db = Database()
     try:
         query = """
-        SELECT dv.id_detalleventa, p.nombre, dv.cantidad, dv.precio_total, dv.iva, (dv.cantidad * dv.precio_total) as subtotal
+        SELECT dv.id_detalleventa, p.nombre, dv.cantidad, dv.precio_total, dv.iva, (dv.iva + dv.precio_total * dv.cantidad ) as subtotal, (dv.iva + dv.precio_total) as subtotalIva
         FROM detalle_venta dv
         JOIN producto p ON p.id_producto = dv.id_producto
         WHERE dv.id_venta1 = %s
@@ -491,6 +491,7 @@ def detalle_venta(request):
         detalles_venta = db.fetch_all(query, [venta_id])
 
         total = sum(detalle[5] for detalle in detalles_venta)  # Suma de subtotales
+        
 
         context = {
             'detalles_venta': detalles_venta,
@@ -507,24 +508,24 @@ def historico_ventas(request):
     db = Database()
     try:
         # Datos del filtro
-        cliente_id = request.GET.get('cliente')
+        #cliente_id = request.GET.get('cliente')
         fecha_inicio = request.GET.get('fecha_inicio')
         fecha_fin = request.GET.get('fecha_fin')
 
         # Consulta con filtros
         query = """
-        SELECT v.id_venta, v.fecha, cl.razon_social, v.total
+        SELECT v.id_venta, v.fecha, SUM(dv.precio_total), SUM(dv.iva)
         FROM venta v
         JOIN detalle_venta dv ON v.id_venta = dv.id_venta1
-        JOIN cliente cl ON cl.id_cliente = dv.id_cliente
+        
         WHERE 1=1
         """
-
+#JOIN cliente cl ON cl.id_cliente = dv.id_cliente
         # Añadir filtros a la consulta
         params = []
-        if cliente_id:
-            query += " AND cl.id_cliente = %s"
-            params.append(cliente_id)
+        #if cliente_id:
+        #    query += " AND cl.id_cliente = %s"
+        #    params.append(cliente_id)
         if fecha_inicio:
             query += " AND v.fecha >= %s"
             params.append(fecha_inicio)
@@ -533,26 +534,28 @@ def historico_ventas(request):
             params.append(fecha_fin)
 
         query += """
-        GROUP BY v.id_venta, cl.razon_social
+        GROUP BY v.id_venta, v.fecha
         ORDER BY v.id_venta DESC
         """
 
         # Obtener la lista de clientes para el filtro
-        clientes_query = "SELECT id_cliente, razon_social FROM cliente"
-        clientes = db.fetch_all(clientes_query, [])
-        clientes_dict = [{'id_cliente': cliente[0], 'razon_social': cliente[1]} for cliente in clientes]
+        #clientes_query = "SELECT id_cliente, razon_social FROM cliente"
+        #clientes = db.fetch_all(clientes_query, [])
+        #clientes_dict = [{'id_cliente': cliente[0], 'razon_social': cliente[1]} for cliente in clientes]
+
 
         historial_ventas = db.fetch_all(query, params)
-        total = sum(venta[3] for venta in historial_ventas)
+        total = sum(venta[2] for venta in historial_ventas)
 
         context = {
             'historial_ventas': historial_ventas,
-            'total': total,
-            'clientes': clientes_dict
+            'total': total
+            #'clientes': clientes_dict
         }
     finally:
         db.close()
     return render(request, 'historico_ventas.html', context)
+
 
 
 @admin_required

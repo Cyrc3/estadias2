@@ -58,7 +58,7 @@
         // Manejar clic en "Ver detalle"
         $(document).on('click', '.ver-detalle', function (event) {
             event.preventDefault();
-            var ventaId = $(this).data('venta-id').trim();
+            var ventaId = String($(this).data('venta-id')).trim();
             console.log("Venta ID:", ventaId);
 
             $.ajax({
@@ -99,19 +99,18 @@
                 <th>Detalle</th>
                 <th>No. Venta</th>
                 <th>Fecha</th>
-                <th>Cliente</th>
+                <th>IVA</th>
                 <th>Subtotal</th>
             </tr>
         </thead>
         <tbody>
             {% for venta in historial_ventas %}
-                
                 <tr>
                     <td><button class="ver-detalle" data-venta-id="{{ venta.0 }}">Ver detalle</button></td>
                     <td>{{ venta.0 }}</td>
                     <td>{{ venta.1 }}</td>
-                    <td>{{ venta.2 }}</td>
-                    <td id="subtotalHead">$ {{ venta.3|currency_format }}</td>
+                    <td>{{ venta.3 }}</td>
+                    <td id="subtotalHead">$ {{ venta.2|currency_format }}</td>
                 </tr>
             {% endfor %}
             <tr id="ttal">

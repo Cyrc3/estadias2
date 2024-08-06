@@ -1,78 +1,79 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Histórico de Aperturas y Cierres de Caja</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-</head>
-<body>
-    <h1>Histórico de Aperturas y Cierres de Caja</h1>
-    <table>
-        <thead>
+{% extends 'base.html' %}
+
+{% block title %}<title>Registro de Caja</title>{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'styles/CAJAS.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Histórico de Aperturas y Cierres de Caja</h1>
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+</style>
+<table>
+    <thead>
+        <tr>
+            <th>Tipo</th>
+            <th>ID Caja</th>
+            <th>Mil</th>
+            <th>Quinientos</th>
+            <th>Doscientos</th>
+            <th>Cien</th>
+            <th>Cincuenta</th>
+            <th>Veinte</th>
+            <th>Monedas</th>
+            <th>Monto Asignado / Total Suma</th>
+            <th>Total Diferencia</th>
+            <th>Fecha Asignación</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in data %}
             <tr>
-                <th>Tipo</th>
-                <th>ID Caja</th>
-                <th>Mil</th>
-                <th>Quinientos</th>
-                <th>Doscientos</th>
-                <th>Cien</th>
-                <th>Cincuenta</th>
-                <th>Veinte</th>
-                <th>Monedas</th>
-                <th>Monto Asignado / Total Suma</th>
-                <th>Total Diferencia</th>
-                <th>Fecha Asignación</th>
+                <td>
+                    {% if item.id_caja %}
+                        Apertura
+                    {% else %}
+                        Cierre
+                    {% endif %}
+                </td>
+                <td>{{ item.id_caja }}</td>
+                <td>{{ item.mil }}</td>
+                <td>{{ item.quinientos }}</td>
+                <td>{{ item.doscientos }}</td>
+                <td>{{ item.cien }}</td>
+                <td>{{ item.cincuenta }}</td>
+                <td>{{ item.veinte }}</td>
+                <td>{{ item.monedas }}</td>
+                <td>
+                    {% if item.total_suma %}
+                        {{ item.total_suma }}
+                    {% else %}
+                        {{ item.monto_asignado }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if item.total_diferencia %}
+                        {{ item.total_diferencia }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>{{ item.fecha_asignacion }}</td>
             </tr>
-        </thead>
-        <tbody>
-            {% for item in data %}
-                <tr>
-                    <td>
-                        {% if item.id_caja %}
-                            Apertura
-                        {% else %}
-                            Cierre
-                        {% endif %}
-                    </td>
-                    <td>{{ item.id_caja }}</td>
-                    <td>{{ item.mil }}</td>
-                    <td>{{ item.quinientos }}</td>
-                    <td>{{ item.doscientos }}</td>
-                    <td>{{ item.cien }}</td>
-                    <td>{{ item.cincuenta }}</td>
-                    <td>{{ item.veinte }}</td>
-                    <td>{{ item.monedas }}</td>
-                    <td>
-                        {% if item.total_suma %}
-                            {{ item.total_suma }}
-                        {% else %}
-                            {{ item.monto_asignado }}
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if item.total_diferencia %}
-                            {{ item.total_diferencia }}
-                        {% else %}
-                            -
-                        {% endif %}
-                    </td>
-                    <td>{{ item.fecha_asignacion }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

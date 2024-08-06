@@ -7,9 +7,9 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
   const productoId = formData.get("id_producto");
   const cantidad = parseFloat(formData.get("id_cantidad"));
   const precioTotal = parseFloat(formData.get("precio_total"));
-  let clienteId = formData.get("id_cliente");
+  //let clienteId = formData.get("id_cliente");
 
-  document.getElementById("hidden_cliente").value = clienteId;
+  //document.getElementById("hidden_cliente").value = clienteId;
 
 
   // Verificar si cantidad y precio total son números válidos
@@ -22,7 +22,7 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
 
   // Obtener texto de las opciones seleccionadas
   const productoText = document.querySelector(`#id_id_producto option[value="${productoId}"]`).textContent;
-  const clienteText = document.querySelector(`#id_id_cliente option[value="${clienteId}"]`).textContent;
+  //const clienteText = document.querySelector(`#id_id_cliente option[value="${clienteId}"]`).textContent;
 
   // Actualizar la tabla
   const table = document.getElementById("resumenTabla");
@@ -59,7 +59,7 @@ document.getElementById("btnGuardar").addEventListener("click", function (event)
 
   //SE LIMPIA EL FORMULARIO
   $('#id_id_producto').val(null).trigger('change');
-  console.log(clienteId);
+//  console.log(clienteId);
   document.getElementById("id_id_cantidad").value = "";
   document.getElementById("id_precio_total").value = "";
 
@@ -179,7 +179,7 @@ document.getElementById("registrarVentaBtn").addEventListener("click", function 
 
   const fechaVenta = document.getElementById("fecha_venta").value;
   const totalVenta = document.getElementById("total-venta").textContent;
-  const clienteId = document.getElementById('hidden_cliente').value;
+  //const clienteId = document.getElementById('hidden_cliente').value;
 
 
   const fechaField = document.createElement("input");
@@ -193,13 +193,13 @@ document.getElementById("registrarVentaBtn").addEventListener("click", function 
   totalField.name = "total_venta";
   totalField.value = totalVenta;
   document.getElementById("ventaForm").appendChild(totalField);
-
+/*
   const clienteField = document.createElement('input');
     clienteField.type = "hidden";
     clienteField.name = "cliente_id";
     clienteField.value = clienteId;
     document.getElementById("ventaForm").appendChild(clienteField);
-
+*/
 
   document.getElementById("ventaForm").submit();
 });
