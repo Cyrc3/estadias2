@@ -70,25 +70,20 @@ class CompraForm(forms.ModelForm):
         self.fields['id_proveedor'].queryset = Proveedor.objects.all()
         self.fields['id_producto'].queryset = Producto.objects.all()
 
-
 class VentaForm(forms.ModelForm):
-    id_producto = forms.ModelChoiceField(queryset=Producto.objects.all(), label='Producto', required=False)
+    id_producto = forms.ModelChoiceField(queryset=Producto.objects.none(), label='Producto', required=False)
     id_cantidad = forms.IntegerField(label='Cantidad', required=False)
-    #costo = forms.FloatField(label='Costo Individual', required=False)
     precio_total = forms.FloatField(label='Costo Individual', required=False)
-    #id_venta1 not defined cs don't get how to link this (detalle_venta) with Venta xd
-    #iva = forms.FloatField(label='IVA'
-    #fecha_venta = forms.DateField(label='fecha')
-    #id_cliente = forms.ModelChoiceField(queryset=Cliente.objects.all(), label='Cliente', required=False)
 
     class Meta:
         model = Detalle_Venta
-        fields = ['id_producto','id_cantidad', 'precio_total']
+        fields = ['id_producto', 'id_cantidad', 'precio_total']
+
     def __init__(self, *args, **kwargs):
         super(VentaForm, self).__init__(*args, **kwargs)
-        self.fields['id_producto'].queryset = Producto.objects.all()
-        #self.fields['id_cliente'].queryset = Cliente.objects.all()
+        self.fields['id_producto'].queryset = Producto.objects.filter(stock__gt=1, estado=1)
 
+'''
 class CajaForm(forms.ModelForm):
     id_usuario = forms.ModelChoiceField(
         queryset=Usuario.objects.all(),  # Asegúrate de que esto traiga todos los usuarios.
@@ -136,7 +131,7 @@ class CajaForm(forms.ModelForm):
         return cleaned_data
 
 
-
+'''
 
 
 class CajaForm(forms.ModelForm):
@@ -164,7 +159,8 @@ class CajaForm(forms.ModelForm):
         super(CajaForm, self).__init__(*args, **kwargs)
         self.fields['id_usuario'].queryset = Usuario.objects.all()
         self.fields['fecha_asignacion'].initial = timezone.now()
-
+        self.fields['fecha_asignacion'].initial = timezone.now()    
+            
     def clean(self):
         cleaned_data = super().clean()
 
