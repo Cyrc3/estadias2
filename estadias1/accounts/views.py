@@ -503,6 +503,10 @@ def detalle_venta(request):
     return render(request, 'detalle_venta.html', context)
 
 
+
+
+
+
 @admin_required
 def historico_ventas(request):
     db = Database()
