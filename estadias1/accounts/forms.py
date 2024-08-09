@@ -158,8 +158,6 @@ class CajaForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(CajaForm, self).__init__(*args, **kwargs)
         self.fields['id_usuario'].queryset = Usuario.objects.all()
-        self.fields['fecha_asignacion'].initial = timezone.now()
-        self.fields['fecha_asignacion'].initial = timezone.now().strftime('%Y-%m-%dT%H:%M')    
             
     def clean(self):
         cleaned_data = super().clean()
@@ -187,8 +185,7 @@ class CierreForm(forms.ModelForm):
     id_caja = forms.ModelChoiceField(
         queryset=Caja.objects.all(),
         label='Caja',
-        required=True,
-        to_field_name='id_caja',
+        required=True
     )
     fecha_asignacion = forms.DateTimeField(
         label='Fecha de Asignación',

@@ -1,79 +1,78 @@
 {% extends 'base.html' %}
 
-{% block title %}<title>Registro de Caja</title>{% endblock %}
+{% block title %}<title>Historial de cajas</title>{% endblock %}
 
 {% block extra_css %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'styles/CAJAS.css' %}">
+<link rel="stylesheet" href="{% static 'styles/historial_caja.css' %}">
 {% endblock %}
 
 {% block content %}
+
+{% load custom_filters %}
 <h1>Histórico de Aperturas y Cierres de Caja</h1>
-<style>
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    th, td {
-        border: 1px solid #ddd;
-        padding: 8px;
-    }
-    th {
-        background-color: #f2f2f2;
-    }
-</style>
-<table>
-    <thead>
-        <tr>
-            <th>Tipo</th>
-            <th>ID Caja</th>
-            <th>Mil</th>
-            <th>Quinientos</th>
-            <th>Doscientos</th>
-            <th>Cien</th>
-            <th>Cincuenta</th>
-            <th>Veinte</th>
-            <th>Monedas</th>
-            <th>Monto Asignado / Total Suma</th>
-            <th>Total Diferencia</th>
-            <th>Fecha Asignación</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in data %}
+<div class="table-container">
+    <table>
+        <thead>
             <tr>
-                <td>
-                    {% if item.id_caja %}
-                        Apertura
-                    {% else %}
-                        Cierre
-                    {% endif %}
-                </td>
-                <td>{{ item.id_caja }}</td>
-                <td>{{ item.mil }}</td>
-                <td>{{ item.quinientos }}</td>
-                <td>{{ item.doscientos }}</td>
-                <td>{{ item.cien }}</td>
-                <td>{{ item.cincuenta }}</td>
-                <td>{{ item.veinte }}</td>
-                <td>{{ item.monedas }}</td>
-                <td>
-                    {% if item.total_suma %}
-                        {{ item.total_suma }}
-                    {% else %}
-                        {{ item.monto_asignado }}
-                    {% endif %}
-                </td>
-                <td>
-                    {% if item.total_diferencia %}
-                        {{ item.total_diferencia }}
-                    {% else %}
-                        -
-                    {% endif %}
-                </td>
-                <td>{{ item.fecha_asignacion }}</td>
+                <th>Tipo</th>
+                <th>ID Caja</th>
+                <th>Usuario</th>
+                <th>Fecha de Asignación</th>
+                <th>Monto Asignado</th>
+                <th>Tipo Cierre</th>
+                <th>Fecha de Cierre</th>
+                <th>Monto de cierre</th>
+                <th>Total Diferencia</th>
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td>{{ item.tipo }}</td>
+                <td>{{ item.id_caja }}</td>
+                <td>{{ item.usuario }}</td>
+                <td>{{ item.fecha_asignacion }}</td>
+                <td>{{ item.monto_asignado|currency_format }}</td>
+                <td>{{ item.tipo_cierre }}</td>
+                <td>{{ item.fecha_cierre }}</td>
+                <td>{{ item.monto_cierre|currency_format }}</td>
+                <td>{{ item.total_diferencia|currency_format }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script>
+    function actualizarTabla() {
+        fetch('/historico_caja/', {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector('table tbody');
+                tbody.innerHTML = '';
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                    <td>${item.tipo}</td>
+                    <td>${item.id_caja}</td>
+                    <td>${item.usuario}</td>
+                    <td>${item.fecha_asignacion}</td>
+                    <td>${item.monto_asignado}</td>
+                    <td>{% if item.tipo == 'Cierre' %}Cierre{% else %}Apertura{% endif %}</td>
+                    <td>${item.fecha_cierre}</td>
+                    <td>${item.total_diferencia}</td>
+                `;
+                    tbody.appendChild(row);
+                });
+            });
+    }
+
+    // Llama a la función actualizarTabla() cuando sea necesario
+</script>
+
+
 {% endblock %}

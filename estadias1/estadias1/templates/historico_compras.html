@@ -112,12 +112,12 @@
                         <td>{{ compra.0 }}</td>
                         <td>{{ compra.1}}</td>
                         <td>{{ compra.2 }}</td>
-                        <td id="subtotalHead">$ {{ compra.3|currency_format }}</td>
+                        <td id="subtotalHead">{{ compra.3|currency_format }}</td>
                     </tr>
             {% endfor %}
             <tr id="ttal">
                 <td colspan="4" style="text-align: right;">Total:</td>
-                <td style="text-align: right;">$ {{ total|currency_format }}</td>
+                <td style="text-align: right;">{{ total|currency_format }}</td>
             </tr>
         </tbody>
     </table>

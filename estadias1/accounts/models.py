@@ -156,8 +156,8 @@ class Caja(models.Model):
         db_table = 'caja'
         managed = False
 
-    def __int__(self):
-        return self.id_caja
+    def __str__(self):
+        return f"Caja: {self.id_caja}"
 
 
 

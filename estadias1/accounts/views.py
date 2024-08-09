@@ -8,7 +8,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Detalle_Venta, Compra, Venta, Usuario, Caja, Cierre_Caja
 from .forms import ProductoForm, ClienteForm, ProveedorForm, CompraForm, VentaForm, UsuarioForm, CajaForm, CierreForm
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django_select2.views import AutoResponseView
 from .db_connection import Database #conexión directa
 import json
@@ -609,7 +609,7 @@ def close_caja(request):
 
 
 
-
+''' 
 @admin_required
 def historico_caja(request):
     # Obtener todos los datos de apertura de caja
@@ -623,6 +623,106 @@ def historico_caja(request):
     data.sort(key=lambda x: x.fecha_asignacion)
 
     return render(request, 'historico_caja.html', {'data': data})
+
+
+@admin_required
+def historico_caja(request):
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        aperturas = Caja.objects.all().order_by('fecha_asignacion')
+        cierres = Cierre_Caja.objects.all().order_by('fecha_asignacion')
+
+        data = []
+        for apertura in aperturas:
+            data.append({
+                'tipo': 'Apertura',
+                'id_caja': apertura.id_caja,
+                'monto_asignado': apertura.monto_asignado,
+                'fecha_asignacion': apertura.fecha_asignacion,
+                'usuario': apertura.id_usuario.nombre  # Asumiendo que usuario es un objeto User
+            })
+
+        for cierre in cierres:
+            data.append({
+                'tipo': 'Cierre',
+                'id_caja': cierre.id_caja,
+                'total_suma': cierre.total_suma,
+                'total_diferencia': cierre.total_diferencia,
+                'monto_cierre': cierre.total_suma,
+                'fecha_cierre': cierre.fecha_asignacion
+            })
+
+        data.sort(key=lambda x: x['fecha_asignacion'])
+        return JsonResponse(data, safe=False)
+
+    # Renderizar la plantilla normalmente si no es una solicitud AJAX
+    aperturas = Caja.objects.all().order_by('fecha_asignacion')
+    cierres = Cierre_Caja.objects.all().order_by('fecha_asignacion')
+
+    data = []
+    for apertura in aperturas:
+        data.append({
+            'tipo': 'Apertura',
+            'id_caja': apertura.id_caja,
+            'monto_asignado': apertura.monto_asignado,
+            'fecha_asignacion': apertura.fecha_asignacion,
+            'usuario': apertura.id_usuario.nombre  # Asumiendo que usuario es un objeto User
+        })
+
+    for cierre in cierres:
+        data.append({
+            'tipo': 'Cierre',
+            'id_caja': cierre.id_caja,
+            'total_suma': cierre.total_suma,
+            'total_diferencia': cierre.total_diferencia,
+            'monto_cierre': cierre.total_suma,
+            'fecha_cierre': cierre.fecha_asignacion
+        })
+
+    data.sort(key=lambda x: x.get('fecha_asignacion', x.get('fecha_cierre')))
+    return render(request, 'historico_caja.html', {'data': data})
+'''
+@admin_required
+def historico_caja(request):
+    aperturas = Caja.objects.all().order_by('fecha_asignacion')
+    cierres = Cierre_Caja.objects.all().order_by('fecha_asignacion')
+
+    data = {}
+
+    # Procesar aperturas
+    for apertura in aperturas:
+        data[apertura.id_caja] = {
+            'tipo': 'Apertura',
+            'id_caja': apertura.id_caja,
+            'usuario': apertura.id_usuario.nombre,
+            'fecha_asignacion': apertura.fecha_asignacion,
+            'monto_asignado': apertura.monto_asignado,
+            'tipo_cierre': '',
+            'fecha_cierre': '',
+            'monto_cierre': '',
+            'total_diferencia': ''
+        }
+
+    # Procesar cierres y actualizar las aperturas existentes en data
+    for cierre in cierres:
+        if cierre.id_caja.id_caja in data:
+            data[cierre.id_caja.id_caja].update({
+                'tipo_cierre': 'Cierre',
+                'fecha_cierre': cierre.fecha_asignacion,
+                'monto_cierre': cierre.total_suma,
+                'total_diferencia': cierre.total_diferencia
+            })
+
+    # Convertir el diccionario en una lista ordenada por fecha de asignación
+    data_list = list(data.values())
+    data_list.sort(key=lambda x: x['fecha_asignacion'])
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse(data_list, safe=False)
+
+    return render(request, 'historico_caja.html', {'data': data_list})
+
+
+
 
 
 @admin_required

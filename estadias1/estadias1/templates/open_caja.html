@@ -8,8 +8,6 @@
 
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 
-<script src="{% static 'JavaScript/editarProducto.js' %}"></script>
-
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Select2 JS -->
@@ -121,4 +119,30 @@
         });
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtén el campo por su ID
+        var fechaAsignacionInput = document.getElementById('id_fecha_asignacion');
+        
+        // Si el campo existe en la página
+        if (fechaAsignacionInput) {
+            // Obtiene la fecha y hora actual
+            var now = new Date();
+
+            // Ajusta el formato de la fecha y hora a 'YYYY-MM-DDTHH:MM'
+            var year = now.getFullYear();
+            var month = ('0' + (now.getMonth() + 1)).slice(-2);
+            var day = ('0' + now.getDate()).slice(-2);
+            var hours = ('0' + now.getHours()).slice(-2);
+            var minutes = ('0' + now.getMinutes()).slice(-2);
+
+            // Formato para el input de tipo 'datetime-local'
+            var formattedDateTime = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+
+            // Asigna el valor al campo
+            fechaAsignacionInput.value = formattedDateTime;
+        }
+    });
+</script>
+
 {% endblock %}

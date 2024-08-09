@@ -76,7 +76,7 @@ table {
 }
 
 thead {
-    background-color: #575757;
+    background-color: #143795;
     position: sticky;
     top: 0;
     z-index: 1; 
@@ -102,7 +102,7 @@ tbody td {
 }
 
 tbody tr:nth-child(even) {
-    background-color: #dfd7d7;
+    background-color: #d9d7df;
 }
 
 .total-row {
@@ -127,7 +127,7 @@ tbody tr:nth-child(even) {
 
 #ttal{
     color: #fff;
-    background-color: rgb(24, 187, 21);
+    background-color: rgb(25, 163, 78);
     font-weight: bold;
     font-size: 18px;
 }

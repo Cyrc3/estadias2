@@ -4,7 +4,14 @@
 
 {% block extra_css %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'styles/CAJAS.css' %}">
+<link rel="stylesheet" href="{% static 'styles/cierre_caja.css' %}">
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -12,18 +19,23 @@
 <div class="container"> 
     <form method="POST" id="cierreForm">
         {% csrf_token %}
-        {{ form.id_caja.label_tag }} {{ form.id_caja }}
-        {{ form.mil.label_tag }} {{ form.mil }}
-        {{ form.quinientos.label_tag }} {{ form.quinientos }}
-        {{ form.doscientos.label_tag }} {{ form.doscientos }}
-        {{ form.cien.label_tag }} {{ form.cien }}
-        {{ form.cincuenta.label_tag }} {{ form.cincuenta }}
-        {{ form.veinte.label_tag }} {{ form.veinte }}
-        {{ form.monedas.label_tag }} {{ form.monedas }}
+        <div class="encabezado">
+            <div class="usuario-fecha">
+                {{ form.id_caja.label_tag }} {{ form.id_caja }}
+                {{ form.fecha_asignacion.label_tag }} {{ form.fecha_asignacion }}
+            </div>
+        </div>
+        <div class="billetes-monedas">
+            {{ form.mil.label_tag }} {{ form.mil }}
+            {{ form.quinientos.label_tag }} {{ form.quinientos }}
+            {{ form.doscientos.label_tag }} {{ form.doscientos }}
+            {{ form.cien.label_tag }} {{ form.cien }}
+            {{ form.cincuenta.label_tag }} {{ form.cincuenta }}
+            {{ form.veinte.label_tag }} {{ form.veinte }}
+            {{ form.monedas.label_tag }} {{ form.monedas }}
+        </div>
         <div class="form-bottom">
-            {{ form.fecha_asignacion.label_tag }} {{ form.fecha_asignacion }}
-            <br> <!-- Alinea el botón en una nueva línea -->
-            <input type="submit" value="Registrar Caja">
+            <input type="submit" value="Cerrar caja">
         </div>
     </form>
     {% if form.errors %}
@@ -69,31 +81,38 @@
         }
     });
 </script>
-<!--
 <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const form = document.getElementById('cierreForm');
-        const inputs = form.querySelectorAll('input, textarea, select');
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtén el campo por su ID
+        var fechaAsignacionInput = document.getElementById('id_fecha_asignacion');
         
-        inputs.forEach(input => {
-            if (input.type === 'text' || input.type === 'number' || input.type === 'hidden') {
-                input.value = '0';
-            } else if (input.type === 'radio' || input.type === 'checkbox') {
-                input.checked = false;
-            }
-        });
+        // Si el campo existe en la página
+        if (fechaAsignacionInput) {
+            // Obtiene la fecha y hora actual
+            var now = new Date();
+
+            // Ajusta el formato de la fecha y hora a 'YYYY-MM-DDTHH:MM'
+            var year = now.getFullYear();
+            var month = ('0' + (now.getMonth() + 1)).slice(-2);
+            var day = ('0' + now.getDate()).slice(-2);
+            var hours = ('0' + now.getHours()).slice(-2);
+            var minutes = ('0' + now.getMinutes()).slice(-2);
+
+            // Formato para el input de tipo 'datetime-local'
+            var formattedDateTime = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+
+            // Asigna el valor al campo
+            fechaAsignacionInput.value = formattedDateTime;
+        }
     });
 
-    // Ocultar los campos "id_total_suma" y "id_total_diferencia"
-    document.getElementById('id_total_suma')?.style.setProperty('visibility', 'hidden');
-    document.getElementById('id_total_diferencia')?.style.setProperty('visibility', 'hidden');
 
-    // Ocultar el campo "id_monto_asignado" y su etiqueta
-    document.getElementById('id_monto_asignado')?.style.setProperty('display', 'none');
-    var label = document.querySelector("label[for='id_monto_asignado']");
-    if (label) {
-        label.style.setProperty('display', 'none');
-    }
+    $(document).ready(function () {
+            $('#id_id_caja').select2({
+                placeholder: "Caja No.",
+                allowClear: true
+            });
+    });
 </script>
--->
+
 {% endblock %}
