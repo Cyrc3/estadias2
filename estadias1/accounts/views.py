@@ -1,5 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Sum, F, FloatField, ExpressionWrapper
+from django.db.models.functions import Coalesce
 from django.http import HttpResponse
+from django.utils.dateparse import parse_date
 from reportlab.pdfgen import canvas
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.forms import AuthenticationForm
@@ -624,33 +627,36 @@ def historico_caja(request):
 
 @admin_required
 def historico_ganancias(request):
-    fecha = request.GET.get('fecha')  # Obtén la fecha del request
+    fecha = request.GET.get('fecha')
+    if fecha:
+        fecha = parse_date(fecha)  # Convierte la fecha a un formato de fecha adecuado
 
-    # Obtener el total vendido por día, los productos vendidos y el total de la venta
-    ventas = Detalle_Venta.objects.filter(id_venta1__fecha=fecha).values(
-        'id_venta1__fecha',
-        'id_producto__nombre', 
-        'cantidad',
-        'precio_total'
-    ).annotate(
-        total_venta=Sum('precio_total'),
-        total_iva=Sum('iva'),
-        total_vendido=Sum(F('precio_total') + F('iva'), output_field=FloatField())
-    )
+        # Obtener el subtotal de ventas y el costo total por día
+        ventas = Detalle_Venta.objects.filter(id_venta1__fecha=fecha).values(
+            'id_producto__nombre',
+            'cantidad',
+            'precio_total'
+        ).annotate(
+            total_venta=Sum(F('precio_total') + F('iva'), output_field=FloatField()),
+            costo_total=Sum(F('cantidad') * F('id_producto__costo_venta'), output_field=FloatField())
+        )
 
-    # Sumatoria de todas las ventas del día
-    total_dia = ventas.aggregate(
-        total_dia=Coalesce(Sum('total_vendido'), 0)
-    )
+        # Calcular las ganancias del día
+        total_dia = ventas.aggregate(
+            total_venta=Coalesce(Sum('total_venta'), 0, output_field=FloatField()),
+            costo_total=Coalesce(Sum('costo_total'), 0, output_field=FloatField())
+        )
+        total_ganancias = total_dia['total_venta'] - total_dia['costo_total']
 
-    context = {
-        'ventas': ventas,
-        'total_dia': total_dia['total_dia']
-    }
+        context = {
+            'ventas': ventas,
+            'total_ganancias': total_ganancias
+        }
 
-    return render(request, 'historico_ganancias.html', context)
-
-
+        return render(request, 'historico_ganancias.html', context)
+    else:
+        # Manejar el caso donde no se proporciona una fecha
+        return render(request, 'historico_ganancias.html', {'error': 'No se ha proporcionado una fecha.'})
 
 #TEST PARA LA CONEXION DIRECTA A LA BD !!--11--1--121-01|0|020|920|93UR84U2RY2U3
 '''
