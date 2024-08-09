@@ -260,7 +260,7 @@ def registro_ventas(request):
                     cantidad = int(item.get('cantidad'))
                     producto_id = Producto.objects.get(id_producto=item['producto_id'])
                     precio_total = float(item.get('precio_total'))
-                    precio_base = precio_total / 1.16
+                    precio_base = precio_total
                     iva = precio_total - precio_base
 
                     #descontar stock
@@ -627,36 +627,47 @@ def historico_caja(request):
 
 @admin_required
 def historico_ganancias(request):
-    fecha = request.GET.get('fecha')
-    if fecha:
-        fecha = parse_date(fecha)  # Convierte la fecha a un formato de fecha adecuado
+    # Obtener el subtotal de ventas y el costo total para todo el histórico
+    ventas = Detalle_Venta.objects.values(
+        'id_producto__nombre',
+        'cantidad',
+        'precio_total',
+        'iva',
+        'id_producto__costo_venta'
+    )
+    productos = Producto.objects.values(
+        'id_producto',
+        'nombre',
+        'costo_compra'
+    )
+    # Crear listas para almacenar los totales calculados
+    ventas_totales = []
+    costos_totales = []
 
-        # Obtener el subtotal de ventas y el costo total por día
-        ventas = Detalle_Venta.objects.filter(id_venta1__fecha=fecha).values(
-            'id_producto__nombre',
-            'cantidad',
-            'precio_total'
-        ).annotate(
-            total_venta=Sum(F('precio_total') + F('iva'), output_field=FloatField()),
-            costo_total=Sum(F('cantidad') * F('id_producto__costo_venta'), output_field=FloatField())
-        )
+    # Calcular los totales para cada venta individualmente
+    for venta in ventas:
+        total_venta = venta['precio_total'] + venta['iva']
+        costo_total = venta['cantidad'] * venta['id_producto__costo_venta']
+        
+        ventas_totales.append(total_venta)
+        costos_totales.append(costo_total)
 
-        # Calcular las ganancias del día
-        total_dia = ventas.aggregate(
-            total_venta=Coalesce(Sum('total_venta'), 0, output_field=FloatField()),
-            costo_total=Coalesce(Sum('costo_total'), 0, output_field=FloatField())
-        )
-        total_ganancias = total_dia['total_venta'] - total_dia['costo_total']
+    # Sumar todos los totales
+    total_venta_sum = sum(ventas_totales)
+    costo_total_sum = sum(costos_totales)
+    
+    # Calcular las ganancias totales
+    total_ganancias = total_venta_sum - costo_total_sum
 
-        context = {
-            'ventas': ventas,
-            'total_ganancias': total_ganancias
-        }
+    context = {
+        'ventas': ventas,
+        'productos': Producto.objects.values('id_producto', 'nombre', 'costo_compra'),
+        'total_ganancias': total_ganancias
+    }
 
-        return render(request, 'historico_ganancias.html', context)
-    else:
-        # Manejar el caso donde no se proporciona una fecha
-        return render(request, 'historico_ganancias.html', {'error': 'No se ha proporcionado una fecha.'})
+    return render(request, 'historico_ganancias.html', context)
+
+
 
 #TEST PARA LA CONEXION DIRECTA A LA BD !!--11--1--121-01|0|020|920|93UR84U2RY2U3
 '''

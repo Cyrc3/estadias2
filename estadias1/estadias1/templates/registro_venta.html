@@ -110,26 +110,50 @@
 </script>
 {% endfor %}
 
-<script>
-    $(document).ready(function() {
-        $('#id_id_producto').select2({
-            placeholder: "Selecciona un producto",
-            allowClear: true
+
+
+
+
+{% if request.session.privilegio %}
+    <script>
+        $(document).ready(function() {
+            $('#id_id_producto').select2({
+                placeholder: "Selecciona un producto",
+                allowClear: true
+            });
+
+            $('#id_id_producto').on('change', function() {
+                var productoId = $(this).val();
+                if (productoId) {
+                    var costo = productos[productoId].costo;
+                    $('#id_precio_total').val(costo);
+                } else {
+                    $('#id_precio_total').val(''); // Limpiar el campo de costo si no hay producto seleccionado
+                }
+            });
         });
+    </script>
+    
+{% else %}
+    <script>
+        $(document).ready(function() {
+            $('#id_id_producto').select2({
+                placeholder: "Selecciona un producto",
+                allowClear: true
+            });
 
-        $('#id_id_producto').on('change', function() {
-            var productoId = $(this).val();
-            if (productoId) {
-                var costo = productos[productoId].costo;
-                $('#id_precio_total').val(costo);
-            } else {
-                $('#id_precio_total').val(''); // Limpiar el campo de costo si no hay producto seleccionado
-            }
+            $('#id_id_producto').on('change', function() {
+                var productoId = $(this).val();
+                if (productoId) {
+                    var costo = productos[productoId].costo;
+                    $('#id_precio_total').val(costo).prop('readonly', true);
+                } else {
+                    $('#id_precio_total').val('').prop('readonly', true); // Limpiar el campo de costo y mantenerlo no editable
+                }
+            });
         });
-    });
-</script>
-
-
+    </script>
+{% endif %}
 
 
 <script src="{% static 'JavaScript/Registro_venta_form.js' %}"></script>
