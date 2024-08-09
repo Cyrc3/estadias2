@@ -622,6 +622,35 @@ def historico_caja(request):
     return render(request, 'historico_caja.html', {'data': data})
 
 
+@admin_required
+def historico_ganancias(request):
+    fecha = request.GET.get('fecha')  # Obtén la fecha del request
+
+    # Obtener el total vendido por día, los productos vendidos y el total de la venta
+    ventas = Detalle_Venta.objects.filter(id_venta1__fecha=fecha).values(
+        'id_venta1__fecha',
+        'id_producto__nombre', 
+        'cantidad',
+        'precio_total'
+    ).annotate(
+        total_venta=Sum('precio_total'),
+        total_iva=Sum('iva'),
+        total_vendido=Sum(F('precio_total') + F('iva'), output_field=FloatField())
+    )
+
+    # Sumatoria de todas las ventas del día
+    total_dia = ventas.aggregate(
+        total_dia=Coalesce(Sum('total_vendido'), 0)
+    )
+
+    context = {
+        'ventas': ventas,
+        'total_dia': total_dia['total_dia']
+    }
+
+    return render(request, 'historico_ganancias.html', context)
+
+
 
 #TEST PARA LA CONEXION DIRECTA A LA BD !!--11--1--121-01|0|020|920|93UR84U2RY2U3
 '''

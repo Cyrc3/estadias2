@@ -175,3 +175,6 @@ class Cierre_Caja(models.Model):
     class Meta:
         db_table = 'cierre_caja'
         managed = False
+
+
+
