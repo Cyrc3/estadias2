@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}<title>Historial de Ventas</title>{% endblock %}
+{% block title %}<title>Historial de Ganancias</title>{% endblock %}
 
 {% block extra_css %}
 {% load static %}
@@ -14,7 +14,7 @@
 <!-- Select2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
-<h1>Historial de Ventas</h1>
+<h1>Historial de Ganancias</h1>
 
 <form method="get" action="">
     <label for="fecha_inicio">Fecha Inicio:</label>
@@ -81,27 +81,25 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Detalle</th>
-                <th>No. Venta</th>
-                <th>Fecha</th>
-                <th>IVA</th>
-                <th>Subtotal</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio Venta</th>
+                <th>Total Ganancia</th>
             </tr>
         </thead>
         <tbody>
             {% for venta in ventas %}
-                <tr>
-                    <td><button class="ver-detalle" data-venta-id="{{ venta.id_venta1 }}">Ver detalle</button></td>
-                    <td>{{ venta.id_venta1 }}</td>
-                    <td>{{ venta.fecha }}</td>
-                    <td>{{ venta.iva|currency_format }}</td>
-                    <td>{{ venta.precio_total|currency_format }}</td>
-                </tr>
-            {% endfor %}
-            <tr id="ttal">
-                <td colspan="4" style="text-align: right;">Total:</td>
-                <td style="text-align: right;">$ {{ total_ganancias|currency_format }}</td>
-            </tr>
+    <tr>
+        <td>{{ venta.id_producto__nombre }}</td>
+        <td>{{ venta.cantidad }}</td>
+        <td>{{ venta.precio_total }}</td>
+        <td>{{ productos.costo_compra }}</td>
+
+
+    </tr>
+{% endfor %}
+        
+
         </tbody>
     </table>
 </div>
