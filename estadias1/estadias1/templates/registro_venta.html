@@ -29,6 +29,7 @@
                     const today = new Date().toISOString().split('T')[0];
                     // Asignar la fecha actual como el valor máximo del input de fecha
                     document.getElementById('fecha_venta').setAttribute('max', today);
+                    document.getElementById('fecha_venta').value = today;
                 </script>
                 <button id="cambiarClienteBtn" style="display: none;">Cambiar Cliente</button>
             </div>

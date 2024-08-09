@@ -1,107 +1,90 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f6f3ee;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-form {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgb(229, 229, 229);
-    width: 80%;
-}
-
-label {
-    width: 20%;
-    margin: 10px 0;
-    text-align: right;
-    padding-right: 10px;
-}
-
-input[type="text"],
-input[type="date"],
-input[type="number"],
-select {
-    width: 25%;
-    padding: 8px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-input[type="submit"] {
-    background-color: #0952b1; /* Color azul cielo */
-    color: white;
-    font-weight: bold;
-    border: none;
-    padding: 10px 15px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 10px 0;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-}
-
-input[type="submit"]:hover {
-    background-color: #f0a800; /* Un tono más oscuro para el hover */
-}
-
-.alert.alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-    padding: 10px;
-    border: 1px solid #f5c6cb;
-    border-radius: 5px;
-    width: 80%;
-    margin-top: 20px;
-}
-
-.alert.alert-danger strong {
-    display: block;
-}
-
-.hidden {
-    display: none;
+    background-color: #f4f4f9;
+    color: #333;
 }
 
 h2 {
     text-align: center;
-    color: #000;
-    font-weight: bold;
-    font-size: 24px;
+    color: #4CAF50;
     margin-bottom: 20px;
 }
+
 .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.encabezado {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.usuario-fecha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.usuario-fecha div {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.usuario-fecha div:last-child {
+    margin-right: 0;
+}
+
+.billetes-monedas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+}
+
+.billetes-monedas div {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.form-bottom {
-    text-align: center;
-    margin-top: 20px; /* Opcional: añade un margen superior si necesitas espacio */
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
 }
 
-.form-bottom input[type="submit"] {
-    margin-top: 10px; /* Opcional: añade un margen superior para el botón */
+input[type="text"],
+input[type="date"],
+input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+.form-bottom {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#id_id_usuario{
+    width: 50%;
 }

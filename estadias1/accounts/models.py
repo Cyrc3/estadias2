@@ -156,6 +156,9 @@ class Caja(models.Model):
         db_table = 'caja'
         managed = False
 
+    def __int__(self):
+        return self.id_caja
+
 
 
 class Cierre_Caja(models.Model):
@@ -170,7 +173,7 @@ class Cierre_Caja(models.Model):
     monedas = models.IntegerField()
     total_suma = models.DecimalField(max_digits=10, decimal_places=2)
     total_diferencia = models.DecimalField(max_digits=10, decimal_places=2)
-    fecha_asignacion = models.DateField()
+    fecha_asignacion = models.DateTimeField()
 
     class Meta:
         db_table = 'cierre_caja'

@@ -65,11 +65,11 @@
                 <th>Id</th>
                 <th>Nombre</th>
                 <th>Stock</th>
+                <th>Stock minimo</th>
                 <th>Categoría</th>
                 <th>Precio de Venta</th>
                 <th>Precio de Compra</th>
                 <th>Utilidad</th>
-                <th>Stock minimo</th>
                 <th>Estado</th>
                 <th>Acciones</th>
             </tr>
@@ -81,11 +81,11 @@
                 <td> {{producto.id_producto}} </td>
                 <td> {{producto.nombre}} </td>
                 <td class=" {% if producto.stock > producto.punto_reorden %} stockAlto-color {% elif producto.stock == producto.punto_reorden %} stockMedio-color {% else %} stockBajo-color {% endif %} "> {{producto.stock}} </td>
+                <td> {{producto.punto_reorden}} </td>
                 <td> {{producto.id_categoria.descripcion}} </td>
                 <td>${{producto.costo_venta|currency_format }} </td>
                 <td>${{producto.costo_compra|currency_format }} </td>
                 <td>{{producto.porcentaje_utilidad}}% </td>
-                <td> {{producto.punto_reorden}} </td>
                 <td
                 class=" {% if producto.estado == True %}activo {% elif producto.estado == False %}inactivo {% endif %} " style="font-weight: bold;">
                     {% if producto.estado %}

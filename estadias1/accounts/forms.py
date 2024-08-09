@@ -141,10 +141,10 @@ class CajaForm(forms.ModelForm):
         required=True,
         to_field_name='id_usuario',  # Esto asegura que el ID se guarde en la base de datos.
     )
-    fecha_asignacion = forms.DateField(
+    fecha_asignacion = forms.DateTimeField(
         label='Fecha de Asignación',
         required=True,
-        widget=forms.TextInput(attrs={'type': 'datetime-local'})
+        widget=forms.DateInput(attrs={'type': 'datetime-local'})
     )
 
     monto_asignado = forms.DecimalField(
@@ -159,7 +159,7 @@ class CajaForm(forms.ModelForm):
         super(CajaForm, self).__init__(*args, **kwargs)
         self.fields['id_usuario'].queryset = Usuario.objects.all()
         self.fields['fecha_asignacion'].initial = timezone.now()
-        self.fields['fecha_asignacion'].initial = timezone.now()    
+        self.fields['fecha_asignacion'].initial = timezone.now().strftime('%Y-%m-%dT%H:%M')    
             
     def clean(self):
         cleaned_data = super().clean()
@@ -190,10 +190,10 @@ class CierreForm(forms.ModelForm):
         required=True,
         to_field_name='id_caja',
     )
-    fecha_asignacion = forms.DateField(
+    fecha_asignacion = forms.DateTimeField(
         label='Fecha de Asignación',
         required=True,
-        widget=forms.TextInput(attrs={'type': 'date'})
+        widget=forms.DateInput(attrs={'type': 'datetime-local'})
     )
 
     total_suma=forms.DecimalField(

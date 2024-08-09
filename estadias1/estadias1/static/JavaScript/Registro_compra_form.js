@@ -203,7 +203,9 @@ document.getElementById('cancelarCambiar').addEventListener('click', function(ev
 })
 
 document.getElementById("registrarCompraBtn").addEventListener("click", function (event) {
+
     event.preventDefault();
+
 
     const resumenTabla = document.getElementById("resumenTabla");
     const rows = resumenTabla.getElementsByTagName("tr");
@@ -275,5 +277,7 @@ document.getElementById("registrarCompraBtn").addEventListener("click", function
     document.getElementById("compraForm").appendChild(proveedorField);
 
     document.getElementById("compraForm").submit();
+
+
 
 });

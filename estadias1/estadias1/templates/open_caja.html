@@ -5,16 +5,75 @@
 {% block extra_css %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'styles/CAJAS.css' %}">
-{% endblock %}
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+
+<script src="{% static 'JavaScript/editarProducto.js' %}"></script>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+{% endblock %} 
 
 {% block content %}
+
+
 <h2>Registro de Caja</h2>
+
 <div class="container"> 
     <form method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Registrar Caja">
+        <div class="encabezado">
+            <div class="usuario-fecha">
+                <div>
+                    <label for="id_id_usuario">Usuario:</label>
+                    {{ form.id_usuario }}
+                </div>
+                <div>
+                    <label for="id_fecha_asignacion">Fecha de Asignación:</label>
+                    {{ form.fecha_asignacion }}
+                </div>
+            </div>
+        </div>
+
+        <div class="billetes-monedas">
+            <div>
+                <label for="id_mil">Mil:</label>
+                {{ form.mil }}
+            </div>
+            <div>
+                <label for="id_quinientos">Quinientos:</label>
+                {{ form.quinientos }}
+            </div>
+            <div>
+                <label for="id_doscientos">Doscientos:</label>
+                {{ form.doscientos }}
+            </div>
+            <div>
+                <label for="id_cien">Cien:</label>
+                {{ form.cien }}
+            </div>
+            <div>
+                <label for="id_cincuenta">Cincuenta:</label>
+                {{ form.cincuenta }}
+            </div>
+            <div>
+                <label for="id_veinte">Veinte:</label>
+                {{ form.veinte }}
+            </div>
+            <div>
+                <label for="id_monedas">Monedas:</label>
+                {{ form.monedas }}
+            </div>
+        </div>
+
+        <div class="form-bottom">
+            <input type="submit" value="Registrar Caja">
+        </div>
     </form>
+    
     {% if form.errors %}
     <div class="alert alert-danger">
         {% for field in form %}
@@ -25,6 +84,7 @@
     </div>
     {% endif %}
 </div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Lista de IDs de campos numéricos
@@ -52,6 +112,13 @@
             montoAsignadoField.style.visibility = "hidden";
             montoAsignadoField.parentElement.style.display = "none";
         }
+
+        $(document).ready(function () {
+            $('#id_id_usuario').select2({
+                placeholder: "Selecciona un usuario",
+                allowClear: true
+            });
+        });
     });
 </script>
 {% endblock %}
