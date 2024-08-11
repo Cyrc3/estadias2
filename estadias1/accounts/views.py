@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Sum, F, FloatField, ExpressionWrapper
 from django.db.models.functions import Coalesce
 from django.http import HttpResponse
+import datetime
 from django.utils.dateparse import parse_date
 from reportlab.pdfgen import canvas
 from django.contrib.auth.hashers import make_password, check_password
@@ -727,47 +728,60 @@ def historico_caja(request):
 
 @admin_required
 def historico_ganancias(request):
-    # Obtener el subtotal de ventas y el costo total para todo el histórico
-    ventas = Detalle_Venta.objects.values(
+    # Obtener la fecha actual
+    today = datetime.date.today()
+
+    # Obtener las fechas del formulario de filtro, si están presentes
+    fecha_inicio = request.GET.get('fecha_inicio')
+    fecha_fin = request.GET.get('fecha_fin')
+
+    # Si las fechas son cadenas, convertirlas a objetos date, de lo contrario usar today
+    if fecha_inicio:
+        fecha_inicio = parse_date(fecha_inicio)
+    else:
+        fecha_inicio = today
+
+    if fecha_fin:
+        fecha_fin = parse_date(fecha_fin)
+    else:
+        fecha_fin = today
+
+    # Filtrar las ventas por rango de fechas si se proporcionan
+    ventas = Detalle_Venta.objects.all()
+    if fecha_inicio and fecha_fin:
+        ventas = ventas.filter(id_venta1__fecha__range=[fecha_inicio, fecha_fin])
+    elif fecha_inicio:
+        ventas = ventas.filter(id_venta1__fecha__gte=fecha_inicio)
+    elif fecha_fin:
+        ventas = ventas.filter(id_venta1__fecha__lte=fecha_fin)
+
+    ventas = ventas.values(
         'id_producto__nombre',
         'cantidad',
         'precio_total',
         'iva',
-        'id_producto__costo_venta'
+        'id_producto__costo_venta',
+        'id_producto__costo_compra'
     )
-    productos = Producto.objects.values(
-        'id_producto',
-        'nombre',
-        'costo_compra'
-    )
-    # Crear listas para almacenar los totales calculados
-    ventas_totales = []
-    costos_totales = []
 
-    # Calcular los totales para cada venta individualmente
+    ventas_con_ganancia = []
     for venta in ventas:
-        total_venta = venta['precio_total'] + venta['iva']
-        costo_total = venta['cantidad'] * venta['id_producto__costo_venta']
-        
-        ventas_totales.append(total_venta)
-        costos_totales.append(costo_total)
+        ganancia = venta['precio_total'] - (venta['cantidad'] * venta['id_producto__costo_compra'])
+        ventas_con_ganancia.append({
+            **venta,
+            'ganancia': ganancia
+        })
 
-    # Sumar todos los totales
-    total_venta_sum = sum(ventas_totales)
-    costo_total_sum = sum(costos_totales)
-    
-    # Calcular las ganancias totales
-    total_ganancias = total_venta_sum - costo_total_sum
+    total_ganancias = sum(venta['ganancia'] for venta in ventas_con_ganancia)
 
     context = {
-        'ventas': ventas,
-        'productos': Producto.objects.values('id_producto', 'nombre', 'costo_compra'),
-        'total_ganancias': total_ganancias
+        'ventas': ventas_con_ganancia,
+        'total_ganancias': total_ganancias,
+        'fecha_inicio': fecha_inicio,
+        'fecha_fin': fecha_fin
     }
 
     return render(request, 'historico_ganancias.html', context)
-
-
 
 #TEST PARA LA CONEXION DIRECTA A LA BD !!--11--1--121-01|0|020|920|93UR84U2RY2U3
 '''
