@@ -66,6 +66,10 @@ urlpatterns = [
 
     path('historico_ganancias/', views.historico_ganancias, name='ganancias'),
 
+    path('registro_codes/', views.codes, name='codes'),
+    
+    path('verificar_codigo/', views.verificar_codigo, name='verificar_codigo'),
+
 
     
     #prueba coneksion a la bd directo

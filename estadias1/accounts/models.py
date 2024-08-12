@@ -180,4 +180,9 @@ class Cierre_Caja(models.Model):
         managed = False
 
 
-
+class Codes(models.Model):
+    id_code = models.AutoField(primary_key=True)
+    code = models.IntegerField()
+    class Meta:
+        db_table = 'codes'
+        managed = False

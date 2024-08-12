@@ -1,6 +1,6 @@
 from django import forms
 from django.utils import timezone
-from .models import Categoria, Producto, Cliente, Proveedor, Detalle_Compra, Detalle_Venta, Usuario, Caja, Cierre_Caja
+from .models import Categoria, Producto, Cliente, Proveedor, Detalle_Compra, Detalle_Venta, Usuario, Caja, Cierre_Caja, Codes
 
 #ESTE ARCHIVO SE UTILIZA PARA LOS FORMULARIOS Y HACER QUE DJANGO HAGA TODO EL TRABAJO AJIJIJI
 
@@ -19,6 +19,15 @@ class ClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente 
         fields = ['razon_social','codigo_postal']
+
+        
+class CodesForm(forms.ModelForm):
+    class Meta:
+        model = Codes
+        fields = ['code']
+
+    def __init__(self, *args, **kwargs):
+        super(CodesForm, self).__init__(*args, **kwargs)
 
 
 class UsuarioForm(forms.ModelForm):

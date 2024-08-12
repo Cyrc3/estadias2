@@ -8,7 +8,7 @@ from reportlab.pdfgen import canvas
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Cliente, Proveedor, Categoria, Producto, Detalle_Compra, Detalle_Venta, Compra, Venta, Usuario, Caja, Cierre_Caja
-from .forms import ProductoForm, ClienteForm, ProveedorForm, CompraForm, VentaForm, UsuarioForm, CajaForm, CierreForm
+from .forms import ProductoForm, ClienteForm, ProveedorForm, CompraForm, VentaForm, UsuarioForm, CajaForm, CierreForm, CodesForm
 from django.http import HttpResponse, JsonResponse
 from django_select2.views import AutoResponseView
 from .db_connection import Database #conexión directa
@@ -87,6 +87,21 @@ def registro_usuario(request):
     return render(request, 'usuario.html', {'form':form})
 
 
+@admin_required
+def codes(request):
+    if request.method == 'POST':
+        form = CodesForm(request.POST)
+        if form.is_valid():
+            code = form.save(commit=False)
+            code.save()
+            messages.success(request, 'Código guardado exitosamente.')
+            return redirect('codes')
+        else:
+            messages.error(request, 'Error al guardar el código. Verifique los datos ingresados.')
+    else:
+        form = CodesForm()
+
+    return render(request, 'registro_codes.html', {'form': form})
 @admin_required
 def registrar_cliente(request):
     if request.method == 'POST' :
@@ -782,6 +797,19 @@ def historico_ganancias(request):
     }
 
     return render(request, 'historico_ganancias.html', context)
+
+
+
+def verificar_codigo(request):
+    if request.method == 'POST':
+        codigo_ingresado = request.POST.get('codigo')
+        try:
+            codigo = Codes.objects.get(code=codigo_ingresado)
+            return JsonResponse({'valid': True})
+        except Codes.DoesNotExist:
+            return JsonResponse({'valid': False})
+    return JsonResponse({'valid': False}, status=400)
+
 
 #TEST PARA LA CONEXION DIRECTA A LA BD !!--11--1--121-01|0|020|920|93UR84U2RY2U3
 '''
