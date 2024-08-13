@@ -128,6 +128,10 @@ CREATE TABLE cierre_caja (
     FOREIGN KEY (id_caja) REFERENCES caja(id_caja)
 );
 
+CREATE TABLE IF NOT EXISTS codes (
+    id_code INT NOT NULL PRIMARY KEY,
+    code INT NOT NULL
+);
 
 
 

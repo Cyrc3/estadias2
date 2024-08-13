@@ -46,9 +46,78 @@
                 {{ form.precio_total.label_tag }} {{ form.precio_total }}
             </div>
             <div class="form-group">
+                <button type="button" id="modificarCostoBtn">Modificar Costo</button>
+            </div>
+            <div class="form-group">
                 <input type="button" value="Guardar" id="btnGuardar">
             </div>
+            
         </div>
+
+        <div id="codigoModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Ingresar Código</h2>
+                <input type="text" id="codigoInput" placeholder="Ingresa el código">
+                <button id="verificarCodigoBtn">Verificar Código</button>
+            </div>
+        </div>
+        <!--I think the script to check the code starts here, i belive-->
+        <!-- Botón que muestra la ventana emergente -->
+<button type="button" id="modificarCostoBtn">Modificar Costo</button>
+
+<!-- Ventana emergente -->
+<div id="codigoModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Ingresar Código</h2>
+        <input type="text" id="codigoInput" placeholder="Ingresa el código">
+        <button id="verificarCodigoBtn">Verificar Código</button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // Mostrar la ventana flotante cuando se presiona el botón
+        $('#modificarCostoBtn').on('click', function() {
+            $('#codigoModal').show();
+        });
+
+        // Cerrar la ventana emergente al hacer clic en el botón de cerrar
+        $('.close').on('click', function() {
+            $('#codigoModal').hide();
+        });
+
+        // Verificar el código ingresado
+        $('#verificarCodigoBtn').on('click', function() {
+            var codigoIngresado = $('#codigoInput').val();
+
+            // Realizar la consulta a la base de datos
+            $.ajax({
+                url: '/verificar_codigo/',  // URL de la vista que manejará la verificación en Django
+                method: 'POST',
+                data: {
+                    'codigo': codigoIngresado,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    if (response.valid) {
+                        $('#id_precio_total').prop('readonly', false);  // Permitir la edición del campo de costo
+                        $('#codigoModal').hide();  // Cerrar la ventana flotante
+                        $('#codigoInput').val('');  // Limpiar el campo del código
+                    } else {
+                        alert('Código de autorización incorrecto');
+                    }
+                },
+                error: function() {
+                    alert('Error en la verificación del código');
+                }
+            });
+        });
+    });
+</script>
+     
+        
         <div class="right">
             <div class="resumen">
                 <table id="resumenTabla">
@@ -112,7 +181,7 @@
 
 
 
-
+<!--
 
 {% if request.session.privilegio %}
     <script>
@@ -135,6 +204,8 @@
     </script>
     
 {% else %}
+{% endif %}
+-->
     <script>
         $(document).ready(function() {
             $('#id_id_producto').select2({
@@ -153,7 +224,7 @@
             });
         });
     </script>
-{% endif %}
+
 
 
 <script src="{% static 'JavaScript/Registro_venta_form.js' %}"></script>
