@@ -1,152 +1,148 @@
--- tabla cliente
-create table cliente (
-    id_cliente int not null auto_increment primary key,
-    rfc varchar(20),
-    razon_social varchar(255),
-    uso_factura varchar(255),
-    regimen_fiscal varchar(255),
-    codigo_postal int
+-- TABLA USUARIO
+CREATE TABLE USUARIO (
+    ID_USUARIO INT PRIMARY KEY AUTO_INCREMENT,
+    NOMBRE VARCHAR(255),
+    username VARCHAR(255),
+    ROL boolean,	
+    PASSWORD VARCHAR(255)
 );
 
--- tabla proveedor
-create table proveedor (
-    id_proveedor int primary key auto_increment,
-    razon_social varchar(255),
-    direccion varchar(255),
-    comunidad varchar(255),
-    ciudad varchar(255),
-    estado varchar(255),
-    municipio varchar(255),
-    cp int,
-    numero_telefono varchar(20),
-    rfc varchar(20)
+-- TABLA CLIENTE
+CREATE TABLE CLIENTE (
+    ID_CLIENTE INT NOT NULL auto_increment PRIMARY KEY,
+    RFC VARCHAR(20),
+    RAZON_SOCIAL VARCHAR(255),
+    USO_FACTURA VARCHAR(255),
+    REGIMEN_FISCAL VARCHAR(255),
+    CODIGO_POSTAL int
 );
 
--- tabla categoria_producto
-create table categoria_producto (
-    id_categoria int primary key auto_increment,
-    descripcion varchar(255)
+-- TABLA PROVEEDOR
+CREATE TABLE PROVEEDOR (
+    ID_PROVEEDOR INT PRIMARY KEY AUTO_INCREMENT,
+    RAZON_SOCIAL VARCHAR(255),
+    DIRECCION VARCHAR(255),
+    MUNICIPIO varchar(255),
+    CIUDAD varchar(255),
+    ESTADO varchar(255),
+    CP int,
+    TELEFONO VARCHAR(10),
+    RFC VARCHAR(18)
 );
 
--- tabla producto
-create table producto (
-    id_producto int primary key auto_increment,
-    -- id_proveedor int,
-    stock int,
-    nombre varchar(255),
-    id_categoria int,
-    costo_venta decimal(10, 2),
-    costo_compra decimal(10, 2),
-    porcentaje_utilidad decimal(5,2),
-    punto_reorden int,
-    estado boolean,
-    foreign key (id_categoria) references categoria_producto(id_categoria)
-    -- foreign key (id_proveedor) references proveedor(id_proveedor)
+-- tabla estados
+create table if not exists estados(
+	id_estado int auto_increment primary key,
+	nombre_estado varchar (100)
 );
 
--- tabla venta
-create table venta (
-    id_venta int primary key auto_increment,
-    fecha date,
-    total decimal(10, 2)
+-- tabla de municipios
+create table if not exists municipios(
+	id_municipio int auto_increment primary key,
+    nombre_municipio varchar (100),
+    id_estado int,
+    foreign key (id_estado) references estados (id_estado)
 );
 
--- tabla detalle_venta
-create table detalle_venta (
-    id_detalleventa int primary key auto_increment,
-    id_producto int,
-    id_venta1 int,
-    id_cliente int,
-    cantidad int,
-    precio_total float,
-    iva float,
-    foreign key (id_producto) references producto(id_producto),
-    foreign key (id_venta1) references venta(id_venta),
-    foreign key (id_cliente) references cliente(id_cliente)
+-- TABLA CATEGORIA_PRODUCTO
+CREATE TABLE CATEGORIA_PRODUCTO (
+    ID_CATEGORIA INT PRIMARY KEY AUTO_INCREMENT,
+    DESCRIPCION VARCHAR(255)
 );
 
--- tabla compra
-create table compra (
-    id_compra int primary key auto_increment,
-    total decimal(10, 2),
-    fecha date
+-- TABLA PRODUCTO
+CREATE TABLE PRODUCTO (
+    ID_PRODUCTO INT PRIMARY KEY AUTO_INCREMENT,
+    STOCK INT,
+    NOMBRE VARCHAR(255),
+    ID_CATEGORIA INT,
+    COSTO_VENTA DECIMAL(10, 2),
+    COSTO_COMPRA DECIMAL(10, 2),
+    PORCENTAJE_UTILIDAD DECIMAL(5,2),
+    PUNTO_REORDEN INT,
+    ESTADO BOOLEAN,
+    FOREIGN KEY (ID_CATEGORIA) REFERENCES CATEGORIA_PRODUCTO(ID_CATEGORIA)
+    -- FOREIGN KEY (ID_PROVEEDOR) REFERENCES PROVEEDOR(ID_PROVEEDOR)
 );
 
--- tabla detalle_compra
-create table detalle_compra (
-    id_detallecompra int auto_increment primary key,
-    id_proveedor int,
-    cantidad int,
-    costo decimal(10, 2),
-    id_producto int,
-    id_compra int,
-    foreign key (id_proveedor) references proveedor(id_proveedor),
-    foreign key (id_producto) references producto(id_producto),
-    foreign key (id_compra) references compra(id_compra)
+-- TABLA VENTA
+CREATE TABLE VENTA (
+    ID_VENTA INT PRIMARY KEY AUTO_INCREMENT,
+    FECHA DATE,
+    TOTAL DECIMAL(10, 2),
+    ID_USUARIO INT,
+    foreign key (ID_USUARIO) REFERENCES USUARIO (ID_USUARIO)
 );
 
--- tabla usuario
-create table usuario (
-    id_usuario int primary key auto_increment,
-    nombre varchar(255),
-    privilegio boolean,	
-    password varchar(255)
+
+-- TABLA DETALLE_VENTA
+CREATE TABLE DETALLE_VENTA (
+    ID_DETALLEVENTA INT PRIMARY KEY AUTO_INCREMENT,
+    ID_PRODUCTO INT,
+    ID_VENTA INT,
+    CANTIDAD INT,
+    PRECIO_TOTAL DECIMAL(10,2),
+    IVA DECIMAL(10,2),
+    FOREIGN KEY (ID_PRODUCTO) REFERENCES PRODUCTO(ID_PRODUCTO),
+    FOREIGN KEY (ID_VENTA) references VENTA(ID_VENTA)
 );
 
-create table caja(
-    id_caja int primary key auto_increment,
-    id_usuario varchar(255),
-    mil int,
-    quinientos int,
-    doscientos int,
-    cien int,
-    cincuenta int,
-    veinte int,
-    monedas int,
-    monto_asignado decimal(10, 2) not null,
-    fecha_asignacion datetime not null,
-    
+
+-- TABLA COMPRA
+CREATE TABLE COMPRA (
+    ID_COMPRA INT PRIMARY KEY AUTO_INCREMENT,
+    TOTAL DECIMAL(10, 2),
+    FECHA DATE,
+    ID_PROVEEDOR INT,
+	FOREIGN KEY (ID_PROVEEDOR) REFERENCES PROVEEDOR(ID_PROVEEDOR)
 );
-foreign key (id_usuario) references usuario(id_usuario)
 
 
-WAWAWAWAWAWa
-CREATE TABLE cierre_caja (
-    id_cierre INT(11) NOT NULL AUTO_INCREMENT,
-    id_caja INT(11) NULL,
-    mil INT(11) NULL,
-    quinientos INT(11) NULL,
-    doscientos INT(11) NULL,
-    cien INT(11) NULL,
-    cincuenta INT(11) NULL,
-    veinte INT(11) NULL,
-    monedas INT(11) NULL,
-    total_suma DECIMAL(10, 2) NOT NULL,
-    total_diferencia DECIMAL(10, 2) NOT NULL,
-    fecha_asignacion DATETIME NOT NULL,
-    PRIMARY KEY (id_cierre),
-    FOREIGN KEY (id_caja) REFERENCES caja(id_caja)
+-- TABLA DETALLE_COMPRA
+CREATE TABLE DETALLE_COMPRA (
+	ID_DETALLECOMPRA INT auto_increment PRIMARY KEY,
+    CANTIDAD INT,
+    COSTO DECIMAL(10, 2),
+    ID_PRODUCTO INT,
+    ID_COMPRA INT,
+    FOREIGN KEY (ID_PRODUCTO) REFERENCES PRODUCTO(ID_PRODUCTO),
+	FOREIGN KEY (ID_COMPRA) REFERENCES COMPRA (ID_COMPRA)
+);
+
+
+ create table CAJA(
+    ID_CAJA INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	USUARIO_ID INT,
+	BILLETES_1000 INT,
+	BILLETES_500 INT,
+	BILLETES_200 INT,
+	BILLETES_100 INT,
+	BILLETES_50 INT,
+	BILLETES_20 INT,
+	MONEDAS DECIMAL(5,2),
+	MONTO_ASIGNADO DECIMAL(10,2),
+	FECHA_ASIGNACIÓN DATETIME,
+    ACTIVO BOOLEAN,
+	FOREIGN KEY (USUARIO_ID) REFERENCES USUARIO (ID_USUARIO));
+
+CREATE TABLE CIERRE_CAJA(
+	ID_CIERRE INT NOT NULL PRIMARY KEY auto_increment,
+    ID_CAJA INT,
+    BILLETES_1000 INT,
+	BILLETES_500 INT,
+	BILLETES_200 INT,
+	BILLETES_100 INT,
+	BILLETES_50 INT,
+	BILLETES_20 INT,
+	MONEDAS INT,
+    MONTO_ENTREGADO DECIMAL(10,2),
+    MONTO_FINAL decimal(10,2), -- SUMA DE LAS VENTAS DEL CAJERO + MONTO DE ASIGNACIÓN
+    DIFERENCIA DECIMAL(10,2),
+    FECHA_FIN DATETIME,
+    foreign key (ID_CAJA) REFERENCES CAJA (ID_CAJA)
 );
 
 CREATE TABLE IF NOT EXISTS codes (
-    id_code INT NOT NULL PRIMARY KEY,
-    code INT NOT NULL
+    id_code INT PRIMARY KEY AUTO_INCREMENT,
+    code VARCHAR(255) NOT NULL
 );
-
-
-
-
-
-All the pip programs needed to mount the server, this should be already in the virtEnv
-So is here just in case
-
-pip install django
-pip install mysql-connector-python
-pip install mysqlclient
-pip install reportlab
-pip install django-select2
-pip install pymysql
-pip install bcrypt
-pip install escpos
-
-:c
