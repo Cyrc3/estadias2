@@ -53,7 +53,7 @@ def index(request): #INICIO DE SESIÓN
                 request.session['privilegio'] = usuario.rol
 
                 # Verificar privilegio como booleano usando el valor de TINYINT
-                if usuario.privilegio:
+                if usuario.rol:
                     return redirect('menu_principal')
                 else:  # 0 representa False (usuario regular)
                     return redirect('ventas')
@@ -198,8 +198,10 @@ def registrar_compra(request):
                 proveedor_id = request.POST.get('proveedor_id')
                 resumen_data = json.loads(request.POST.get('resumen_data', '[]'))
 
+                proveedor = Proveedor.objects.get(id_proveedor=proveedor_id)
+
                 # Crear nueva compra
-                nueva_compra = Compra(fecha=fecha_compra, total=total_compra, id_proveedor=proveedor_id)
+                nueva_compra = Compra(fecha=fecha_compra, total=total_compra, id_proveedor=proveedor)
                 nueva_compra.save()
                 
 
@@ -281,17 +283,17 @@ def registro_ventas(request):
                     producto_id.save()
 
                     detalle_venta = Detalle_Venta(
-                        id_venta1=nueva_venta,  # Aquí el campo en la tabla es 'id_venta1'
+                        id_venta=nueva_venta,  # Aquí el campo en la tabla es 'id_venta'
                         id_producto=producto_id,  # Obtener instancia del producto
                         cantidad=cantidad,
                         precio_total=precio_base,
-                       # id_cliente=cliente,  # Obtener instancia del cliente
+                        # id_cliente=cliente,  # Obtener instancia del cliente
                         iva=iva,
                         
                     )
                     detalle_venta.save()
 
-                return redirect('venta')
+                return redirect('ventas')
             except Exception as e:
                 print(f"Error sabrá Dios dónde: {e}")
         else:
@@ -322,14 +324,14 @@ def ticket_generator(request):
     ultimo_detalle = Detalle_Venta.objects.latest('id_detalleventa')
 
     #get the last detalle_venta1 to use it as a reference
-    id_venta1 = ultimo_detalle.id_venta1_id 
+    id_venta = ultimo_detalle.id_venta_id 
 
     #Get the things inside detalle_ventas, not VENTAS, DETALLE you filthy fucker
-    detalles = Detalle_Venta.objects.filter(id_venta1=id_venta1).order_by('-id_detalleventa')
+    detalles = Detalle_Venta.objects.filter(id_venta=id_venta).order_by('-id_detalleventa')
 
     #get the VENTA, not de DETALLE,the VENTA, based on the asociated VENTA1 id in detalle
     #kinda confusing but not so bad my dude
-    venta = Venta.objects.get(id_venta=id_venta1)
+    venta = Venta.objects.get(id_venta=id_venta)
 
     #header of tha shi
     printer.write('**Electronic Store UTSJR or whatever**\n')
@@ -428,7 +430,7 @@ def historico_compras(request):
         SELECT c.id_compra, c.fecha, pr.razon_social, c.total
         FROM compra c
         JOIN detalle_compra dc ON c.id_compra = dc.id_compra 
-        JOIN proveedor pr ON pr.id_proveedor = dc.id_proveedor
+        JOIN proveedor pr ON pr.id_proveedor = c.id_proveedor
         WHERE 1=1
         
         """
@@ -499,10 +501,10 @@ def detalle_venta(request):
     db = Database()
     try:
         query = """
-        SELECT dv.id_detalleventa, p.nombre, dv.cantidad, dv.precio_total, dv.iva, (dv.iva + dv.precio_total * dv.cantidad ) as subtotal, (dv.iva + dv.precio_total) as subtotalIva
+        SELECT dv.id_detalleventa, p.nombre, dv.cantidad, dv.precio_total, (p.costo_venta * dv.cantidad ) as subtotal, ( dv.precio_total) as subtotalIva, p.costo_venta
         FROM detalle_venta dv
         JOIN producto p ON p.id_producto = dv.id_producto
-        WHERE dv.id_venta1 = %s
+        WHERE dv.id_venta = %s
         """
         detalles_venta = db.fetch_all(query, [venta_id])
 
@@ -534,9 +536,9 @@ def historico_ventas(request):
 
         # Consulta con filtros
         query = """
-        SELECT v.id_venta, v.fecha, SUM(dv.precio_total), SUM(dv.iva)
+        SELECT v.id_venta, v.fecha, SUM(dv.precio_total)
         FROM venta v
-        JOIN detalle_venta dv ON v.id_venta = dv.id_venta1
+        JOIN detalle_venta dv ON v.id_venta = dv.id_venta
         
         WHERE 1=1
         """
@@ -697,7 +699,7 @@ def historico_caja(request):
 @admin_required
 def historico_caja(request):
     aperturas = Caja.objects.all().order_by('fecha_asignacion')
-    cierres = Cierre_Caja.objects.all().order_by('fecha_asignacion')
+    cierres = Cierre_Caja.objects.all().order_by('fecha_fin')
 
     data = {}
 
@@ -706,7 +708,7 @@ def historico_caja(request):
         data[apertura.id_caja] = {
             'tipo': 'Apertura',
             'id_caja': apertura.id_caja,
-            'usuario': apertura.id_usuario.nombre,
+            'usuario': apertura.usuario_id.nombre,
             'fecha_asignacion': apertura.fecha_asignacion,
             'monto_asignado': apertura.monto_asignado,
             'tipo_cierre': '',
@@ -720,9 +722,9 @@ def historico_caja(request):
         if cierre.id_caja.id_caja in data:
             data[cierre.id_caja.id_caja].update({
                 'tipo_cierre': 'Cierre',
-                'fecha_cierre': cierre.fecha_asignacion,
-                'monto_cierre': cierre.total_suma,
-                'total_diferencia': cierre.total_diferencia
+                'fecha_cierre': cierre.fecha_fin,
+                'monto_cierre': cierre.monto_entregado,
+                'total_diferencia': cierre.diferencia
             })
 
     # Convertir el diccionario en una lista ordenada por fecha de asignación
@@ -761,11 +763,11 @@ def historico_ganancias(request):
     # Filtrar las ventas por rango de fechas si se proporcionan
     ventas = Detalle_Venta.objects.all()
     if fecha_inicio and fecha_fin:
-        ventas = ventas.filter(id_venta1__fecha__range=[fecha_inicio, fecha_fin])
+        ventas = ventas.filter(id_venta__fecha__range=[fecha_inicio, fecha_fin])
     elif fecha_inicio:
-        ventas = ventas.filter(id_venta1__fecha__gte=fecha_inicio)
+        ventas = ventas.filter(id_venta__fecha__gte=fecha_inicio)
     elif fecha_fin:
-        ventas = ventas.filter(id_venta1__fecha__lte=fecha_fin)
+        ventas = ventas.filter(id_venta__fecha__lte=fecha_fin)
 
     ventas = ventas.values(
         'id_producto__nombre',

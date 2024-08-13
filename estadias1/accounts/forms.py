@@ -172,16 +172,16 @@ class CierreForm(forms.ModelForm):
         cleaned_data = super().clean()
 
         # Obtén los valores de cada denominación
-        mil = cleaned_data.get('billetes_1000', 0) * 1000
-        quinientos = cleaned_data.get('billetes_500', 0) * 500
-        doscientos = cleaned_data.get('billetes_200', 0) * 200
-        cien = cleaned_data.get('billetes_100', 0) * 100
-        cincuenta = cleaned_data.get('billetes_50', 0) * 50
-        veinte = cleaned_data.get('billetes_20', 0) * 20
+        billetes_1000 = cleaned_data.get('billetes_1000', 0) * 1000
+        billetes_500 = cleaned_data.get('billetes_500', 0) * 500
+        billetes_200 = cleaned_data.get('billetes_200', 0) * 200
+        billetes_100 = cleaned_data.get('billetes_100', 0) * 100
+        billetes_50 = cleaned_data.get('billetes_50', 0) * 50
+        billetes_20 = cleaned_data.get('billetes_20', 0) * 20
         monedas = cleaned_data.get('monedas', 0)  # Suponiendo que este es el total de monedas en valor
 
-        # Calcula la suma total #corregir aqui///////////
-        total_suma = mil + quinientos + doscientos + cien + cincuenta + veinte + monedas
+        # Calcula la suma total #corregir aqui///////////+*+*+*+**************************************
+        total_suma = billetes_1000 + billetes_500 + billetes_200 + billetes_100 + billetes_50 + billetes_20 + monedas
         cleaned_data['total_suma'] = total_suma
 
         # Obtener el valor de la otra tabla
@@ -196,34 +196,6 @@ class CierreForm(forms.ModelForm):
 
         # Calcula la diferencia
         total_diferencia = total_suma - monto_asignado
-        cleaned_data['total_diferencia'] = total_diferencia
-
-        return cleaned_data
-        cleaned_data = super().clean()
-
-        # Obtén los valores de cada denominación
-        mil = cleaned_data.get('mil', 0) * 1000
-        quinientos = cleaned_data.get('quinientos', 0) * 500
-        doscientos = cleaned_data.get('doscientos', 0) * 200
-        cien = cleaned_data.get('cien', 0) * 100
-        cincuenta = cleaned_data.get('cincuenta', 0) * 50
-        veinte = cleaned_data.get('veinte', 0) * 20
-        monedas = cleaned_data.get('monedas', 0)  # Suponiendo que este es el total de monedas en valor
-
-        # Calcula la suma total
-        total_suma = mil + quinientos + doscientos + cien + cincuenta + veinte + monedas
-        cleaned_data['total_suma'] = total_suma
-
-        # Obtener el valor de la otra tabla
-        #from .models import Caja 
-        id_caja = cleaned_data.get('id_caja')
-        try:
-            monto_asignado = Caja.objects.get(id_caja=id_caja).valor_numerico  # Ajusta esto según tu modelo
-        except Caja.DoesNotExist:
-            monto_asignado = 0  # Maneja el caso donde no existe el valor en la otra tabla
-
-        # Calcula la diferencia
-        total_diferencia = total_suma - valor_otro
         cleaned_data['total_diferencia'] = total_diferencia
 
         return cleaned_data
