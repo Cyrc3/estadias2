@@ -93,9 +93,9 @@ class VentaForm(forms.ModelForm):
 
 
 class CajaForm(forms.ModelForm):
-    id_usuario = forms.ModelChoiceField(
+    usuario_id = forms.ModelChoiceField(
         queryset=Usuario.objects.all(),  # Asegúrate de que esto traiga todos los usuarios.
-        label='Usuario',
+        label='usuario',
         required=True,
         to_field_name='id_usuario',  # Esto asegura que el ID se guarde en la base de datos.
     )
@@ -115,7 +115,7 @@ class CajaForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CajaForm, self).__init__(*args, **kwargs)
-        self.fields['id_usuario'].queryset = Usuario.objects.all()
+        self.fields['usuario_id'].queryset = Usuario.objects.all()
             
     def clean(self):
         cleaned_data = super().clean()
@@ -172,16 +172,16 @@ class CierreForm(forms.ModelForm):
         cleaned_data = super().clean()
 
         # Obtén los valores de cada denominación
-        billetes_1000 = cleaned_data.get('billetes_1000', 0) * 1000
-        billetes_500 = cleaned_data.get('billetes_500', 0) * 500
-        billetes_200 = cleaned_data.get('billetes_200', 0) * 200
-        billetes_100 = cleaned_data.get('billetes_100', 0) * 100
-        billetes_50 = cleaned_data.get('billetes_50', 0) * 50
-        billetes_20 = cleaned_data.get('billetes_20', 0) * 20
+        mil = cleaned_data.get('billetes_1000', 0) * 1000
+        quinientos = cleaned_data.get('billetes_500', 0) * 500
+        doscientos = cleaned_data.get('billetes_200', 0) * 200
+        cien = cleaned_data.get('billetes_100', 0) * 100
+        cincuenta = cleaned_data.get('billetes_50', 0) * 50
+        veinte = cleaned_data.get('billetes_20', 0) * 20
         monedas = cleaned_data.get('monedas', 0)  # Suponiendo que este es el total de monedas en valor
 
         # Calcula la suma total #corregir aqui///////////+*+*+*+**************************************
-        total_suma = billetes_1000 + billetes_500 + billetes_200 + billetes_100 + billetes_50 + billetes_20 + monedas
+        total_suma = mil + quinientos + doscientos + cien + cincuenta + veinte + monedas
         cleaned_data['total_suma'] = total_suma
 
         # Obtener el valor de la otra tabla

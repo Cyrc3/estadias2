@@ -587,7 +587,7 @@ def open_caja(request):
         form = CajaForm(request.POST)
         if form.is_valid():
             # Obtener el usuario_id desde el formulario
-            usuario_id = form.cleaned_data['id_usuario'].id_usuario
+            usuario_id = form.cleaned_data['usuario_id'].id_usuario
 
             # Obtener el objeto Usuario correspondiente (ya no es necesario si solo necesitas el ID)
             # usuario = get_object_or_404(Usuario, id_usuario=usuario_id)

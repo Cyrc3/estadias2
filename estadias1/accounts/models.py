@@ -141,7 +141,7 @@ class Detalle_Venta(models.Model):
         
 class Caja(models.Model):
     id_caja = models.AutoField(primary_key=True)
-    usuario_id = models.ForeignKey(Usuario, on_delete=models.CASCADE, db_column='id_usuario')
+    usuario_id = models.ForeignKey(Usuario, on_delete=models.CASCADE, db_column='usuario_id')
     billetes_1000 = models.IntegerField()
     billetes_500 = models.IntegerField()
     billetes_200 = models.IntegerField()
@@ -176,7 +176,7 @@ class Cierre_Caja(models.Model):
     monto_final = models.DecimalField(max_digits=10, decimal_places=2)
     diferencia =  models.DecimalField(max_digits=10, decimal_places=2)
     fecha_fin = models.DateTimeField()
-
+    total_venta = models.DecimalField(max_digits=10, decimal_places=2)
     class Meta:
         db_table = 'cierre_caja'
         managed = False

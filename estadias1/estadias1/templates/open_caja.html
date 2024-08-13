@@ -27,7 +27,7 @@
             <div class="usuario-fecha">
                 <div>
                     <label for="id_id_usuario">Usuario:</label>
-                    {{ form.id_usuario }}
+                    {{ form.usuario_id }}
                 </div>
                 <div>
                     <label for="id_fecha_asignacion">Fecha de Asignación:</label>
@@ -112,7 +112,7 @@
         }
 
         $(document).ready(function () {
-            $('#id_id_usuario').select2({
+            $('#id_usuario_id').select2({
                 placeholder: "Selecciona un usuario",
                 allowClear: true
             });
