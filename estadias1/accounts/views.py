@@ -49,7 +49,7 @@ def index(request): #INICIO DE SESIÓN
             # Usar check_password para verificar la contraseña
             if check_password(password, usuario.password):
                 request.session['usuario_id'] = usuario.id_usuario
-                request.session['privilegio'] = usuario.privilegio
+                request.session['privilegio'] = usuario.rol
 
                 # Verificar privilegio como booleano usando el valor de TINYINT
                 if usuario.privilegio:
@@ -183,11 +183,9 @@ def registrar_compra(request):
                 resumen_data = json.loads(request.POST.get('resumen_data', '[]'))
 
                 # Crear nueva compra
-                nueva_compra = Compra(fecha=fecha_compra, total=total_compra)
+                nueva_compra = Compra(fecha=fecha_compra, total=total_compra, id_proveedor=proveedor_id)
                 nueva_compra.save()
                 
-                #obtener el proveedor 
-                proveedor = Proveedor.objects.get(id_proveedor=proveedor_id)
 
                 #insertar detalles de la compra
                 for item in resumen_data:
@@ -215,7 +213,6 @@ def registrar_compra(request):
 
                     detalle_compra = Detalle_Compra(
                         id_compra=nueva_compra,
-                        id_proveedor=proveedor,
                         id_producto=producto,
                         cantidad=cantidad,
                         costo=costo 

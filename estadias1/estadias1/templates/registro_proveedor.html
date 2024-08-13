@@ -22,11 +22,11 @@
             {% csrf_token %}
             {{form.razon_social.label_tag}} {{ form.razon_social }}
             {{form.direccion.label_tag}} {{ form.direccion }}
-            {{form.comunidad.label_tag}} {{ form.comunidad }}
+            {{form.ciudad.label_tag}} {{ form.ciudad }}
             {{form.municipio.label_tag}} {{ form.municipio }}
             {{form.estado.label_tag}} {{ form.estado }}
             {{form.cp.label_tag}} {{ form.cp }}
-            {{form.numero_telefono.label_tag}} {{ form.numero_telefono }}
+            {{form.telefono.label_tag}} {{ form.telefono }}
             {{form.rfc.label_tag}} {{ form.rfc }}
             <input type="submit" value="Guardar"></input>
         </form>
@@ -55,8 +55,8 @@
                 <tr>
                     <td> {{ proveedor.id_proveedor }} </td>
                     <td> {{ proveedor.razon_social }} </td>
-                    <td> {{ proveedor.direccion }} {{proveedor.comunidad}} {{proveedor.municipio}} {{proveedor.estado}} {{proveedor.cp}} </td>
-                    <td> {{ proveedor.numero_telefono }} </td>
+                    <td> {{ proveedor.direccion }} {{proveedor.ciudad}} {{proveedor.municipio}} {{proveedor.estado}} {{proveedor.cp}} </td>
+                    <td> {{ proveedor.telefono }} </td>
                     <td> {{ proveedor.rfc }} </td>
                 </tr>
                 {% endfor %}

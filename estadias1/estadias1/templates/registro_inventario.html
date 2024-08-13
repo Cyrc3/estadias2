@@ -83,8 +83,8 @@
                 <td class=" {% if producto.stock > producto.punto_reorden %} stockAlto-color {% elif producto.stock == producto.punto_reorden %} stockMedio-color {% else %} stockBajo-color {% endif %} "> {{producto.stock}} </td>
                 <td> {{producto.punto_reorden}} </td>
                 <td> {{producto.id_categoria.descripcion}} </td>
-                <td>${{producto.costo_venta|currency_format }} </td>
-                <td>${{producto.costo_compra|currency_format }} </td>
+                <td>{{producto.costo_venta|currency_format }} </td>
+                <td>{{producto.costo_compra|currency_format }} </td>
                 <td>{{producto.porcentaje_utilidad}}% </td>
                 <td
                 class=" {% if producto.estado == True %}activo {% elif producto.estado == False %}inactivo {% endif %} " style="font-weight: bold;">
