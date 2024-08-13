@@ -33,10 +33,10 @@
             {{ form.billetes_50.label_tag }} {{ form.billetes_50 }}
             {{ form.billetes_20.label_tag }} {{ form.billetes_20 }}
             {{ form.monedas.label_tag }} {{ form.monedas }}
-            
         </div>
         <div class="calculos">
-            {{ form.total_venta.label_tag }} {{ form.total_venta }}
+            {{ form.total_venta.label_tag }} 
+            <input type="text" name="total_venta" id="id_total_venta" readonly>
             {{ form.monto_entregado.label_tag }} {{ form.monto_entregado }}
             {{ form.monto_final.label_tag }} {{ form.monto_final }}
             {{ form.diferencia.label_tag }} {{ form.diferencia }}
@@ -94,44 +94,51 @@
         diferencia.setAttribute('readonly', true);
     });
 </script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Obtén el campo por su ID
-        var fechaAsignacionInput = document.getElementById('id_fecha_fin');
-        
-        // Si el campo existe en la página
-        if (fechaAsignacionInput) {
-            // Obtiene la fecha y hora actual
-            var now = new Date();
 
-            // Ajusta el formato de la fecha y hora a 'YYYY-MM-DDTHH:MM'
+
+<script>
+    $(document).ready(function () {
+        $('#id_id_caja').select2({
+            placeholder: "Caja No.",
+            allowClear: true
+        });
+
+        $('#id_id_caja, #id_fecha_fin').change(function(){
+            var cajaId = $('#id_id_caja').val();
+            var fechaFin = $('#id_fecha_fin').val();
+
+            if(cajaId && fechaFin) {
+                $.ajax({
+                    url: '{% url "calculate_total_venta" %}',
+                    data: {
+                        'caja_id': cajaId,
+                        'fecha_fin': fechaFin
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.total_venta !== undefined) {
+                            $('#id_total_venta').val(data.total_venta);
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var fechaAsignacionInput = document.getElementById('id_fecha_fin');
+        if (fechaAsignacionInput) {
+            var now = new Date();
             var year = now.getFullYear();
             var month = ('0' + (now.getMonth() + 1)).slice(-2);
             var day = ('0' + now.getDate()).slice(-2);
             var hours = ('0' + now.getHours()).slice(-2);
             var minutes = ('0' + now.getMinutes()).slice(-2);
 
-            // Formato para el input de tipo 'datetime-local'
             var formattedDateTime = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
-
-            // Asigna el valor al campo
             fechaAsignacionInput.value = formattedDateTime;
         }
     });
-
 </script>
-
-<script>
-    $(document).ready(function () {
-            $('#id_id_caja').select2({
-                placeholder: "Caja No.",
-                allowClear: true
-            });
-    });
-</script>
-
-{%for caja in cajas %}
-
-{% endfor  %}
 
 {% endblock %}

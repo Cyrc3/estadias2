@@ -605,13 +605,14 @@ def caja(request):
     
     return render(request, 'first_caja.html')
 
+
 @admin_required
 def close_caja(request):
     cajas = Caja.objects.filter(activo=True)
     if request.method == 'POST':
         form = CierreForm(request.POST)
         if form.is_valid():
-            caja_id=request.POST.get('id_id_caja')
+            caja_id=request.POST.get('id_caja')
             caja = Caja.objects.get(id_caja=caja_id)
             caja.activo = False
             caja.save()
@@ -623,6 +624,20 @@ def close_caja(request):
         form = CierreForm()
     return render(request, 'close_caja.html', {'form': form, 'cajas': cajas})
 
+
+
+@admin_required
+def calculate_total_venta(request):
+    if request.method == 'GET':
+        caja_id = request.GET.get('caja_id')
+        fecha_fin = request.GET.get('fecha_fin')
+        
+        if caja_id and fecha_fin:
+            caja = Caja.objects.get(id_caja=caja_id)
+            total_venta = Venta.objects.filter(fecha__gte=caja.fecha_asignacion, fecha__lte=fecha_fin).aggregate(Sum('total'))['total__sum'] or 0
+            return JsonResponse({'total_venta': total_venta})
+        
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
 ''' 

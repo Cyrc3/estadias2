@@ -70,7 +70,7 @@ urlpatterns = [
     
     path('verificar_codigo/', views.verificar_codigo, name='verificar_codigo'),
 
-
+    path('calculate_total_venta/', views.calculate_total_venta, name='calculate_total_venta'),
     
     #prueba coneksion a la bd directo
     #path('test_db/',views.test_db_view, name='test_db'),
