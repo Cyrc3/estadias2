@@ -88,3 +88,26 @@ input[type="submit"]:hover {
 #id_id_caja{
     width: 20%;
 }
+
+.calculos {
+    margin-top: 5%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; 
+}
+
+#id_monto_entregado{
+    width: 25%;
+}
+
+#id_monto_final{
+    width: 25%;
+}
+
+#id_diferencia{
+    width: 25%;
+}
+
+#id_total_venta{
+    width: 25%;
+}

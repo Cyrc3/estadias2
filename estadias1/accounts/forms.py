@@ -141,12 +141,12 @@ class CajaForm(forms.ModelForm):
 
 class CierreForm(forms.ModelForm):
     id_caja = forms.ModelChoiceField(
-        queryset=Caja.objects.all(),
+        queryset=Caja.objects.filter(activo=True),
         label='Caja',
         required=True
     )
-    fecha_asignacion = forms.DateTimeField(
-        label='Fecha de Asignación',
+    fecha_fin = forms.DateTimeField(
+        label='Fecha y hora de cierre',
         required=True,
         widget=forms.DateInput(attrs={'type': 'datetime-local'})
     )
@@ -161,12 +161,12 @@ class CierreForm(forms.ModelForm):
 
     class Meta:
         model = Cierre_Caja  # Asegúrate de que este sea el modelo correcto
-        fields = ['id_caja', 'billetes_1000', 'billetes_500', 'billetes_200', 'billetes_100', 'billetes_50', 'billetes_20', 'monedas', 'monto_entregado', 'monto_final','diferencia', 'fecha_fin']
+        fields = ['id_caja', 'billetes_1000', 'billetes_500', 'billetes_200', 'billetes_100', 'billetes_50', 'billetes_20', 'monedas', 'monto_entregado', 'monto_final','diferencia', 'fecha_fin','total_venta']
 
     def __init__(self, *args, **kwargs):
         super(CierreForm, self).__init__(*args, **kwargs)
-        self.fields['id_caja'].queryset = Caja.objects.all()
-        self.fields['fecha_asignacion'].initial = timezone.now().date()
+        self.fields['id_caja'].queryset = Caja.objects.filter(activo=True)
+        self.fields['fecha_fin'].initial = timezone.now().date()
 
     def clean(self):
         cleaned_data = super().clean()

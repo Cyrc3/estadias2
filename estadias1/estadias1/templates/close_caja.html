@@ -22,7 +22,7 @@
         <div class="encabezado">
             <div class="usuario-fecha">
                 {{ form.id_caja.label_tag }} {{ form.id_caja }}
-                {{ form.fecha_asignacion.label_tag }} {{ form.fecha_asignacion }}
+                {{ form.fecha_fin.label_tag }} {{ form.fecha_fin }}
             </div>
         </div>
         <div class="billetes-monedas">
@@ -33,6 +33,13 @@
             {{ form.billetes_50.label_tag }} {{ form.billetes_50 }}
             {{ form.billetes_20.label_tag }} {{ form.billetes_20 }}
             {{ form.monedas.label_tag }} {{ form.monedas }}
+            
+        </div>
+        <div class="calculos">
+            {{ form.total_venta.label_tag }} {{ form.total_venta }}
+            {{ form.monto_entregado.label_tag }} {{ form.monto_entregado }}
+            {{ form.monto_final.label_tag }} {{ form.monto_final }}
+            {{ form.diferencia.label_tag }} {{ form.diferencia }}
         </div>
         <div class="form-bottom">
             <input type="submit" value="Cerrar caja">
@@ -62,7 +69,11 @@
             'id_billetes_100',
             'id_billetes_50',
             'id_billetes_20',
-            'id_monedas'
+            'id_monedas',
+            'id_monto_final',
+            'id_total_venta',
+            'id_diferencia',
+            'id_monto_entregado'
         ];
         
         // Establece el valor de cada campo numérico a 0
@@ -72,19 +83,21 @@
                 field.value = '0';
             }
         });
-        
-        // Oculta el campo monto_asignado
-        var montoAsignadoField = document.getElementById('id_monto_asignado');
-        if (montoAsignadoField) {
-            montoAsignadoField.style.visibility = "hidden";
-            montoAsignadoField.parentElement.style.display = "none";
-        }
+
+        var total_venta = document.getElementById('id_total_venta');
+        total_venta.setAttribute('readonly', true);
+
+        var monto_final = document.getElementById('id_monto_final');
+        monto_final.setAttribute('readonly', true);
+
+        var diferencia = document.getElementById('id_diferencia');
+        diferencia.setAttribute('readonly', true);
     });
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Obtén el campo por su ID
-        var fechaAsignacionInput = document.getElementById('id_fecha_asignacion');
+        var fechaAsignacionInput = document.getElementById('id_fecha_fin');
         
         // Si el campo existe en la página
         if (fechaAsignacionInput) {
@@ -106,7 +119,9 @@
         }
     });
 
+</script>
 
+<script>
     $(document).ready(function () {
             $('#id_id_caja').select2({
                 placeholder: "Caja No.",
@@ -114,5 +129,9 @@
             });
     });
 </script>
+
+{%for caja in cajas %}
+
+{% endfor  %}
 
 {% endblock %}

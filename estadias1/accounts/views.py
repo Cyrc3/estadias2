@@ -288,8 +288,6 @@ def registro_ventas(request):
                         cantidad=cantidad,
                         precio_total=precio_base,
                         # id_cliente=cliente,  # Obtener instancia del cliente
-                        iva=iva,
-                        
                     )
                     detalle_venta.save()
 
@@ -609,11 +607,14 @@ def caja(request):
 
 @admin_required
 def close_caja(request):
-    cajas = Caja.objects.all()
+    cajas = Caja.objects.filter(activo=True)
     if request.method == 'POST':
         form = CierreForm(request.POST)
         if form.is_valid():
-            # Guardar el formulario y crear una nueva instancia de CierreCaja
+            caja_id=request.POST.get('id_id_caja')
+            caja = Caja.objects.get(id_caja=caja_id)
+            caja.activo = False
+            caja.save()
             form.save()
 
             # Redirigir a una página de éxito o lista de cierres de caja

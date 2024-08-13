@@ -117,7 +117,7 @@ class Detalle_Compra(models.Model):
 
 class Venta(models.Model):
     id_venta = models.AutoField(primary_key=True)
-    fecha = models.DateField()
+    fecha = models.DateTimeField()
     total = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
@@ -151,7 +151,7 @@ class Caja(models.Model):
     monedas = models.IntegerField()
     monto_asignado = models.DecimalField(max_digits=10, decimal_places=2)
     fecha_asignacion = models.DateTimeField()
-    activo = models.BooleanField(default=False)
+    activo = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'caja'
