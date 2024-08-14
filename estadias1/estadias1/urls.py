@@ -65,6 +65,8 @@ urlpatterns = [
     path('historico_caja/', views.historico_caja, name='historico_caja'),
 
     path('historico_ganancias/', views.historico_ganancias, name='ganancias'),
+    
+    path('historico_rector/', views.historico_rector, name='rector'),
 
     path('registro_codes/', views.codes, name='codes'),
     

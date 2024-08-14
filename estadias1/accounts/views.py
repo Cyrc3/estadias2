@@ -824,6 +824,66 @@ def historico_ganancias(request):
 
 
 
+@admin_required
+def historico_rector(request):
+    # Obtener la fecha actual
+    today = datetime.date.today()
+
+    # Obtener las fechas del formulario de filtro, si están presentes
+    fecha_inicio = request.GET.get('fecha_inicio')
+    fecha_fin = request.GET.get('fecha_fin')
+
+    # Si las fechas son cadenas, convertirlas a objetos date, de lo contrario usar today
+    if fecha_inicio:
+        fecha_inicio = parse_date(fecha_inicio)
+    else:
+        fecha_inicio = today
+
+    if fecha_fin:
+        fecha_fin = parse_date(fecha_fin)
+    else:
+        fecha_fin = today
+
+    # Filtrar las ventas por rango de fechas si se proporcionan
+    ventas = Detalle_Venta.objects.all()
+    if fecha_inicio and fecha_fin:
+        ventas = ventas.filter(id_venta__fecha__range=[fecha_inicio, fecha_fin])
+    elif fecha_inicio:
+        ventas = ventas.filter(id_venta__fecha__gte=fecha_inicio)
+    elif fecha_fin:
+        ventas = ventas.filter(id_venta__fecha__lte=fecha_fin)
+
+    # Seleccionar solo los datos necesarios: precio_total, costo_compra, y calcular la ganancia
+    ventas = ventas.values(
+        'precio_total',
+        'id_producto__costo_compra',
+        'cantidad'
+    )
+
+    ventas_con_ganancia = []
+    for venta in ventas:
+        # Calcular el costo total multiplicando el costo individual por la cantidad
+        costo_total = venta['cantidad'] * venta['id_producto__costo_compra']
+        # Calcular la ganancia restando el costo total del precio total
+        ganancia = venta['precio_total'] - costo_total
+        ventas_con_ganancia.append({
+            'precio_total': venta['precio_total'],  # Precio de venta
+            'costo_total': costo_total,             # Precio de compra (multiplicado por la cantidad)
+            'ganancia': ganancia                    # Total de la ganancia
+        })
+
+    total_ganancias = sum(venta['ganancia'] for venta in ventas_con_ganancia)
+
+    context = {
+        'ventas': ventas_con_ganancia,
+        'total_ganancias': total_ganancias,
+        'fecha_inicio': fecha_inicio,
+        'fecha_fin': fecha_fin
+    }
+
+    return render(request, 'historico_rector.html', context)
+
+
 def verificar_codigo(request):
     if request.method == 'POST':
         codigo_ingresado = request.POST.get('codigo')
