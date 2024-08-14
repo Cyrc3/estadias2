@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect, get_object_or_404
-import requests
 from django.db.models import Sum, F, FloatField, ExpressionWrapper
 from django.db.models.functions import Coalesce
 from django.http import HttpResponse
