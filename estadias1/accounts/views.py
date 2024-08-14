@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+import requests
 from django.db.models import Sum, F, FloatField, ExpressionWrapper
 from django.db.models.functions import Coalesce
 from django.http import HttpResponse
@@ -15,6 +16,7 @@ from .db_connection import Database #conexión directa
 import json
 from decimal import Decimal
 import bcrypt
+
 
 #from .forms import ProductoForm
 from django.contrib import messages
