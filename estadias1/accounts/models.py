@@ -119,6 +119,7 @@ class Venta(models.Model):
     id_venta = models.AutoField(primary_key=True)
     fecha = models.DateTimeField()
     total = models.DecimalField(max_digits=10, decimal_places=2)
+    id_usuario = models.ForeignKey(Usuario, on_delete=models.SET_NULL, db_column='id_usuario',null=True)
 
     class Meta:
         db_table = 'venta'

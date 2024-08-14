@@ -634,7 +634,11 @@ def calculate_total_venta(request):
         
         if caja_id and fecha_fin:
             caja = Caja.objects.get(id_caja=caja_id)
-            total_venta = Venta.objects.filter(fecha__gte=caja.fecha_asignacion, fecha__lte=fecha_fin).aggregate(Sum('total'))['total__sum'] or 0
+            total_venta = Venta.objects.filter(
+                fecha__gte=caja.fecha_asignacion, 
+                fecha__lte=fecha_fin,
+                id_usuario=caja.usuario_id.id_usuario
+            ).aggregate(Sum('total'))['total__sum'] or 0
             return JsonResponse({'total_venta': total_venta})
         
     return JsonResponse({'error': 'Invalid request'}, status=400)
