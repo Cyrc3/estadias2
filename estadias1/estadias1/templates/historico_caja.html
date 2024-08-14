@@ -5,55 +5,38 @@
 {% block extra_css %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'styles/historial_caja.css' %}">
-<style>
-    /* Centrar solo las fechas y el botón de filtro */
-    .date-filters {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 20px;
-    }
-
-    .date-filters label, .date-filters input, .date-filters button {
-        display: inline-block;
-    }
-
-    /* Asegúrate de que el resto de la página no se vea afectada */
-</style>
 {% endblock %}
 
 {% block content %}
 
 {% load custom_filters %}
 <h1>Histórico de Aperturas y Cierres de Caja</h1>
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('fecha_inicio').setAttribute('max', today);
-        document.getElementById('fecha_fin').setAttribute('max', today);
+    th,
+    td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
 
-        if (!document.getElementById('fecha_inicio').value) {
-            document.getElementById('fecha_inicio').value = today;
-        }
-        if (!document.getElementById('fecha_fin').value) {
-            document.getElementById('fecha_fin').value = today;
-        }
-    });
-</script>
+    th {
+        background-color: #492c8e;
+    }
+</style>
 
-<!-- Solo centramos las fechas -->
 <form method="get" class="date-filters">
     <label for="fecha_inicio">Fecha Inicio:</label>
-    <input type="date" id="fecha_inicio" name="fecha_inicio" value="{{ fecha_inicio|date:'Y-m-d' }}">
+    <input type="datetime-local" id="fecha_inicio" name="fecha_inicio" value="{{ fecha_inicio|date:'Y-m-d\\TH:i' }}">
     
     <label for="fecha_fin">Fecha Fin:</label>
-    <input type="date" id="fecha_fin" name="fecha_fin" value="{{ fecha_fin|date:'Y-m-d' }}">
+    <input type="datetime-local" id="fecha_fin" name="fecha_fin" value="{{ fecha_fin|date:'Y-m-d\\TH:i' }}">
     
     <button type="submit">Filtrar</button>
 </form>
-
 <div class="table-container">
     <table>
         <thead>
@@ -65,14 +48,14 @@
                 <th>Monto Asignado</th>
                 <th>Tipo Cierre</th>
                 <th>Fecha de Cierre</th>
-                <th>Monto de Cierre</th>
-                <th>Total Vendido</th>
+                <th>Total de ventas</th>
+                <th>Monto de Entregado</th>
                 <th>Total Diferencia</th>
             </tr>
         </thead>
         <tbody>
             {% for item in data %}
-            <tr data-caja-id="{{ item.id_caja }}" data-fecha-fin="{{ item.fecha_cierre }}">
+            <tr>
                 <td>{{ item.tipo }}</td>
                 <td>{{ item.id_caja }}</td>
                 <td>{{ item.usuario }}</td>
@@ -80,47 +63,14 @@
                 <td>{{ item.monto_asignado|currency_format }}</td>
                 <td>{{ item.tipo_cierre }}</td>
                 <td>{{ item.fecha_cierre }}</td>
+                <td>{{ item.total_ventas |currency_format}}</td>
                 <td>{{ item.monto_cierre|currency_format }}</td>
-                <td class="total-venta">Cargando...</td> <!-- Se actualizará vía JS -->
                 <td>{{ item.total_diferencia|currency_format }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Seleccionamos todas las filas de la tabla
-        const rows = document.querySelectorAll('table tbody tr');
-
-        rows.forEach(row => {
-            const cajaId = row.getAttribute('data-caja-id');
-            const fechaFin = row.getAttribute('data-fecha-fin');
-            
-            // Hacemos la solicitud a la vista calculate_total_venta para cada fila
-            fetch(`/calculate_total_venta?caja_id=${cajaId}&fecha_fin=${fechaFin}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.total_venta !== undefined) {
-                        // Actualizamos la columna 'Total Vendido' con el valor obtenido
-                        row.querySelector('.total-venta').textContent = data.total_venta.toLocaleString('es-MX', {
-                            style: 'currency',
-                            currency: 'MXN'
-                        });
-                    } else if (data.error) {
-                        row.querySelector('.total-venta').textContent = 'Error';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error al obtener el total de ventas:', error);
-                    row.querySelector('.total-venta').textContent = 'Error';
-                });
-        });
-    });
-</script>
-
-
 <script>
     function actualizarTabla() {
         fetch('/historico_caja/', {
@@ -128,28 +78,29 @@
                 'X-Requested-With': 'XMLHttpRequest'
             }
         })
-        .then(response => response.json())
-        .then(data => {
-            const tbody = document.querySelector('table tbody');
-            tbody.innerHTML = '';
-            data.forEach(item => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${item.tipo}</td>
-                    <td>${item.id_caja}</td>
-                    <td>${item.usuario}</td>
-                    <td>${item.fecha_asignacion}</td>
-                    <td>${item.monto_asignado}</td>
-                    <td>${item.tipo_cierre}</td>
-                    <td>${item.fecha_cierre}</td>
-                    <td>${item.monto_cierre}</td>
-                    <td>${item.total_vendido}</td>
-                    <td>${item.total_diferencia}</td>
-                `;
-                tbody.appendChild(row);
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector('table tbody');
+                tbody.innerHTML = '';
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+            <td>${item.tipo}</td>
+            <td>${item.id_caja}</td>
+            <td>${item.usuario}</td>
+            <td>${item.fecha_asignacion}</td>
+            <td>${item.monto_asignado}</td>
+            <td>{% if item.tipo == 'Cierre' %}Cierre{% else %}Apertura{% endif %}</td>
+            <td>${item.fecha_cierre}</td>
+            <td>${item.total_diferencia}</td>
+        `;
+                    tbody.appendChild(row);
+                });
             });
-        });
     }
+
+    // Llama a la función actualizarTabla() cuando sea necesario
 </script>
+
 
 {% endblock %}

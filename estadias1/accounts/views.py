@@ -4,7 +4,7 @@ from django.db.models import Sum, F, FloatField, ExpressionWrapper
 from django.db.models.functions import Coalesce
 from django.http import HttpResponse
 import datetime
-from django.utils.dateparse import parse_date
+from django.utils.dateparse import parse_date, parse_datetime
 from reportlab.pdfgen import canvas
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.forms import AuthenticationForm
@@ -656,52 +656,32 @@ def calculate_total_venta(request):
 ''' 
 @admin_required
 def historico_caja(request):
-    # Obtener todos los datos de apertura de caja
+   
+    # Obtener las fechas de inicio y fin del formulario
+    fecha_inicio = request.GET.get('fecha_inicio')
+    fecha_fin = request.GET.get('fecha_fin')
+
+    # Convertir las fechas a objetos datetime
+    if fecha_inicio:
+        fecha_inicio = parse_datetime(fecha_inicio)
+    if fecha_fin:
+        fecha_fin = parse_datetime(fecha_fin)
+
+    # Filtrar aperturas y cierres basados en las fechas si están definidas
     aperturas = Caja.objects.all().order_by('fecha_asignacion')
+    cierres = Cierre_Caja.objects.all().order_by('fecha_fin')
 
-    # Obtener todos los datos de cierre de caja
-    cierres = Cierre_Caja.objects.all().order_by('fecha_asignacion')
+    if fecha_inicio and fecha_fin:
+        aperturas = aperturas.filter(fecha_asignacion__range=[fecha_inicio, fecha_fin])
+        cierres = cierres.filter(fecha_fin__range=[fecha_inicio, fecha_fin])
+    elif fecha_inicio:
+        aperturas = aperturas.filter(fecha_asignacion__gte=fecha_inicio)
+        cierres = cierres.filter(fecha_fin__gte=fecha_inicio)
+    elif fecha_fin:
+        aperturas = aperturas.filter(fecha_asignacion__lte=fecha_fin)
+        cierres = cierres.filter(fecha_fin__lte=fecha_fin)
 
-    # Combinar aperturas y cierres
-    data = list(aperturas) + list(cierres)
-    data.sort(key=lambda x: x.fecha_asignacion)
-
-    return render(request, 'historico_caja.html', {'data': data})
-
-
-@admin_required
-def historico_caja(request):
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        aperturas = Caja.objects.all().order_by('fecha_asignacion')
-        cierres = Cierre_Caja.objects.all().order_by('fecha_asignacion')
-
-        data = []
-        for apertura in aperturas:
-            data.append({
-                'tipo': 'Apertura',
-                'id_caja': apertura.id_caja,
-                'monto_asignado': apertura.monto_asignado,
-                'fecha_asignacion': apertura.fecha_asignacion,
-                'usuario': apertura.id_usuario.nombre  # Asumiendo que usuario es un objeto User
-            })
-
-        for cierre in cierres:
-            data.append({
-                'tipo': 'Cierre',
-                'id_caja': cierre.id_caja,
-                'total_suma': cierre.total_suma,
-                'total_diferencia': cierre.total_diferencia,
-                'monto_cierre': cierre.total_suma,
-                'fecha_cierre': cierre.fecha_asignacion
-            })
-
-        data.sort(key=lambda x: x['fecha_asignacion'])
-        return JsonResponse(data, safe=False)
-
-    # Renderizar la plantilla normalmente si no es una solicitud AJAX
-    aperturas = Caja.objects.all().order_by('fecha_asignacion')
-    cierres = Cierre_Caja.objects.all().order_by('fecha_asignacion')
-
+    # Armar la respuesta con los datos filtrados
     data = []
     for apertura in aperturas:
         data.append({
@@ -709,84 +689,82 @@ def historico_caja(request):
             'id_caja': apertura.id_caja,
             'monto_asignado': apertura.monto_asignado,
             'fecha_asignacion': apertura.fecha_asignacion,
-            'usuario': apertura.id_usuario.nombre  # Asumiendo que usuario es un objeto User
+            'usuario': apertura.usuario_id.nombre
         })
 
     for cierre in cierres:
         data.append({
             'tipo': 'Cierre',
             'id_caja': cierre.id_caja,
-            'total_suma': cierre.total_suma,
-            'total_diferencia': cierre.total_diferencia,
-            'monto_cierre': cierre.total_suma,
-            'fecha_cierre': cierre.fecha_asignacion
+            'total_diferencia': cierre.diferencia,
+            'monto_entregado': cierre.monto_entregado,
+            'monto_final': cierre.monto_final,
+            'fecha_cierre': cierre.fecha_fin,
+            'total_venta': cierre.total_venta
         })
 
     data.sort(key=lambda x: x.get('fecha_asignacion', x.get('fecha_cierre')))
-    return render(request, 'historico_caja.html', {'data': data})
-'''
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse(data, safe=False)
+
+    return render(request, 'historico_caja.html', {'data': data, 'fecha_inicio': fecha_inicio, 'fecha_fin': fecha_fin})
+
+''' 
+
+from django.utils.dateparse import parse_datetime
+
 @admin_required
 def historico_caja(request):
-    today = datetime.date.today()
+    fecha_inicio = request.GET.get('fecha_inicio')
+    fecha_fin = request.GET.get('fecha_fin')
 
-    # Obtener fecha de inicio y fin, con valores predeterminados si están vacíos
-    fecha_inicio_str = request.GET.get('fecha_inicio', today.strftime('%Y-%m-%d'))
-    fecha_fin_str = request.GET.get('fecha_fin', today.strftime('%Y-%m-%d'))
+    aperturas = Caja.objects.all().order_by('fecha_asignacion')
+    cierres = Cierre_Caja.objects.all().order_by('fecha_fin')
 
-    # Verificar que las fechas tengan el formato correcto
-    try:
-        fecha_inicio = datetime.datetime.strptime(fecha_inicio_str, '%Y-%m-%d').date()
-        fecha_fin = datetime.datetime.strptime(fecha_fin_str, '%Y-%m-%d').date()
-    except ValueError:
-        return JsonResponse({'error': 'Formato de fecha no válido'}, status=400)
+    if fecha_inicio and fecha_fin:
+        fecha_inicio_dt = parse_datetime(fecha_inicio)
+        fecha_fin_dt = parse_datetime(fecha_fin)
+        if fecha_inicio_dt and fecha_fin_dt:
+            aperturas = aperturas.filter(fecha_asignacion__gte=fecha_inicio_dt, fecha_asignacion__lte=fecha_fin_dt)
+            cierres = cierres.filter(fecha_fin__gte=fecha_inicio_dt, fecha_fin__lte=fecha_fin_dt)
 
-    # Filtrar aperturas y cierres de caja por rango de fechas
-    cajas = Caja.objects.filter(
-        fecha_asignacion__gte=fecha_inicio,
-        fecha_asignacion__lte=fecha_fin
-    )
+    data = {}
 
-    data = []
+    # Procesar aperturas
+    for apertura in aperturas:
+        data[apertura.id_caja] = {
+            'tipo': 'Apertura',
+            'id_caja': apertura.id_caja,
+            'usuario': apertura.usuario_id.nombre,
+            'fecha_asignacion': apertura.fecha_asignacion,
+            'monto_asignado': apertura.monto_asignado,
+            'tipo_cierre': '',
+            'fecha_cierre': '',
+            'monto_cierre': '',
+            'total_diferencia': '',
+            'total_ventas': ''
+        }
 
-    for caja in cajas:
-        # Buscar el cierre de caja relacionado con esta caja
-        cierre_caja = Cierre_Caja.objects.filter(id_caja=caja.id_caja, fecha_fin__lte=fecha_fin).last()
-        
-        monto_cierre = cierre_caja.monto_entregado if cierre_caja else 0
+    # Procesar cierres y actualizar las aperturas existentes en data
+    for cierre in cierres:
+        if cierre.id_caja.id_caja in data:
+            data[cierre.id_caja.id_caja].update({
+                'tipo_cierre': 'Cierre',
+                'fecha_cierre': cierre.fecha_fin,
+                'monto_cierre': cierre.monto_entregado,
+                'total_diferencia': cierre.diferencia,
+                'total_ventas': cierre.total_venta
+            })
 
-        # Solicitar el total vendido desde la vista calculate_total_venta
-        response = requests.get(
-            f'{request.build_absolute_uri(calculate_total_venta)}',  # Construir la URL completa
-            params={'caja_id': caja.id_caja, 'fecha_fin': fecha_fin_str}
-        )
+    # Convertir el diccionario en una lista ordenada por fecha de asignación
+    data_list = list(data.values())
+    data_list.sort(key=lambda x: x['fecha_asignacion'])
 
-        if response.status_code == 200:
-            total_venta = response.json().get('total_venta', 0)
-        else:
-            total_venta = 0
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse(data_list, safe=False)
 
-        total_diferencia = (caja.monto_asignado + total_venta) - monto_cierre
-
-        data.append({
-            'tipo': 'Apertura' if not cierre_caja else 'Cierre',
-            'id_caja': caja.id_caja,
-            'usuario': caja.usuario_id.nombre,  # Asegúrate de tener un campo 'nombre' en tu modelo Usuario
-            'fecha_asignacion': caja.fecha_asignacion,
-            'monto_asignado': caja.monto_asignado,
-            'tipo_cierre': 'Cierre' if cierre_caja else 'Apertura',
-            'fecha_cierre': cierre_caja.fecha_fin if cierre_caja else '',
-            'monto_cierre': monto_cierre,
-            'total_vendido': total_venta,
-            'total_diferencia': total_diferencia
-        })
-
-    context = {
-        'data': data,
-        'fecha_inicio': fecha_inicio_str,
-        'fecha_fin': fecha_fin_str
-    }
-    
-    return render(request, 'historico_caja.html', context)
+    return render(request, 'historico_caja.html', { 'data': data_list, 'fecha_inicio': fecha_inicio, 'fecha_fin': fecha_fin })
 
 
 @admin_required
