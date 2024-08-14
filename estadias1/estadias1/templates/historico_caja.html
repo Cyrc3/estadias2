@@ -12,15 +12,22 @@
 {% load custom_filters %}
 <h1>Histórico de Aperturas y Cierres de Caja</h1>
 <script>
-    // Obtener la fecha actual en formato ISO (YYYY-MM-DD)
-    const today = new Date().toISOString().split('T')[0];
+    document.addEventListener("DOMContentLoaded", function() {
+        // Obtener la fecha actual en formato ISO (YYYY-MM-DD)
+        const today = new Date().toISOString().split('T')[0];
 
-    // Asignar la fecha actual como el valor máximo del input de fecha
-    document.getElementById('fecha_inicio').setAttribute('max', today);
-    document.getElementById('fecha_fin').setAttribute('max', today);
-    // Establecer la fecha de hoy en los campos de entrada
-    document.getElementById('fecha_inicio').value = today;
-    document.getElementById('fecha_fin').value = today;
+        // Asignar la fecha actual como el valor máximo del input de fecha
+        document.getElementById('fecha_inicio').setAttribute('max', today);
+        document.getElementById('fecha_fin').setAttribute('max', today);
+        
+        // Establecer la fecha de hoy en los campos de entrada si no tienen valor por defecto
+        if (!document.getElementById('fecha_inicio').value) {
+            document.getElementById('fecha_inicio').value = today;
+        }
+        if (!document.getElementById('fecha_fin').value) {
+            document.getElementById('fecha_fin').value = today;
+        }
+    });
 </script>
 
 <form method="get">
