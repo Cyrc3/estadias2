@@ -39,8 +39,8 @@
             <input type="text" name="monto_asignado" id="id_monto_asignado" value="" readonly>
             {{ form.total_venta.label_tag }}
             <input type="text" name="total_venta" id="id_total_venta" readonly>
-            {{ form.monto_entregado.label_tag }} {{ form.monto_entregado }}
             {{ form.monto_final.label_tag }} <input type="text" name="monto_final" id="id_monto_final" readonly>
+            {{ form.monto_entregado.label_tag }} {{ form.monto_entregado }}
             {{ form.diferencia.label_tag }}  {{ form.diferencia }}
             <label id="ldiferencia">aaa</label>
             <script>
@@ -152,6 +152,9 @@
 
         var diferencia = document.getElementById('id_diferencia');
         diferencia.setAttribute('readonly', true);
+
+        var entregado = document.getElementById('id_monto_entregado');
+        entregado.setAttribute('readonly', true);
     });
 </script>
 
