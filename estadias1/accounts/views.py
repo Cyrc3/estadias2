@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+import requests
 from django.db.models import Sum, F, FloatField, ExpressionWrapper
 from django.db.models.functions import Coalesce
 from django.http import HttpResponse
@@ -638,16 +639,18 @@ def calculate_total_venta(request):
         fecha_fin = request.GET.get('fecha_fin')
         
         if caja_id and fecha_fin:
-            caja = Caja.objects.get(id_caja=caja_id)
-            total_venta = Venta.objects.filter(
-                fecha__gte=caja.fecha_asignacion, 
-                fecha__lte=fecha_fin,
-                id_usuario=caja.usuario_id.id_usuario
-            ).aggregate(Sum('total'))['total__sum'] or 0
-            return JsonResponse({'total_venta': total_venta})
+            try:
+                caja = Caja.objects.get(id_caja=caja_id)
+                total_venta = Venta.objects.filter(
+                    fecha__gte=caja.fecha_asignacion, 
+                    fecha__lte=fecha_fin,
+                    id_usuario=caja.usuario_id.id_usuario
+                ).aggregate(Sum('total'))['total__sum'] or 0
+                return JsonResponse({'total_venta': total_venta})
+            except Caja.DoesNotExist:
+                return JsonResponse({'error': 'Caja no encontrada'}, status=404)
         
-    return JsonResponse({'error': 'Invalid request'}, status=400)
-
+    return JsonResponse({'error': 'Solicitud inválida'}, status=400)
 
 ''' 
 @admin_required
@@ -749,13 +752,19 @@ def historico_caja(request):
         cierre_caja = Cierre_Caja.objects.filter(id_caja=caja.id_caja, fecha_fin__lte=fecha_fin).last()
         
         monto_cierre = cierre_caja.monto_entregado if cierre_caja else 0
-        total_venta = Venta.objects.filter(
-            fecha__gte=caja.fecha_asignacion,
-            fecha__lte=fecha_fin,
-            id_usuario=caja.usuario_id
-        ).aggregate(Sum('total'))['total__sum'] or 0
 
-        total_diferencia = monto_cierre - total_venta
+        # Solicitar el total vendido desde la vista calculate_total_venta
+        response = requests.get(
+            f'{request.build_absolute_uri(calculate_total_venta)}',  # Construir la URL completa
+            params={'caja_id': caja.id_caja, 'fecha_fin': fecha_fin_str}
+        )
+
+        if response.status_code == 200:
+            total_venta = response.json().get('total_venta', 0)
+        else:
+            total_venta = 0
+
+        total_diferencia = (caja.monto_asignado + total_venta) - monto_cierre
 
         data.append({
             'tipo': 'Apertura' if not cierre_caja else 'Cierre',
@@ -766,13 +775,16 @@ def historico_caja(request):
             'tipo_cierre': 'Cierre' if cierre_caja else 'Apertura',
             'fecha_cierre': cierre_caja.fecha_fin if cierre_caja else '',
             'monto_cierre': monto_cierre,
-            'total_venta': total_venta,
+            'total_vendido': total_venta,
             'total_diferencia': total_diferencia
         })
 
     context = {
         'data': data,
+        'fecha_inicio': fecha_inicio_str,
+        'fecha_fin': fecha_fin_str
     }
+    
     return render(request, 'historico_caja.html', context)
 
 

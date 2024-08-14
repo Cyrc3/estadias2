@@ -60,12 +60,13 @@
                 <td>{{ item.tipo_cierre }}</td>
                 <td>{{ item.fecha_cierre }}</td>
                 <td>{{ item.monto_cierre|currency_format }}</td>
-                <td>{{ item.total_vendido|currency_format }}</td>
+                <td>{{ item.total_venta|currency_format }}</td>
                 <td>{{ item.total_diferencia|currency_format }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+    
 </div>
 
 <script>
