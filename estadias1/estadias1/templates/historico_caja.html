@@ -11,7 +11,29 @@
 
 {% load custom_filters %}
 <h1>Histórico de Aperturas y Cierres de Caja</h1>
+<script>
+    // Obtener la fecha actual en formato ISO (YYYY-MM-DD)
+    const today = new Date().toISOString().split('T')[0];
+
+    // Asignar la fecha actual como el valor máximo del input de fecha
+    document.getElementById('fecha_inicio').setAttribute('max', today);
+    document.getElementById('fecha_fin').setAttribute('max', today);
+    // Establecer la fecha de hoy en los campos de entrada
+    document.getElementById('fecha_inicio').value = today;
+    document.getElementById('fecha_fin').value = today;
+</script>
+
+<form method="get">
+    <label for="fecha_inicio">Fecha Inicio:</label>
+    <input type="date" id="fecha_inicio" name="fecha_inicio" value="{{ fecha_inicio|date:'Y-m-d' }}">
+    
+    <label for="fecha_fin">Fecha Fin:</label>
+    <input type="date" id="fecha_fin" name="fecha_fin" value="{{ fecha_fin|date:'Y-m-d' }}">
+    
+    <button type="submit">Filtrar</button>
+</form>
 <div class="table-container">
+    
     <table>
         <thead>
             <tr>
@@ -22,7 +44,8 @@
                 <th>Monto Asignado</th>
                 <th>Tipo Cierre</th>
                 <th>Fecha de Cierre</th>
-                <th>Monto de cierre</th>
+                <th>Monto de Cierre</th>
+                <th>Total Vendido</th>
                 <th>Total Diferencia</th>
             </tr>
         </thead>
@@ -37,12 +60,14 @@
                 <td>{{ item.tipo_cierre }}</td>
                 <td>{{ item.fecha_cierre }}</td>
                 <td>{{ item.monto_cierre|currency_format }}</td>
+                <td>{{ item.total_vendido|currency_format }}</td>
                 <td>{{ item.total_diferencia|currency_format }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
+
 <script>
     function actualizarTabla() {
         fetch('/historico_caja/', {
@@ -62,8 +87,10 @@
                     <td>${item.usuario}</td>
                     <td>${item.fecha_asignacion}</td>
                     <td>${item.monto_asignado}</td>
-                    <td>{% if item.tipo == 'Cierre' %}Cierre{% else %}Apertura{% endif %}</td>
+                    <td>${item.tipo_cierre}</td>
                     <td>${item.fecha_cierre}</td>
+                    <td>${item.monto_cierre}</td>
+                    <td>${item.total_vendido}</td>
                     <td>${item.total_diferencia}</td>
                 `;
                     tbody.appendChild(row);
@@ -73,6 +100,5 @@
 
     // Llama a la función actualizarTabla() cuando sea necesario
 </script>
-
 
 {% endblock %}

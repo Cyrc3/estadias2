@@ -723,58 +723,66 @@ def historico_caja(request):
 '''
 @admin_required
 def historico_caja(request):
-    aperturas = Caja.objects.all().order_by('fecha_asignacion')
-    cierres = Cierre_Caja.objects.all().order_by('fecha_fin')
+    today = datetime.date.today()
 
-    data = {}
+    # Obtener fecha de inicio y fin, con valores predeterminados si están vacíos
+    fecha_inicio_str = request.GET.get('fecha_inicio', today.strftime('%Y-%m-%d'))
+    fecha_fin_str = request.GET.get('fecha_fin', today.strftime('%Y-%m-%d'))
 
-    # Procesar aperturas
-    for apertura in aperturas:
-        data[apertura.id_caja] = {
-            'tipo': 'Apertura',
-            'id_caja': apertura.id_caja,
-            'usuario': apertura.usuario_id.nombre,
-            'fecha_asignacion': apertura.fecha_asignacion,
-            'monto_asignado': apertura.monto_asignado,
-            'tipo_cierre': '',
-            'fecha_cierre': '',
-            'monto_cierre': '',
-            'total_diferencia': ''
-        }
+    # Verificar que las fechas tengan el formato correcto
+    try:
+        fecha_inicio = datetime.datetime.strptime(fecha_inicio_str, '%Y-%m-%d').date()
+        fecha_fin = datetime.datetime.strptime(fecha_fin_str, '%Y-%m-%d').date()
+    except ValueError:
+        return JsonResponse({'error': 'Formato de fecha no válido'}, status=400)
 
-    # Procesar cierres y actualizar las aperturas existentes en data
-    for cierre in cierres:
-        if cierre.id_caja.id_caja in data:
-            data[cierre.id_caja.id_caja].update({
-                'tipo_cierre': 'Cierre',
-                'fecha_cierre': cierre.fecha_fin,
-                'monto_cierre': cierre.monto_entregado,
-                'total_diferencia': cierre.diferencia
-            })
+    # Filtrar aperturas y cierres de caja por rango de fechas
+    cajas = Caja.objects.filter(
+        fecha_asignacion__gte=fecha_inicio,
+        fecha_asignacion__lte=fecha_fin
+    )
 
-    # Convertir el diccionario en una lista ordenada por fecha de asignación
-    data_list = list(data.values())
-    data_list.sort(key=lambda x: x['fecha_asignacion'])
+    data = []
 
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        return JsonResponse(data_list, safe=False)
+    for caja in cajas:
+        # Buscar el cierre de caja relacionado con esta caja
+        cierre_caja = Cierre_Caja.objects.filter(id_caja=caja.id_caja, fecha_fin__lte=fecha_fin).last()
+        
+        monto_cierre = cierre_caja.monto_entregado if cierre_caja else 0
+        total_venta = Venta.objects.filter(
+            fecha__gte=caja.fecha_asignacion,
+            fecha__lte=fecha_fin,
+            id_usuario=caja.usuario_id
+        ).aggregate(Sum('total'))['total__sum'] or 0
 
-    return render(request, 'historico_caja.html', {'data': data_list})
+        total_diferencia = monto_cierre - total_venta
 
+        data.append({
+            'tipo': 'Apertura' if not cierre_caja else 'Cierre',
+            'id_caja': caja.id_caja,
+            'usuario': caja.usuario_id.nombre,  # Asegúrate de tener un campo 'nombre' en tu modelo Usuario
+            'fecha_asignacion': caja.fecha_asignacion,
+            'monto_asignado': caja.monto_asignado,
+            'tipo_cierre': 'Cierre' if cierre_caja else 'Apertura',
+            'fecha_cierre': cierre_caja.fecha_fin if cierre_caja else '',
+            'monto_cierre': monto_cierre,
+            'total_venta': total_venta,
+            'total_diferencia': total_diferencia
+        })
 
-
+    context = {
+        'data': data,
+    }
+    return render(request, 'historico_caja.html', context)
 
 
 @admin_required
 def historico_ganancias(request):
-    # Obtener la fecha actual
     today = datetime.date.today()
 
-    # Obtener las fechas del formulario de filtro, si están presentes
     fecha_inicio = request.GET.get('fecha_inicio')
     fecha_fin = request.GET.get('fecha_fin')
 
-    # Si las fechas son cadenas, convertirlas a objetos date, de lo contrario usar today
     if fecha_inicio:
         fecha_inicio = parse_date(fecha_inicio)
     else:
@@ -785,7 +793,6 @@ def historico_ganancias(request):
     else:
         fecha_fin = today
 
-    # Filtrar las ventas por rango de fechas si se proporcionan
     ventas = Detalle_Venta.objects.all()
     if fecha_inicio and fecha_fin:
         ventas = ventas.filter(id_venta__fecha__range=[fecha_inicio, fecha_fin])
@@ -794,18 +801,19 @@ def historico_ganancias(request):
     elif fecha_fin:
         ventas = ventas.filter(id_venta__fecha__lte=fecha_fin)
 
-    ventas = ventas.values(
+    ventas = ventas.annotate(
+        costo_total_compra=F('cantidad') * F('id_producto__costo_compra')
+    ).values(
         'id_producto__nombre',
         'cantidad',
         'precio_total',
-        'iva',
-        'id_producto__costo_venta',
-        'id_producto__costo_compra'
+        'id_producto__costo_compra',
+        'costo_total_compra'
     )
 
     ventas_con_ganancia = []
     for venta in ventas:
-        ganancia = venta['precio_total'] - (venta['cantidad'] * venta['id_producto__costo_compra'])
+        ganancia = venta['precio_total'] - venta['costo_total_compra']
         ventas_con_ganancia.append({
             **venta,
             'ganancia': ganancia
@@ -821,8 +829,6 @@ def historico_ganancias(request):
     }
 
     return render(request, 'historico_ganancias.html', context)
-
-
 
 @admin_required
 def historico_rector(request):
