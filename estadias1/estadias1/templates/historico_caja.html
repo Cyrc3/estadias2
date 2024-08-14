@@ -28,6 +28,21 @@
     }
 </style>
 
+<style>
+    .date-filters {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .date-filters label, 
+    .date-filters input, 
+    .date-filters button {
+        margin: 10px 0;
+    }
+</style>
+
 <form method="get" class="date-filters">
     <label for="fecha_inicio">Fecha Inicio:</label>
     <input type="datetime-local" id="fecha_inicio" name="fecha_inicio" value="{{ fecha_inicio|date:'Y-m-d\\TH:i' }}">
@@ -37,6 +52,7 @@
     
     <button type="submit">Filtrar</button>
 </form>
+
 <div class="table-container">
     <table>
         <thead>
