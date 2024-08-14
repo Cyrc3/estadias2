@@ -254,6 +254,7 @@ def registrar_compra(request):
 
 @login_required
 def registro_ventas(request):
+    usuario_id = request.session.get('usuario_id')
     productos = Producto.objects.all()
     if request.method == 'POST':
         form = VentaForm(request.POST)
@@ -264,8 +265,10 @@ def registro_ventas(request):
                 total_venta = request.POST.get('total_venta')
                 #cliente_id = request.POST.get('cliente_id')
                 resumen_data = json.loads(request.POST.get('resumen_data', '[]'))
+
+                usuario = Usuario.objects.get(id_usuario=usuario_id)
                     
-                nueva_venta = Venta(fecha=fecha_venta, total=total_venta)
+                nueva_venta = Venta(fecha=fecha_venta, total=total_venta, id_usuario=usuario)
                 nueva_venta.save()
 
                 #cliente = Cliente.objects.get(id_cliente=cliente_id)
