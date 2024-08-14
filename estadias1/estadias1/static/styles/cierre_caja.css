@@ -111,3 +111,7 @@ input[type="submit"]:hover {
 #id_total_venta{
     width: 25%;
 }
+
+#id_monto_asignado{
+    width: 25%;
+}

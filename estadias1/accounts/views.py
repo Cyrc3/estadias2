@@ -600,6 +600,7 @@ def open_caja(request):
 
     return render(request, 'open_caja.html', {'form': form, 'usuarios': usuarios})
 
+
 @admin_required
 def caja(request):
     
@@ -609,6 +610,7 @@ def caja(request):
 @admin_required
 def close_caja(request):
     cajas = Caja.objects.filter(activo=True)
+
     if request.method == 'POST':
         form = CierreForm(request.POST)
         if form.is_valid():
@@ -622,7 +624,7 @@ def close_caja(request):
             return redirect('close_caja')
     else:
         form = CierreForm()
-    return render(request, 'close_caja.html', {'form': form, 'cajas': cajas})
+    return render(request, 'close_caja.html', {'form': form, 'cajas': cajas })
 
 
 

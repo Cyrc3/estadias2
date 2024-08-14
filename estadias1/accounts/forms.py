@@ -168,6 +168,7 @@ class CierreForm(forms.ModelForm):
         self.fields['id_caja'].queryset = Caja.objects.filter(activo=True)
         self.fields['fecha_fin'].initial = timezone.now().date()
 
+    '''
     def clean(self):
         cleaned_data = super().clean()
 
@@ -198,4 +199,4 @@ class CierreForm(forms.ModelForm):
         total_diferencia = total_suma - monto_asignado
         cleaned_data['total_diferencia'] = total_diferencia
 
-        return cleaned_data
+        return cleaned_data '''
