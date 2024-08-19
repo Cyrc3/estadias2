@@ -81,23 +81,12 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Precio Venta</th>
-                <th>Costo Compra</th>
                 <th>Total Ganancia</th>
             </tr>
         </thead>
-        <tbody>
-            {% for venta in ventas %}
-            <tr>
-                <td>{{ venta.precio_total }}</td>
-                <td>{{ venta.costo_total }}</td>
-                <td>{{ venta.ganancia }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
         <tfoot>
             <tr>
-                <td colspan="2"><strong>Total Ganancias:</strong></td>
+                <td><strong>Total Ganancias:</strong></td>
                 <td><strong>{{ total_ganancias|currency_format }}</strong></td>
             </tr>
         </tfoot>

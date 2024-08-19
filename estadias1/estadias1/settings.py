@@ -89,7 +89,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'CONTROL_INVENTARIO',
         'USER': 'root',
-        'PASSWORD': '3Sa1s87873!',
+        'PASSWORD': 'miau',
         'HOST': 'localhost',
         'w': '3306',
     }
