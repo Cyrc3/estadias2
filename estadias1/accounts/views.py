@@ -75,18 +75,19 @@ def logout_view(request):
 
 @admin_required
 def registro_usuario(request):
+    usuarios = Usuario.objects.all()
     if request.method == 'POST':
         form = UsuarioForm(request.POST)
         if form.is_valid():
             usuario = form.save(commit=False)
             usuario.password = make_password(form.cleaned_data['password'])
             usuario.save()
-            return redirect('menu_principal')
+            return redirect('usuario')
         else:
             messages.error(request, "Hubo un error al registrar el usuario.")
     else:
         form = UsuarioForm()
-    return render(request, 'usuario.html', {'form':form})
+    return render(request, 'usuario.html', {'form':form, 'usuarios':usuarios})
 
 
 @admin_required

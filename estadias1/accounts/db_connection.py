@@ -24,7 +24,7 @@ class Database:
             host = 'localhost',
             user = 'root',
             password = '3Sa1s87873!',
-            database = 'EstadiaPruebas',
+            database = 'CONTROL_INVENTARIO',
             port = 3306
         )
 

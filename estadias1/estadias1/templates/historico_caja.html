@@ -82,7 +82,16 @@
                 <td>{{ item.fecha_cierre }}</td>
                 <td>{{ item.total_ventas |currency_format}}</td>
                 <td>{{ item.monto_cierre|currency_format }}</td>
-                <td>{{ item.total_diferencia|currency_format }}</td>
+                <td class="
+                {% if item.total_diferencia < 0 %}
+                Faltante
+                {% elif item.total_diferencia == 0 %}
+                Correcto
+                {% else %}
+                Sobrante
+                {% endif %}
+                "
+                >{{ item.total_diferencia|currency_format }}</td>
                 <td class="
                     {% if item.total_diferencia < 0 %}
                     Faltante

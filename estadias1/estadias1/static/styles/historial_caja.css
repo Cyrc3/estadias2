@@ -67,16 +67,19 @@ tbody tr:nth-child(even) {
 
 
 .Faltante{
-    color: rgb(134, 0, 175);
+    color: rgb(231, 22, 22);
+    background-color: #ffc6c6;
     font-weight: bold;
 }
 
 .Correcto{
     color: rgb(22, 231, 22);
+    background-color: #d7f5d8;
     font-weight: bold;
 }
 
 .Sobrante{
-    color: rgb(231, 22, 22);
+    color: rgb(134, 0, 175);
+    background-color: #d5c6ff;
     font-weight: bold;
 }
